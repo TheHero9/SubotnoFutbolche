@@ -36,3 +36,7 @@ A Spotify Wrapped-style single-page React app for displaying football season sta
 - Mobile-first responsive design
 - No backend - all data in JSON file
 - Screenshot-friendly summary card at the end
+
+## Bonus info
+
+After finishing a task, don't start the next one except cases when it's specified.

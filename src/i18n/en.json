@@ -1,0 +1,78 @@
+{
+  "header": {
+    "title": "Saturday Football 2025"
+  },
+  "landing": {
+    "title": "Your 2025 Football Wrapped",
+    "subtitle": "Select your name to see your stats",
+    "searchPlaceholder": "Search player...",
+    "selectButton": "Show Stats"
+  },
+  "loading": {
+    "message1": "Analyzing your games...",
+    "message2": "Crunching the numbers...",
+    "message3": "Preparing your wrapped..."
+  },
+  "story": {
+    "welcome": "Your 2025",
+    "gamesPlayed": "You played",
+    "games": "games",
+    "rank": "You are",
+    "outOf": "out of",
+    "players": "players",
+    "rankChange": "From 2024 to now",
+    "rankUp": "Moved up by",
+    "rankDown": "Moved down by",
+    "rankSame": "Kept your position",
+    "positions": "positions",
+    "position": "position",
+    "tapToContinue": "Tap to continue"
+  },
+  "scroll": {
+    "monthlyBreakdown": "Monthly Breakdown - 2025",
+    "comparison2024": "Comparison with 2024",
+    "bestMonths": "Best Months",
+    "worstMonths": "Worst Months",
+    "bestSeason": "Best Season",
+    "worstSeason": "Worst Season",
+    "achievements": "Achievements",
+    "summary": "Your 2025 Wrapped"
+  },
+  "achievements": {
+    "moreGames": "You played more than {{percent}}% of all players",
+    "futureProjection": "If you keep this up, in 10 years you'll have {{games}} games!",
+    "favoriteMonth": "Your favorite month is {{month}} - you never miss it!",
+    "moreThanLastYear": "You played {{diff}} more games than last year",
+    "lessThanLastYear": "You played {{diff}} fewer games than last year",
+    "sameAsLastYear": "Same number of games as last year"
+  },
+  "summary": {
+    "title": "Your 2025 Football Wrapped",
+    "totalGames": "Total Games",
+    "rank": "Rank",
+    "rankChange": "Change",
+    "gamesChange": "Games vs 2024",
+    "screenshotPrompt": "Screenshot & Share!",
+    "footer": "Saturday Football 2025"
+  },
+  "seasons": {
+    "winter": "Winter",
+    "spring": "Spring",
+    "summer": "Summer",
+    "autumn": "Autumn"
+  },
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  }
+}

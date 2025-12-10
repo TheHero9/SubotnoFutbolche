@@ -1,0 +1,78 @@
+{
+  "header": {
+    "title": "Съботно Футболче 2025"
+  },
+  "landing": {
+    "title": "Вашият 2025 Football Wrapped",
+    "subtitle": "Изберете вашето име за да видите статистиките си",
+    "searchPlaceholder": "Търси играч...",
+    "selectButton": "Покажи статистики"
+  },
+  "loading": {
+    "message1": "Анализираме мачовете ти...",
+    "message2": "Смятаме числата...",
+    "message3": "Подготвяме твоя wrapped..."
+  },
+  "story": {
+    "welcome": "Твоят 2025",
+    "gamesPlayed": "Ти игра",
+    "games": "мача",
+    "rank": "Ти си",
+    "outOf": "от",
+    "players": "играчи",
+    "rankChange": "От 2024 до сега",
+    "rankUp": "Изкачи се с",
+    "rankDown": "Спадна с",
+    "rankSame": "Запази позицията си",
+    "positions": "позиции",
+    "position": "позиция",
+    "tapToContinue": "Докосни за продължаване"
+  },
+  "scroll": {
+    "monthlyBreakdown": "Разпределение по месеци - 2025",
+    "comparison2024": "Сравнение с 2024",
+    "bestMonths": "Най-добри месеци",
+    "worstMonths": "Най-слаби месеци",
+    "bestSeason": "Най-добър сезон",
+    "worstSeason": "Най-слаб сезон",
+    "achievements": "Постижения",
+    "summary": "Твоят 2025 Wrapped"
+  },
+  "achievements": {
+    "moreGames": "Ти игра повече от {{percent}}% от всички играчи",
+    "futureProjection": "Ако продължиш така, след 10 години ще имаш {{games}} мача!",
+    "favoriteMonth": "Твоят любим месец е {{month}} - никога не го пропускаш!",
+    "moreThanLastYear": "Ти игра {{diff}} повече мача от миналата година",
+    "lessThanLastYear": "Ти игра {{diff}} по-малко мача от миналата година",
+    "sameAsLastYear": "Същия брой мачове като миналата година"
+  },
+  "summary": {
+    "title": "Твоят 2025 Football Wrapped",
+    "totalGames": "Общо мачове",
+    "rank": "Класиране",
+    "rankChange": "Промяна",
+    "gamesChange": "Мачове спрямо 2024",
+    "screenshotPrompt": "Снимай екрана и сподели!",
+    "footer": "Съботно Футболче 2025"
+  },
+  "seasons": {
+    "winter": "Зима",
+    "spring": "Пролет",
+    "summer": "Лято",
+    "autumn": "Есен"
+  },
+  "months": {
+    "january": "Януари",
+    "february": "Февруари",
+    "march": "Март",
+    "april": "Април",
+    "may": "Май",
+    "june": "Юни",
+    "july": "Юли",
+    "august": "Август",
+    "september": "Септември",
+    "october": "Октомври",
+    "november": "Ноември",
+    "december": "Декември"
+  }
+}

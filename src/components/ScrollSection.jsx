@@ -5,6 +5,7 @@ import AchievementBadge from './AchievementBadge';
 import MonthlyChart from './MonthlyChart';
 import ComparisonChart from './ComparisonChart';
 import SummaryCard from './SummaryCard';
+import ScrollToTop from './ScrollToTop';
 import {
   getBestWorstMonths,
   getBestSeason,
@@ -156,6 +157,9 @@ const ScrollSection = ({ player, totalPlayers }) => {
         {/* Summary Card */}
         <SummaryCard player={player} totalPlayers={totalPlayers} />
       </div>
+
+      {/* Scroll to top button */}
+      <ScrollToTop />
     </div>
   );
 };

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import confetti from 'canvas-confetti';
 import StoryCard from './StoryCard';
 import { getRankTitle, getRankChange } from '../utils/calculations';
 
@@ -10,6 +11,18 @@ const StorySection = ({ player, totalPlayers, onComplete }) => {
 
   const rankChange = getRankChange(player.rank2024, player.rank2025);
   const rankTitle = getRankTitle(player.rank2025, i18n.language);
+
+  // Trigger confetti on rank reveal
+  useEffect(() => {
+    if (currentStory === 2) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#1db954', '#ffd700', '#ffffff']
+      });
+    }
+  }, [currentStory]);
 
   const stories = [
     // Story 1: Welcome

@@ -62,7 +62,8 @@
     "favoriteMonth": "Твоят любим месец е {{month}} - никога не го пропускаш!",
     "moreThanLastYear": "Ти игра {{diff}} повече мача от миналата година",
     "lessThanLastYear": "Ти игра {{diff}} по-малко мача от миналата година",
-    "sameAsLastYear": "Същия брой мачове като миналата година"
+    "sameAsLastYear": "Същия брой мачове като миналата година",
+    "longestStreak": "Най-дълга серия: {{streak}} мача без да пропуснеш събота"
   },
   "summary": {
     "title": "Твоят 2025 Football Wrapped",

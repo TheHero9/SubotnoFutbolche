@@ -173,19 +173,117 @@ export const calculateRanks = (players) => {
 };
 
 /**
+ * Helper: Parse date string "DD/MM" to Date object
+ */
+const parseDate = (dateStr, year = 2025) => {
+  const [day, month] = dateStr.split('/');
+  return new Date(year, parseInt(month) - 1, parseInt(day));
+};
+
+/**
+ * Helper: Format Date to "DD/MM" (handles single digit dates)
+ */
+const formatDateToDDMM = (date) => {
+  const day = date.getDate().toString();
+  const month = (date.getMonth() + 1).toString();
+  return `${day}/${month}`;
+};
+
+/**
+ * Calculate longest streak for 2025 - only breaks when Saturday is missed
+ * @param {string[]} playerDates2025 - Player's 2025 dates
+ * @param {string[]} allGameDates2025 - All game dates from all players
+ * @returns {number} - Longest streak count
+ */
+export const calculateLongestStreak2025 = (playerDates2025, allGameDates2025) => {
+  if (!playerDates2025 || playerDates2025.length === 0) return 0;
+
+  // Parse all game dates and filter to Saturdays only
+  const allDates = allGameDates2025.map(d => parseDate(d, 2025));
+  const saturdayDates = allDates
+    .filter(d => d.getDay() === 6) // 6 = Saturday
+    .sort((a, b) => a - b);
+
+  if (saturdayDates.length === 0) return playerDates2025.length;
+
+  // Create a set for fast lookup
+  const playerDatesSet = new Set(playerDates2025);
+
+  let maxStreak = 0;
+  let currentStreak = 0;
+  let lastSaturday = null;
+
+  for (const saturday of saturdayDates) {
+    const saturdayStr = formatDateToDDMM(saturday);
+    const playedThisSaturday = playerDatesSet.has(saturdayStr);
+
+    if (playedThisSaturday) {
+      // Add 1 for this Saturday
+      let streakIncrement = 1;
+
+      if (lastSaturday) {
+        // Count midweek games between last Saturday and this Saturday
+        const midweekGames = playerDates2025.filter(dateStr => {
+          const d = parseDate(dateStr, 2025);
+          return d > lastSaturday && d < saturday;
+        }).length;
+        streakIncrement += midweekGames;
+      } else {
+        // First Saturday in this streak - count any games before it
+        const gamesBeforeSaturday = playerDates2025.filter(dateStr => {
+          const d = parseDate(dateStr, 2025);
+          return d < saturday;
+        }).length;
+        streakIncrement += gamesBeforeSaturday;
+      }
+
+      currentStreak += streakIncrement;
+      lastSaturday = saturday;
+      maxStreak = Math.max(maxStreak, currentStreak);
+    } else {
+      // Missed a Saturday - streak breaks
+      currentStreak = 0;
+      lastSaturday = null;
+    }
+  }
+
+  return maxStreak;
+};
+
+/**
+ * Get all unique game dates from all players for a specific year
+ * @param {Array} players - All players
+ * @param {string} datesKey - 'dates2024' or 'dates2025'
+ * @returns {string[]} - Unique sorted dates
+ */
+const getAllGameDates = (players, datesKey) => {
+  const allDates = new Set();
+  players.forEach(player => {
+    if (player[datesKey]) {
+      player[datesKey].forEach(date => allDates.add(date));
+    }
+  });
+  return Array.from(allDates);
+};
+
+/**
  * Process raw player data to add all calculated fields
  * @param {Array} rawPlayers - Players with only name and dates arrays
  * @returns {Array} - Enriched players with all calculated stats
  */
 export const processPlayerData = (rawPlayers) => {
+  // Get all game dates for streak calculation
+  const allGameDates2025 = getAllGameDates(rawPlayers, 'dates2025');
+
   // First pass: calculate totals and ranks
   const withRanks = calculateRanks(rawPlayers);
 
-  // Second pass: add monthly breakdowns
+  // Second pass: add monthly breakdowns and longest streak
   return withRanks.map(player => ({
     ...player,
     games2024: calculateMonthlyGames(player.dates2024 || []),
     games2025: calculateMonthlyGames(player.dates2025 || []),
-    totalAllTime: calculateAllTimeTotal(player.dates2024, player.dates2025)
+    totalAllTime: calculateAllTimeTotal(player.dates2024, player.dates2025),
+    longestStreak2025: calculateLongestStreak2025(player.dates2025 || [], allGameDates2025)
   }));
 };

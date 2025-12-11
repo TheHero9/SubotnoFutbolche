@@ -126,29 +126,34 @@ const ScrollSection = ({ player, totalPlayers }) => {
               delay={0.1}
             />
             <AchievementBadge
+              icon="🔥"
+              text={t('achievements.longestStreak', { streak: player.longestStreak2025 || 0 })}
+              delay={0.2}
+            />
+            <AchievementBadge
               icon="🚀"
               text={t('achievements.futureProjection', { games: futureGames })}
-              delay={0.2}
+              delay={0.3}
             />
             {gamesDiff > 0 && (
               <AchievementBadge
                 icon="📈"
                 text={t('achievements.moreThanLastYear', { diff: gamesDiff })}
-                delay={0.3}
+                delay={0.4}
               />
             )}
             {gamesDiff < 0 && (
               <AchievementBadge
                 icon="📉"
                 text={t('achievements.lessThanLastYear', { diff: Math.abs(gamesDiff) })}
-                delay={0.3}
+                delay={0.4}
               />
             )}
             {gamesDiff === 0 && (
               <AchievementBadge
                 icon="🟰"
                 text={t('achievements.sameAsLastYear')}
-                delay={0.3}
+                delay={0.4}
               />
             )}
           </div>

@@ -62,7 +62,8 @@
     "favoriteMonth": "Your favorite month is {{month}} - you never miss it!",
     "moreThanLastYear": "You played {{diff}} more games than last year",
     "lessThanLastYear": "You played {{diff}} fewer games than last year",
-    "sameAsLastYear": "Same number of games as last year"
+    "sameAsLastYear": "Same number of games as last year",
+    "longestStreak": "Longest streak: {{streak}} games without missing Saturday"
   },
   "summary": {
     "title": "Your 2025 Football Wrapped",

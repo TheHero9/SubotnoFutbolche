@@ -49,33 +49,8 @@ const GiftCard = ({ children, delay = 0 }) => {
               ease: [0.4, 0, 0.2, 1]
             }}
             whileTap={{ scale: 0.97 }}
+            style={{ willChange: 'transform, opacity' }}
           >
-            {/* Sparkles */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
-              {[...Array(4)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute text-2xl"
-                  style={{
-                    left: `${15 + i * 25}%`,
-                    top: `${25 + (i % 2) * 40}%`
-                  }}
-                  animate={{
-                    scale: [0, 1.2, 0],
-                    rotate: [0, 360],
-                    opacity: [0, 0.8, 0]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: i * 0.5,
-                    ease: "easeInOut"
-                  }}
-                >
-                  ✨
-                </motion.div>
-              ))}
-            </div>
 
             {/* Gift Box */}
             <motion.div
@@ -103,37 +78,21 @@ const GiftCard = ({ children, delay = 0 }) => {
               </div>
 
               {/* Vertical Ribbon */}
-              <motion.div
+              <div
                 className="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-16"
                 style={{
                   background: 'linear-gradient(to right, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
-                  boxShadow: '0 0 20px rgba(29, 185, 84, 0.5)'
+                  boxShadow: '0 0 25px rgba(29, 185, 84, 0.6)'
                 }}
-                animate={{
-                  boxShadow: [
-                    '0 0 20px rgba(29, 185, 84, 0.5)',
-                    '0 0 30px rgba(29, 185, 84, 0.8)',
-                    '0 0 20px rgba(29, 185, 84, 0.5)'
-                  ]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
               />
 
               {/* Horizontal Ribbon */}
-              <motion.div
+              <div
                 className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 h-16"
                 style={{
                   background: 'linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.8), rgba(255, 215, 0, 0.3))',
-                  boxShadow: '0 0 20px rgba(255, 215, 0, 0.5)'
+                  boxShadow: '0 0 25px rgba(255, 215, 0, 0.6)'
                 }}
-                animate={{
-                  boxShadow: [
-                    '0 0 20px rgba(255, 215, 0, 0.5)',
-                    '0 0 30px rgba(255, 215, 0, 0.8)',
-                    '0 0 20px rgba(255, 215, 0, 0.5)'
-                  ]
-                }}
-                transition={{ duration: 2, repeat: Infinity, delay: 1 }}
               />
 
               {/* Bow */}

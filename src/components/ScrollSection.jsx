@@ -46,7 +46,7 @@ const ScrollSection = ({ player, totalPlayers }) => {
         </StatCard>
 
         {/* Best and worst months */}
-        <StatCard delay={0.2}>
+        <StatCard delay={0.2} asGift={true}>
           <h2 className="text-3xl font-bold mb-6" style={{ color: 'var(--color-accent-green)' }}>
             {t('scroll.bestMonths')}
           </h2>
@@ -65,7 +65,7 @@ const ScrollSection = ({ player, totalPlayers }) => {
           </div>
         </StatCard>
 
-        <StatCard delay={0.3}>
+        <StatCard delay={0.3} asGift={true}>
           <h2 className="text-3xl font-bold mb-6" style={{ color: 'var(--color-accent-red)' }}>
             {t('scroll.worstMonths')}
           </h2>
@@ -115,7 +115,7 @@ const ScrollSection = ({ player, totalPlayers }) => {
         </StatCard>
 
         {/* Achievements */}
-        <StatCard delay={0.5}>
+        <StatCard delay={0.5} asGift={true}>
           <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: 'var(--color-accent-gold)' }}>
             {t('scroll.achievements')}
           </h2>

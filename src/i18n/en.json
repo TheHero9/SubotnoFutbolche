@@ -28,6 +28,24 @@
     "position": "position",
     "tapToContinue": "Tap to continue"
   },
+  "community": {
+    "title": "Saturday Football",
+    "subtitle": "Our Community",
+    "totalGames": "Total Games",
+    "totalGames2024": "{{count}} games in 2024",
+    "totalGames2025": "{{count}} games in 2025",
+    "totalGamesAllTime": "{{count}} games total",
+    "longestStreak": "Longest Streak",
+    "streakText": "{{count}} weeks without missing",
+    "averagePlayers": "Average Players per Match",
+    "playersText": "{{count}} people",
+    "favoriteFields": "Favorite Fields",
+    "fieldGames": "{{count}} games",
+    "comparisonTitle": "Comparison with 2024",
+    "moreGames": "+{{count}} games",
+    "lessGames": "-{{count}} games",
+    "sameGames": "Same number of games"
+  },
   "scroll": {
     "monthlyBreakdown": "Monthly Breakdown - 2025",
     "comparison2024": "Comparison with 2024",

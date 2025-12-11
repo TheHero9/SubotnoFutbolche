@@ -1,0 +1,18 @@
+{
+  "totalGames2024": 52,
+  "totalGames2025": 48,
+  "totalGamesAllTime": 156,
+  "longestStreak": 12,
+  "averagePlayersPerMatch": 11.5,
+  "fields": {
+    "Левски Г": 45,
+    "Спортна София": 38,
+    "Герена": 28,
+    "Младост": 25,
+    "Други": 20
+  },
+  "comparisonLastYear": {
+    "gamesChange": -4,
+    "averagePlayersChange": 0.5
+  }
+}

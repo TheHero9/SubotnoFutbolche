@@ -28,6 +28,24 @@
     "position": "позиция",
     "tapToContinue": "Докосни за продължаване"
   },
+  "community": {
+    "title": "Съботно Футболче",
+    "subtitle": "Нашата общност",
+    "totalGames": "Общо мачове",
+    "totalGames2024": "{{count}} мача през 2024",
+    "totalGames2025": "{{count}} мача през 2025",
+    "totalGamesAllTime": "{{count}} мача общо",
+    "longestStreak": "Най-дълга поредица",
+    "streakText": "{{count}} седмици без пропуск",
+    "averagePlayers": "Средно играчи на мач",
+    "playersText": "{{count}} души",
+    "favoriteFields": "Любими терени",
+    "fieldGames": "{{count}} мача",
+    "comparisonTitle": "Сравнение с 2024",
+    "moreGames": "+{{count}} мача",
+    "lessGames": "-{{count}} мача",
+    "sameGames": "Същия брой мачове"
+  },
   "scroll": {
     "monthlyBreakdown": "Разпределение по месеци - 2025",
     "comparison2024": "Сравнение с 2024",

@@ -87,3 +87,105 @@ export const getPercentile = (rank, totalPlayers) => {
 export const getFutureProjection = (total2025) => {
   return total2025 * 10;
 };
+
+/**
+ * Calculate monthly games from dates array
+ * @param {string[]} dates - Array of dates in format "DD/MM"
+ * @returns {Object} - Monthly breakdown {january: 3, february: 2, ...}
+ */
+export const calculateMonthlyGames = (dates) => {
+  const monthly = {
+    january: 0, february: 0, march: 0, april: 0,
+    may: 0, june: 0, july: 0, august: 0,
+    september: 0, october: 0, november: 0, december: 0
+  };
+
+  const monthMap = {
+    '01': 'january', '02': 'february', '03': 'march', '04': 'april',
+    '05': 'may', '06': 'june', '07': 'july', '08': 'august',
+    '09': 'september', '10': 'october', '11': 'november', '12': 'december'
+  };
+
+  dates.forEach(date => {
+    const [day, month] = date.split('/');
+    const monthName = monthMap[month];
+    if (monthName) {
+      monthly[monthName]++;
+    }
+  });
+
+  return monthly;
+};
+
+/**
+ * Calculate total games from dates array
+ * @param {string[]} dates - Array of dates
+ * @returns {number} - Total count
+ */
+export const calculateTotal = (dates) => {
+  return dates ? dates.length : 0;
+};
+
+/**
+ * Calculate all-time total from multiple date arrays
+ * @param {string[]} dates2024
+ * @param {string[]} dates2025
+ * @returns {number}
+ */
+export const calculateAllTimeTotal = (dates2024, dates2025) => {
+  return calculateTotal(dates2024) + calculateTotal(dates2025);
+};
+
+/**
+ * Calculate ranks for all players based on 2025 games
+ * @param {Array} players - Array of player objects with dates2025
+ * @returns {Array} - Players with calculated ranks
+ */
+export const calculateRanks = (players) => {
+  // Calculate totals for each player
+  const playersWithTotals = players.map(player => ({
+    ...player,
+    total2025: calculateTotal(player.dates2025),
+    total2024: calculateTotal(player.dates2024)
+  }));
+
+  // Sort by 2025 total (descending)
+  const sorted = [...playersWithTotals].sort((a, b) => b.total2025 - a.total2025);
+
+  // Assign ranks
+  let currentRank = 1;
+  let previousTotal = null;
+
+  return sorted.map((player, index) => {
+    // Handle ties - same total gets same rank
+    if (previousTotal !== null && player.total2025 < previousTotal) {
+      currentRank = index + 1;
+    }
+    previousTotal = player.total2025;
+
+    return {
+      ...player,
+      rank2025: currentRank,
+      // For 2024 rank, we'll need to calculate separately or store it
+      rank2024: player.rank2024 || currentRank // Keep existing if available
+    };
+  });
+};
+
+/**
+ * Process raw player data to add all calculated fields
+ * @param {Array} rawPlayers - Players with only name and dates arrays
+ * @returns {Array} - Enriched players with all calculated stats
+ */
+export const processPlayerData = (rawPlayers) => {
+  // First pass: calculate totals and ranks
+  const withRanks = calculateRanks(rawPlayers);
+
+  // Second pass: add monthly breakdowns
+  return withRanks.map(player => ({
+    ...player,
+    games2024: calculateMonthlyGames(player.dates2024 || []),
+    games2025: calculateMonthlyGames(player.dates2025 || []),
+    totalAllTime: calculateAllTimeTotal(player.dates2024, player.dates2025)
+  }));
+};

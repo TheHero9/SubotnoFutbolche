@@ -1,45 +1,51 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
+import type { ProcessedPlayer, PlayersData } from './types';
 import Header from './components/Header';
 import PlayerSelect from './components/PlayerSelect';
 import LoadingAnimation from './components/LoadingAnimation';
 import StorySection from './components/StorySection';
 import ScrollSection from './components/ScrollSection';
-import playersData from './data/players.json';
+import playersDataRaw from './data/players.json';
 import { processPlayerData } from './utils/calculations';
 
-function App() {
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showStories, setShowStories] = useState(false);
+const playersData = playersDataRaw as PlayersData;
+
+function App(): JSX.Element {
+  const [selectedPlayer, setSelectedPlayer] = useState<ProcessedPlayer | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showStories, setShowStories] = useState<boolean>(false);
 
   // Process player data on mount (calculate totals, ranks, monthly breakdowns from raw dates)
   // This allows players.json to contain only raw data (name, dates2024, dates2025, rank2024)
   // while all other fields are calculated in the app
-  const processedPlayers = useMemo(() => {
+  const processedPlayers = useMemo<ProcessedPlayer[]>(() => {
     // Check if data is already processed (has total2025 field)
-    if (playersData.players[0]?.total2025 !== undefined) {
-      return playersData.players; // Already processed
+    const firstPlayer = playersData.players[0] as ProcessedPlayer | undefined;
+    if (firstPlayer?.total2025 !== undefined) {
+      return playersData.players as ProcessedPlayer[]; // Already processed
     }
     // Process raw data
     return processPlayerData(playersData.players);
   }, []);
 
-  const handlePlayerSelect = (playerName) => {
+  const handlePlayerSelect = (playerName: string): void => {
     setIsLoading(true);
     // Simulate data processing
     setTimeout(() => {
       const player = processedPlayers.find(p => p.name === playerName);
-      setSelectedPlayer(player);
-      setIsLoading(false);
-      setShowStories(true);
+      if (player) {
+        setSelectedPlayer(player);
+        setIsLoading(false);
+        setShowStories(true);
+      }
     }, 2500);
   };
 
-  const handleStoriesComplete = () => {
+  const handleStoriesComplete = (): void => {
     setShowStories(false);
   };
 
-  const handleReset = () => {
+  const handleReset = (): void => {
     setSelectedPlayer(null);
     setShowStories(false);
     setIsLoading(false);

@@ -1,5 +1,6 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import type { ScrollSectionProps, MonthKey, SeasonKey } from '../types';
 import StatCard from './StatCard';
 import AchievementBadge from './AchievementBadge';
 import MonthlyChart from './MonthlyChart';
@@ -14,7 +15,7 @@ import {
 } from '../utils/calculations';
 import { formatMonthName, formatSeasonName } from '../utils/helpers';
 
-const ScrollSection = ({ player, totalPlayers }) => {
+const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers }) => {
   const { t, i18n } = useTranslation();
 
   const bestWorst = getBestWorstMonths(player.games2025);
@@ -31,7 +32,7 @@ const ScrollSection = ({ player, totalPlayers }) => {
           <h2 className="text-3xl font-bold mb-6" style={{ color: 'var(--color-accent-green)' }}>
             {t('scroll.monthlyBreakdown')}
           </h2>
-          <MonthlyChart data={player.games2025} year={2025} />
+          <MonthlyChart data={player.games2025} year="2025" />
         </StatCard>
 
         {/* Comparison with 2024 */}
@@ -51,11 +52,11 @@ const ScrollSection = ({ player, totalPlayers }) => {
             {t('scroll.bestMonths')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {bestWorst.best.map(([month, games], index) => (
+            {bestWorst.best.map(([month, games]) => (
               <div key={month} className="text-center">
                 <div className="text-4xl mb-2">🏆</div>
                 <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
-                  {formatMonthName(month, i18n.language)}
+                  {formatMonthName(month as MonthKey, i18n.language as 'bg' | 'en')}
                 </div>
                 <div style={{ color: 'var(--color-text-secondary)' }}>
                   {games} {t('story.games')}
@@ -70,11 +71,11 @@ const ScrollSection = ({ player, totalPlayers }) => {
             {t('scroll.worstMonths')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {bestWorst.worst.map(([month, games], index) => (
+            {bestWorst.worst.map(([month, games]) => (
               <div key={month} className="text-center">
                 <div className="text-4xl mb-2">📉</div>
                 <div className="text-2xl font-bold">
-                  {formatMonthName(month, i18n.language)}
+                  {formatMonthName(month as MonthKey, i18n.language as 'bg' | 'en')}
                 </div>
                 <div style={{ color: 'var(--color-text-secondary)' }}>
                   {games} {t('story.games')}
@@ -93,7 +94,7 @@ const ScrollSection = ({ player, totalPlayers }) => {
               </h3>
               <div className="text-6xl mb-3">☀️</div>
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
-                {formatSeasonName(seasons.best[0], i18n.language)}
+                {formatSeasonName(seasons.best[0] as SeasonKey, i18n.language as 'bg' | 'en')}
               </div>
               <div className="mt-2" style={{ color: 'var(--color-text-secondary)' }}>
                 {seasons.best[1]} {t('story.games')}
@@ -105,7 +106,7 @@ const ScrollSection = ({ player, totalPlayers }) => {
               </h3>
               <div className="text-6xl mb-3">❄️</div>
               <div className="text-3xl font-bold">
-                {formatSeasonName(seasons.worst[0], i18n.language)}
+                {formatSeasonName(seasons.worst[0] as SeasonKey, i18n.language as 'bg' | 'en')}
               </div>
               <div className="mt-2" style={{ color: 'var(--color-text-secondary)' }}>
                 {seasons.worst[1]} {t('story.games')}

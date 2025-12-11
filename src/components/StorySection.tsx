@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
+import type { StorySectionProps, CommunityStats } from '../types';
 import StoryCard from './StoryCard';
 import { getRankTitle, getRankChange } from '../utils/calculations';
-import communityStats from '../data/communityStats.json';
+import communityStatsData from '../data/communityStats.json';
 
-const StorySection = ({ player, totalPlayers, onComplete }) => {
+const communityStats = communityStatsData as CommunityStats;
+
+const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onComplete }) => {
   const { t, i18n } = useTranslation();
-  const [currentStory, setCurrentStory] = useState(0);
+  const [currentStory, setCurrentStory] = useState<number>(0);
 
   const rankChange = getRankChange(player.rank2024, player.rank2025);
-  const rankTitle = getRankTitle(player.rank2025, i18n.language);
+  const rankTitle = getRankTitle(player.rank2025, i18n.language as 'bg' | 'en');
 
   // Trigger confetti on community stats and rank reveal
   useEffect(() => {
@@ -273,7 +276,7 @@ const StorySection = ({ player, totalPlayers, onComplete }) => {
     }
   ];
 
-  const handleNext = () => {
+  const handleNext = (): void => {
     if (currentStory < stories.length - 1) {
       setCurrentStory(prev => prev + 1);
     } else {

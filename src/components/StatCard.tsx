@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import type { StatCardProps } from '../types';
 import GiftCard from './GiftCard';
 
-const StatCard = ({ children, delay = 0, asGift = false, giftTheme = 'yellow' }) => {
-  const ref = useRef(null);
+const StatCard: React.FC<StatCardProps> = ({ children, delay = 0, asGift = false, giftTheme = 'yellow' }) => {
+  const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const cardContent = (

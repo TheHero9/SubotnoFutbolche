@@ -1,3 +1,4 @@
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
 import {
@@ -7,8 +8,10 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartOptions
 } from 'chart.js';
+import type { MonthlyChartProps, MonthKey } from '../types';
 import { formatMonthName } from '../utils/helpers';
 
 ChartJS.register(
@@ -20,16 +23,16 @@ ChartJS.register(
   Legend
 );
 
-const MonthlyChart = ({ data, year }) => {
+const MonthlyChart: React.FC<MonthlyChartProps> = ({ data, year }) => {
   const { i18n } = useTranslation();
 
-  const months = [
+  const months: MonthKey[] = [
     'january', 'february', 'march', 'april', 'may', 'june',
     'july', 'august', 'september', 'october', 'november', 'december'
   ];
 
   const chartData = {
-    labels: months.map(m => formatMonthName(m, i18n.language)),
+    labels: months.map(m => formatMonthName(m, i18n.language as 'bg' | 'en')),
     datasets: [
       {
         label: year,
@@ -42,7 +45,7 @@ const MonthlyChart = ({ data, year }) => {
     ]
   };
 
-  const options = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {

@@ -1,6 +1,8 @@
+import React from 'react';
 import { motion } from 'framer-motion';
+import type { StoryCardProps } from '../types';
 
-const StoryCard = ({ children, onNext }) => {
+const StoryCard: React.FC<StoryCardProps> = ({ children, onNext }) => {
   return (
     <motion.div
       className="fixed inset-0 flex items-center justify-center cursor-pointer z-40"

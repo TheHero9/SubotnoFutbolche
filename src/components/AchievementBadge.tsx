@@ -1,6 +1,8 @@
+import React from 'react';
 import { motion } from 'framer-motion';
+import type { AchievementBadgeProps } from '../types';
 
-const AchievementBadge = ({ icon, text, delay = 0 }) => {
+const AchievementBadge: React.FC<AchievementBadgeProps> = ({ icon, text, delay = 0 }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}

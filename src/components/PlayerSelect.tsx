@@ -1,24 +1,30 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import Select from 'react-select';
+import Select, { SingleValue, StylesConfig } from 'react-select';
+import type { PlayerSelectProps } from '../types';
 
-const PlayerSelect = ({ players, onSelect }) => {
+interface OptionType {
+  value: string;
+  label: string;
+}
+
+const PlayerSelect: React.FC<PlayerSelectProps> = ({ players, onSelect }) => {
   const { t } = useTranslation();
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState<SingleValue<OptionType>>(null);
 
-  const options = players.map(player => ({
+  const options: OptionType[] = players.map(player => ({
     value: player.name,
     label: player.name
   }));
 
-  const handleSelect = () => {
+  const handleSelect = (): void => {
     if (selectedOption) {
       onSelect(selectedOption.value);
     }
   };
 
-  const customStyles = {
+  const customStyles: StylesConfig<OptionType, false> = {
     control: (provided) => ({
       ...provided,
       backgroundColor: '#282828',
@@ -120,7 +126,7 @@ const PlayerSelect = ({ players, onSelect }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <Select
+          <Select<OptionType>
             options={options}
             value={selectedOption}
             onChange={setSelectedOption}

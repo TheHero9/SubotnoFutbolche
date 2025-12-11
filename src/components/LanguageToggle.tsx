@@ -1,9 +1,10 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-const LanguageToggle = () => {
+const LanguageToggle: React.FC = () => {
   const { i18n } = useTranslation();
 
-  const toggleLanguage = () => {
+  const toggleLanguage = (): void => {
     const newLang = i18n.language === 'bg' ? 'en' : 'bg';
     i18n.changeLanguage(newLang);
   };

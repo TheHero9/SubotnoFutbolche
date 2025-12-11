@@ -1,29 +1,50 @@
+import type {
+  Player,
+  ProcessedPlayer,
+  MonthlyData,
+  RankTitle,
+  RankChange,
+  BestWorstMonths,
+  BestWorstSeason,
+  StreakData,
+  Language,
+  MonthKey
+} from '../types';
+
+type RankTitleMap = Record<Language, Record<string, RankTitle>>;
+
+const RANK_TITLES: RankTitleMap = {
+  bg: {
+    '1': { title: 'Легендата', description: 'Ако погледнеш нагоре, няма други' },
+    '2-5': { title: 'Голяма машина', description: 'В златната петорка на футбола, носите положението всяка седмица' },
+    '6-10': { title: 'Много сериозен', description: 'От най-сериозните участници, с по-малко личен живот можеше и в петицата' },
+    '11-20': { title: 'Редовен играч', description: 'Идвате на вълни, но винаги спасявате положението' },
+    '21-30': { title: 'Любител на играта', description: 'От време на време идвате да се видите с приятели, понякога се включвате и в мачовете' },
+    '31+': { title: 'Заета личност', description: 'Твърде много ангажименти никога не са на добре, особенно, ако футболчето страда заради това' }
+  },
+  en: {
+    '1': { title: 'The Legend', description: 'If you look up, there\'s no one else' },
+    '2-5': { title: 'Big Machine', description: 'In the golden five of football, carrying the team every week' },
+    '6-10': { title: 'Very Serious', description: 'Among the most serious participants, with less personal life could be in top five' },
+    '11-20': { title: 'Regular Player', description: 'You come in waves, but always save the day' },
+    '21-30': { title: 'Game Enthusiast', description: 'From time to time you come to see friends, sometimes join the matches' },
+    '31+': { title: 'Busy Person', description: 'Too many commitments is never good, especially when football suffers' }
+  }
+};
+
+const MONTH_MAP: Record<string, MonthKey> = {
+  '01': 'january', '02': 'february', '03': 'march', '04': 'april',
+  '05': 'may', '06': 'june', '07': 'july', '08': 'august',
+  '09': 'september', '10': 'october', '11': 'november', '12': 'december'
+};
+
 /**
  * Get player's rank title based on 2025 rank
  */
-export const getRankTitle = (rank, language = 'bg') => {
-  const titles = {
-    bg: {
-      1: { title: 'Легендата', description: 'Ако погледнеш нагоре, няма други' },
-      '2-5': { title: 'Голяма машина', description: 'В златната петорка на футбола, носите положението всяка седмица' },
-      '6-10': { title: 'Много сериозен', description: 'От най-сериозните участници, с по-малко личен живот можеше и в петицата' },
-      '11-20': { title: 'Редовен играч', description: 'Идвате на вълни, но винаги спасявате положението' },
-      '21-30': { title: 'Любител на играта', description: 'От време на време идвате да се видите с приятели, понякога се включвате и в мачовете' },
-      '31+': { title: 'Заета личност', description: 'Твърде много ангажименти никога не са на добре, особенно, ако футболчето страда заради това' }
-    },
-    en: {
-      1: { title: 'The Legend', description: 'If you look up, there\'s no one else' },
-      '2-5': { title: 'Big Machine', description: 'In the golden five of football, carrying the team every week' },
-      '6-10': { title: 'Very Serious', description: 'Among the most serious participants, with less personal life could be in top five' },
-      '11-20': { title: 'Regular Player', description: 'You come in waves, but always save the day' },
-      '21-30': { title: 'Game Enthusiast', description: 'From time to time you come to see friends, sometimes join the matches' },
-      '31+': { title: 'Busy Person', description: 'Too many commitments is never good, especially when football suffers' }
-    }
-  };
+export const getRankTitle = (rank: number, language: Language = 'bg'): RankTitle => {
+  const lang = RANK_TITLES[language] || RANK_TITLES.bg;
 
-  const lang = titles[language] || titles.bg;
-
-  if (rank === 1) return lang[1];
+  if (rank === 1) return lang['1'];
   if (rank >= 2 && rank <= 5) return lang['2-5'];
   if (rank >= 6 && rank <= 10) return lang['6-10'];
   if (rank >= 11 && rank <= 20) return lang['11-20'];
@@ -34,7 +55,7 @@ export const getRankTitle = (rank, language = 'bg') => {
 /**
  * Calculate rank change from 2024 to 2025
  */
-export const getRankChange = (rank2024, rank2025) => {
+export const getRankChange = (rank2024: number, rank2025: number): RankChange => {
   const diff = rank2024 - rank2025;
   return {
     value: Math.abs(diff),
@@ -46,7 +67,7 @@ export const getRankChange = (rank2024, rank2025) => {
 /**
  * Get best and worst months
  */
-export const getBestWorstMonths = (monthlyGames) => {
+export const getBestWorstMonths = (monthlyGames: MonthlyData): BestWorstMonths => {
   const entries = Object.entries(monthlyGames);
   const sorted = entries.sort((a, b) => b[1] - a[1]);
 
@@ -59,7 +80,7 @@ export const getBestWorstMonths = (monthlyGames) => {
 /**
  * Get best season (Winter/Spring/Summer/Autumn)
  */
-export const getBestSeason = (monthlyGames) => {
+export const getBestSeason = (monthlyGames: MonthlyData): BestWorstSeason => {
   const seasons = {
     winter: monthlyGames.december + monthlyGames.january + monthlyGames.february,
     spring: monthlyGames.march + monthlyGames.april + monthlyGames.may,
@@ -69,46 +90,38 @@ export const getBestSeason = (monthlyGames) => {
 
   const sorted = Object.entries(seasons).sort((a, b) => b[1] - a[1]);
   return {
-    best: sorted[0],
-    worst: sorted[sorted.length - 1]
+    best: sorted[0] as [string, number],
+    worst: sorted[sorted.length - 1] as [string, number]
   };
 };
 
 /**
  * Calculate percentile (how many players this player beat)
  */
-export const getPercentile = (rank, totalPlayers) => {
+export const getPercentile = (rank: number, totalPlayers: number): number => {
   return Math.round(((totalPlayers - rank) / totalPlayers) * 100);
 };
 
 /**
  * Calculate future projection (games in 10 years)
  */
-export const getFutureProjection = (total2025) => {
+export const getFutureProjection = (total2025: number): number => {
   return total2025 * 10;
 };
 
 /**
  * Calculate monthly games from dates array
- * @param {string[]} dates - Array of dates in format "DD/MM"
- * @returns {Object} - Monthly breakdown {january: 3, february: 2, ...}
  */
-export const calculateMonthlyGames = (dates) => {
-  const monthly = {
+export const calculateMonthlyGames = (dates: string[]): MonthlyData => {
+  const monthly: MonthlyData = {
     january: 0, february: 0, march: 0, april: 0,
     may: 0, june: 0, july: 0, august: 0,
     september: 0, october: 0, november: 0, december: 0
   };
 
-  const monthMap = {
-    '01': 'january', '02': 'february', '03': 'march', '04': 'april',
-    '05': 'may', '06': 'june', '07': 'july', '08': 'august',
-    '09': 'september', '10': 'october', '11': 'november', '12': 'december'
-  };
-
   dates.forEach(date => {
-    const [day, month] = date.split('/');
-    const monthName = monthMap[month];
+    const [, month] = date.split('/');
+    const monthName = MONTH_MAP[month];
     if (monthName) {
       monthly[monthName]++;
     }
@@ -119,29 +132,22 @@ export const calculateMonthlyGames = (dates) => {
 
 /**
  * Calculate total games from dates array
- * @param {string[]} dates - Array of dates
- * @returns {number} - Total count
  */
-export const calculateTotal = (dates) => {
+export const calculateTotal = (dates: string[] | undefined): number => {
   return dates ? dates.length : 0;
 };
 
 /**
  * Calculate all-time total from multiple date arrays
- * @param {string[]} dates2024
- * @param {string[]} dates2025
- * @returns {number}
  */
-export const calculateAllTimeTotal = (dates2024, dates2025) => {
+export const calculateAllTimeTotal = (dates2024: string[], dates2025: string[]): number => {
   return calculateTotal(dates2024) + calculateTotal(dates2025);
 };
 
 /**
  * Calculate ranks for all players based on 2025 games
- * @param {Array} players - Array of player objects with dates2025
- * @returns {Array} - Players with calculated ranks
  */
-export const calculateRanks = (players) => {
+export const calculateRanks = (players: Player[]): Partial<ProcessedPlayer>[] => {
   // Calculate totals for each player
   const playersWithTotals = players.map(player => ({
     ...player,
@@ -154,7 +160,7 @@ export const calculateRanks = (players) => {
 
   // Assign ranks
   let currentRank = 1;
-  let previousTotal = null;
+  let previousTotal: number | null = null;
 
   return sorted.map((player, index) => {
     // Handle ties - same total gets same rank
@@ -166,8 +172,7 @@ export const calculateRanks = (players) => {
     return {
       ...player,
       rank2025: currentRank,
-      // For 2024 rank, we'll need to calculate separately or store it
-      rank2024: player.rank2024 || currentRank // Keep existing if available
+      rank2024: currentRank // Will be calculated separately if needed
     };
   });
 };
@@ -175,7 +180,7 @@ export const calculateRanks = (players) => {
 /**
  * Helper: Parse date string "DD/MM" to Date object
  */
-const parseDate = (dateStr, year = 2025) => {
+const parseDate = (dateStr: string, year: number = 2025): Date => {
   const [day, month] = dateStr.split('/');
   return new Date(year, parseInt(month) - 1, parseInt(day));
 };
@@ -183,7 +188,7 @@ const parseDate = (dateStr, year = 2025) => {
 /**
  * Helper: Format Date to "DD/MM" (handles single digit dates)
  */
-const formatDateToDDMM = (date) => {
+const formatDateToDDMM = (date: Date): string => {
   const day = date.getDate().toString();
   const month = (date.getMonth() + 1).toString();
   return `${day}/${month}`;
@@ -191,11 +196,11 @@ const formatDateToDDMM = (date) => {
 
 /**
  * Calculate longest streak for 2025 - only breaks when Saturday is missed
- * @param {string[]} playerDates2025 - Player's 2025 dates
- * @param {string[]} allGameDates2025 - All game dates from all players
- * @returns {Object} - { count, startDate, endDate, dates }
  */
-export const calculateLongestStreak2025 = (playerDates2025, allGameDates2025) => {
+export const calculateLongestStreak2025 = (
+  playerDates2025: string[],
+  allGameDates2025: string[]
+): StreakData => {
   if (!playerDates2025 || playerDates2025.length === 0) {
     return { count: 0, startDate: null, endDate: null, dates: [] };
   }
@@ -204,7 +209,7 @@ export const calculateLongestStreak2025 = (playerDates2025, allGameDates2025) =>
   const allDates = allGameDates2025.map(d => parseDate(d, 2025));
   const saturdayDates = allDates
     .filter(d => d.getDay() === 6) // 6 = Saturday
-    .sort((a, b) => a - b);
+    .sort((a, b) => a.getTime() - b.getTime());
 
   if (saturdayDates.length === 0) {
     return {
@@ -218,10 +223,10 @@ export const calculateLongestStreak2025 = (playerDates2025, allGameDates2025) =>
   // Create a set for fast lookup
   const playerDatesSet = new Set(playerDates2025);
 
-  let maxStreak = { count: 0, startDate: null, endDate: null, dates: [] };
+  let maxStreak: StreakData = { count: 0, startDate: null, endDate: null, dates: [] };
   let currentStreak = 0;
-  let currentStreakDates = [];
-  let lastSaturday = null;
+  let currentStreakDates: string[] = [];
+  let lastSaturday: Date | null = null;
 
   for (const saturday of saturdayDates) {
     const saturdayStr = formatDateToDDMM(saturday);
@@ -276,12 +281,9 @@ export const calculateLongestStreak2025 = (playerDates2025, allGameDates2025) =>
 
 /**
  * Get all unique game dates from all players for a specific year
- * @param {Array} players - All players
- * @param {string} datesKey - 'dates2024' or 'dates2025'
- * @returns {string[]} - Unique sorted dates
  */
-const getAllGameDates = (players, datesKey) => {
-  const allDates = new Set();
+const getAllGameDates = (players: Player[], datesKey: 'dates2024' | 'dates2025'): string[] => {
+  const allDates = new Set<string>();
   players.forEach(player => {
     if (player[datesKey]) {
       player[datesKey].forEach(date => allDates.add(date));
@@ -292,10 +294,8 @@ const getAllGameDates = (players, datesKey) => {
 
 /**
  * Process raw player data to add all calculated fields
- * @param {Array} rawPlayers - Players with only name and dates arrays
- * @returns {Array} - Enriched players with all calculated stats
  */
-export const processPlayerData = (rawPlayers) => {
+export const processPlayerData = (rawPlayers: Player[]): ProcessedPlayer[] => {
   // Get all game dates for streak calculation
   const allGameDates2025 = getAllGameDates(rawPlayers, 'dates2025');
 
@@ -309,11 +309,18 @@ export const processPlayerData = (rawPlayers) => {
       ...player,
       games2024: calculateMonthlyGames(player.dates2024 || []),
       games2025: calculateMonthlyGames(player.dates2025 || []),
-      totalAllTime: calculateAllTimeTotal(player.dates2024, player.dates2025),
+      totalAllTime: calculateAllTimeTotal(player.dates2024 || [], player.dates2025 || []),
       longestStreak2025: streakData.count,
       longestStreakDates: streakData.dates,
       longestStreakStart: streakData.startDate,
-      longestStreakEnd: streakData.endDate
-    };
+      longestStreakEnd: streakData.endDate,
+      total2024: player.total2024!,
+      total2025: player.total2025!,
+      rank2024: player.rank2024!,
+      rank2025: player.rank2025!,
+      name: player.name,
+      dates2024: player.dates2024,
+      dates2025: player.dates2025
+    } as ProcessedPlayer;
   });
 };

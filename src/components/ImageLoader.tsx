@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import type { ImageLoaderProps } from '../types';
 
-const ImageLoader = ({ src, alt, className }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+const ImageLoader: React.FC<ImageLoaderProps> = ({ src, alt, className }) => {
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   return (
     <div className="relative">

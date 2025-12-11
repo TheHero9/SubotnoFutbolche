@@ -1,8 +1,19 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import type { GiftCardProps } from '../types';
 
-const themes = {
+interface ThemeConfig {
+  ribbonVertical: string;
+  ribbonHorizontal: string;
+  shadowVertical: string;
+  shadowHorizontal: string;
+  bowShadow: string;
+  confetti: string[];
+  pattern: string;
+}
+
+const themes: Record<string, ThemeConfig> = {
   yellow: {
     ribbonVertical: 'linear-gradient(to right, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
     ribbonHorizontal: 'linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.8), rgba(255, 215, 0, 0.3))',
@@ -29,16 +40,34 @@ const themes = {
     bowShadow: '0 4px 12px rgba(231, 76, 60, 0.8)',
     confetti: ['#e74c3c', '#ffffff', '#ec7063'],
     pattern: 'repeating-linear-gradient(45deg, var(--color-accent-red) 0px, var(--color-accent-red) 10px, transparent 10px, transparent 20px)'
+  },
+  green: {
+    ribbonVertical: 'linear-gradient(to right, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
+    ribbonHorizontal: 'linear-gradient(to bottom, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
+    shadowVertical: '0 0 25px rgba(29, 185, 84, 0.6)',
+    shadowHorizontal: '0 0 25px rgba(29, 185, 84, 0.6)',
+    bowShadow: '0 4px 12px rgba(29, 185, 84, 0.6)',
+    confetti: ['#1db954', '#ffffff', '#2ecc71'],
+    pattern: 'repeating-linear-gradient(45deg, var(--color-accent-green) 0px, var(--color-accent-green) 10px, transparent 10px, transparent 20px)'
+  },
+  purple: {
+    ribbonVertical: 'linear-gradient(to right, rgba(155, 89, 182, 0.3), rgba(155, 89, 182, 0.8), rgba(155, 89, 182, 0.3))',
+    ribbonHorizontal: 'linear-gradient(to bottom, rgba(155, 89, 182, 0.3), rgba(155, 89, 182, 0.8), rgba(155, 89, 182, 0.3))',
+    shadowVertical: '0 0 25px rgba(155, 89, 182, 0.6)',
+    shadowHorizontal: '0 0 25px rgba(155, 89, 182, 0.6)',
+    bowShadow: '0 4px 12px rgba(155, 89, 182, 0.6)',
+    confetti: ['#9b59b6', '#ffffff', '#c39bd3'],
+    pattern: 'repeating-linear-gradient(45deg, #9b59b6 0px, #9b59b6 10px, transparent 10px, transparent 20px)'
   }
 };
 
-const GiftCard = ({ children, delay = 0, theme = 'yellow' }) => {
-  const [isUnwrapped, setIsUnwrapped] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
+const GiftCard: React.FC<GiftCardProps> = ({ children, delay = 0, theme = 'yellow' }) => {
+  const [isUnwrapped, setIsUnwrapped] = useState<boolean>(false);
+  const [isHovering, setIsHovering] = useState<boolean>(false);
 
   const currentTheme = themes[theme] || themes.yellow;
 
-  const handleUnwrap = () => {
+  const handleUnwrap = (): void => {
     // Trigger confetti on unwrap
     confetti({
       particleCount: 120,

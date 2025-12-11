@@ -1,18 +1,19 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { toPng } from 'html-to-image';
+import type { SummaryCardProps } from '../types';
 import { getRankTitle, getRankChange } from '../utils/calculations';
 
-const SummaryCard = ({ player, totalPlayers }) => {
+const SummaryCard: React.FC<SummaryCardProps> = ({ player, totalPlayers }) => {
   const { t, i18n } = useTranslation();
-  const cardRef = useRef(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const rankTitle = getRankTitle(player.rank2025, i18n.language);
+  const rankTitle = getRankTitle(player.rank2025, i18n.language as 'bg' | 'en');
   const rankChange = getRankChange(player.rank2024, player.rank2025);
   const gamesDiff = player.total2025 - player.total2024;
 
-  const handleDownload = async () => {
+  const handleDownload = async (): Promise<void> => {
     if (cardRef.current === null) return;
 
     try {

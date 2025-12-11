@@ -1,7 +1,9 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import type { HeaderProps } from '../types';
 import LanguageToggle from './LanguageToggle';
 
-const Header = ({ onReset }) => {
+const Header: React.FC<HeaderProps> = ({ onReset }) => {
   const { t } = useTranslation();
 
   return (

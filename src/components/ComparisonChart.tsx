@@ -1,3 +1,4 @@
+import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
 import {
@@ -9,8 +10,10 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  ChartOptions
 } from 'chart.js';
+import type { ComparisonChartProps, MonthKey } from '../types';
 import { formatMonthName } from '../utils/helpers';
 
 ChartJS.register(
@@ -24,16 +27,16 @@ ChartJS.register(
   Filler
 );
 
-const ComparisonChart = ({ data2024, data2025 }) => {
+const ComparisonChart: React.FC<ComparisonChartProps> = ({ data2024, data2025 }) => {
   const { i18n } = useTranslation();
 
-  const months = [
+  const months: MonthKey[] = [
     'january', 'february', 'march', 'april', 'may', 'june',
     'july', 'august', 'september', 'october', 'november', 'december'
   ];
 
   const chartData = {
-    labels: months.map(m => formatMonthName(m, i18n.language)),
+    labels: months.map(m => formatMonthName(m, i18n.language as 'bg' | 'en')),
     datasets: [
       {
         label: '2024',
@@ -64,7 +67,7 @@ const ComparisonChart = ({ data2024, data2025 }) => {
     ]
   };
 
-  const options = {
+  const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {

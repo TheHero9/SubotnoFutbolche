@@ -1,10 +1,10 @@
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
 
-const LoadingAnimation = () => {
+const LoadingAnimation: React.FC = () => {
   const { t } = useTranslation();
-  const [messageIndex, setMessageIndex] = useState(0);
+  const [messageIndex, setMessageIndex] = useState<number>(0);
 
   const messages = [
     t('loading.message1'),

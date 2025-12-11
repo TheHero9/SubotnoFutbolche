@@ -193,10 +193,12 @@ const formatDateToDDMM = (date) => {
  * Calculate longest streak for 2025 - only breaks when Saturday is missed
  * @param {string[]} playerDates2025 - Player's 2025 dates
  * @param {string[]} allGameDates2025 - All game dates from all players
- * @returns {number} - Longest streak count
+ * @returns {Object} - { count, startDate, endDate, dates }
  */
 export const calculateLongestStreak2025 = (playerDates2025, allGameDates2025) => {
-  if (!playerDates2025 || playerDates2025.length === 0) return 0;
+  if (!playerDates2025 || playerDates2025.length === 0) {
+    return { count: 0, startDate: null, endDate: null, dates: [] };
+  }
 
   // Parse all game dates and filter to Saturdays only
   const allDates = allGameDates2025.map(d => parseDate(d, 2025));
@@ -204,13 +206,21 @@ export const calculateLongestStreak2025 = (playerDates2025, allGameDates2025) =>
     .filter(d => d.getDay() === 6) // 6 = Saturday
     .sort((a, b) => a - b);
 
-  if (saturdayDates.length === 0) return playerDates2025.length;
+  if (saturdayDates.length === 0) {
+    return {
+      count: playerDates2025.length,
+      startDate: playerDates2025[0],
+      endDate: playerDates2025[playerDates2025.length - 1],
+      dates: playerDates2025
+    };
+  }
 
   // Create a set for fast lookup
   const playerDatesSet = new Set(playerDates2025);
 
-  let maxStreak = 0;
+  let maxStreak = { count: 0, startDate: null, endDate: null, dates: [] };
   let currentStreak = 0;
+  let currentStreakDates = [];
   let lastSaturday = null;
 
   for (const saturday of saturdayDates) {
@@ -220,29 +230,43 @@ export const calculateLongestStreak2025 = (playerDates2025, allGameDates2025) =>
     if (playedThisSaturday) {
       // Add 1 for this Saturday
       let streakIncrement = 1;
+      let newDates = [saturdayStr];
 
       if (lastSaturday) {
         // Count midweek games between last Saturday and this Saturday
         const midweekGames = playerDates2025.filter(dateStr => {
           const d = parseDate(dateStr, 2025);
           return d > lastSaturday && d < saturday;
-        }).length;
-        streakIncrement += midweekGames;
+        });
+        streakIncrement += midweekGames.length;
+        newDates = [...midweekGames, saturdayStr];
       } else {
         // First Saturday in this streak - count any games before it
         const gamesBeforeSaturday = playerDates2025.filter(dateStr => {
           const d = parseDate(dateStr, 2025);
           return d < saturday;
-        }).length;
-        streakIncrement += gamesBeforeSaturday;
+        });
+        streakIncrement += gamesBeforeSaturday.length;
+        newDates = [...gamesBeforeSaturday, saturdayStr];
       }
 
       currentStreak += streakIncrement;
+      currentStreakDates = [...currentStreakDates, ...newDates];
       lastSaturday = saturday;
-      maxStreak = Math.max(maxStreak, currentStreak);
+
+      // Update max streak if current is longer
+      if (currentStreak > maxStreak.count) {
+        maxStreak = {
+          count: currentStreak,
+          startDate: currentStreakDates[0],
+          endDate: currentStreakDates[currentStreakDates.length - 1],
+          dates: [...currentStreakDates]
+        };
+      }
     } else {
       // Missed a Saturday - streak breaks
       currentStreak = 0;
+      currentStreakDates = [];
       lastSaturday = null;
     }
   }
@@ -279,11 +303,17 @@ export const processPlayerData = (rawPlayers) => {
   const withRanks = calculateRanks(rawPlayers);
 
   // Second pass: add monthly breakdowns and longest streak
-  return withRanks.map(player => ({
-    ...player,
-    games2024: calculateMonthlyGames(player.dates2024 || []),
-    games2025: calculateMonthlyGames(player.dates2025 || []),
-    totalAllTime: calculateAllTimeTotal(player.dates2024, player.dates2025),
-    longestStreak2025: calculateLongestStreak2025(player.dates2025 || [], allGameDates2025)
-  }));
+  return withRanks.map(player => {
+    const streakData = calculateLongestStreak2025(player.dates2025 || [], allGameDates2025);
+    return {
+      ...player,
+      games2024: calculateMonthlyGames(player.dates2024 || []),
+      games2025: calculateMonthlyGames(player.dates2025 || []),
+      totalAllTime: calculateAllTimeTotal(player.dates2024, player.dates2025),
+      longestStreak2025: streakData.count,
+      longestStreakDates: streakData.dates,
+      longestStreakStart: streakData.startDate,
+      longestStreakEnd: streakData.endDate
+    };
+  });
 };

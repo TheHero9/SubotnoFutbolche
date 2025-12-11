@@ -127,7 +127,11 @@ const ScrollSection = ({ player, totalPlayers }) => {
             />
             <AchievementBadge
               icon="🔥"
-              text={t('achievements.longestStreak', { streak: player.longestStreak2025 || 0 })}
+              text={
+                player.longestStreakStart && player.longestStreakEnd
+                  ? `${t('achievements.longestStreak', { streak: player.longestStreak2025 || 0 })} (${player.longestStreakStart} - ${player.longestStreakEnd})`
+                  : t('achievements.longestStreak', { streak: player.longestStreak2025 || 0 })
+              }
               delay={0.2}
             />
             <AchievementBadge

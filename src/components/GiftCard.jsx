@@ -2,9 +2,41 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
-const GiftCard = ({ children, delay = 0 }) => {
+const themes = {
+  yellow: {
+    ribbonVertical: 'linear-gradient(to right, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
+    ribbonHorizontal: 'linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.8), rgba(255, 215, 0, 0.3))',
+    shadowVertical: '0 0 25px rgba(29, 185, 84, 0.6)',
+    shadowHorizontal: '0 0 25px rgba(255, 215, 0, 0.6)',
+    bowShadow: '0 4px 12px rgba(255, 215, 0, 0.6)',
+    confetti: ['#ffd700', '#1db954', '#ffffff'],
+    pattern: 'repeating-linear-gradient(45deg, var(--color-accent-gold) 0px, var(--color-accent-gold) 10px, transparent 10px, transparent 20px)'
+  },
+  blue: {
+    ribbonVertical: 'linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.3))',
+    ribbonHorizontal: 'linear-gradient(to bottom, rgba(52, 152, 219, 0.3), rgba(52, 152, 219, 0.9), rgba(52, 152, 219, 0.3))',
+    shadowVertical: '0 0 25px rgba(255, 255, 255, 0.6)',
+    shadowHorizontal: '0 0 25px rgba(52, 152, 219, 0.6)',
+    bowShadow: '0 4px 12px rgba(52, 152, 219, 0.8)',
+    confetti: ['#3498db', '#ffffff', '#5dade2'],
+    pattern: 'repeating-linear-gradient(45deg, var(--color-accent-blue) 0px, var(--color-accent-blue) 10px, transparent 10px, transparent 20px)'
+  },
+  red: {
+    ribbonVertical: 'linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.3))',
+    ribbonHorizontal: 'linear-gradient(to bottom, rgba(231, 76, 60, 0.3), rgba(231, 76, 60, 0.9), rgba(231, 76, 60, 0.3))',
+    shadowVertical: '0 0 25px rgba(255, 255, 255, 0.6)',
+    shadowHorizontal: '0 0 25px rgba(231, 76, 60, 0.6)',
+    bowShadow: '0 4px 12px rgba(231, 76, 60, 0.8)',
+    confetti: ['#e74c3c', '#ffffff', '#ec7063'],
+    pattern: 'repeating-linear-gradient(45deg, var(--color-accent-red) 0px, var(--color-accent-red) 10px, transparent 10px, transparent 20px)'
+  }
+};
+
+const GiftCard = ({ children, delay = 0, theme = 'yellow' }) => {
   const [isUnwrapped, setIsUnwrapped] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+
+  const currentTheme = themes[theme] || themes.yellow;
 
   const handleUnwrap = () => {
     // Trigger confetti on unwrap
@@ -12,7 +44,7 @@ const GiftCard = ({ children, delay = 0 }) => {
       particleCount: 120,
       spread: 90,
       origin: { y: 0.6 },
-      colors: ['#ffd700', '#1db954', '#ffffff'],
+      colors: currentTheme.confetti,
       ticks: 150
     });
 
@@ -52,26 +84,14 @@ const GiftCard = ({ children, delay = 0 }) => {
             style={{ willChange: 'transform, opacity' }}
           >
 
-            {/* Gift Box */}
-            <motion.div
-              className="relative rounded-2xl p-10 overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, #282828 0%, #1a1a1a 100%)',
-                boxShadow: isHovering
-                  ? '0 20px 60px rgba(255, 215, 0, 0.3), 0 0 40px rgba(29, 185, 84, 0.2)'
-                  : '0 10px 40px rgba(0, 0, 0, 0.5)'
-              }}
-              transition={{
-                duration: 0.3,
-                ease: "easeOut"
-              }}
-            >
+            {/* Gift Box - matches content size */}
+            <div className="relative rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #282828 0%, #1a1a1a 100%)' }}>
               {/* Wrapping Paper Pattern */}
               <div className="absolute inset-0 opacity-10">
                 <div
                   className="w-full h-full"
                   style={{
-                    backgroundImage: 'repeating-linear-gradient(45deg, var(--color-accent-gold) 0px, var(--color-accent-gold) 10px, transparent 10px, transparent 20px)',
+                    backgroundImage: currentTheme.pattern,
                     backgroundSize: '30px 30px'
                   }}
                 />
@@ -79,25 +99,25 @@ const GiftCard = ({ children, delay = 0 }) => {
 
               {/* Vertical Ribbon */}
               <div
-                className="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-16"
+                className="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-16 z-10"
                 style={{
-                  background: 'linear-gradient(to right, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
-                  boxShadow: '0 0 25px rgba(29, 185, 84, 0.6)'
+                  background: currentTheme.ribbonVertical,
+                  boxShadow: currentTheme.shadowVertical
                 }}
               />
 
               {/* Horizontal Ribbon */}
               <div
-                className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 h-16"
+                className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 h-16 z-10"
                 style={{
-                  background: 'linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.8), rgba(255, 215, 0, 0.3))',
-                  boxShadow: '0 0 25px rgba(255, 215, 0, 0.6)'
+                  background: currentTheme.ribbonHorizontal,
+                  boxShadow: currentTheme.shadowHorizontal
                 }}
               />
 
               {/* Bow */}
               <motion.div
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-7xl z-10"
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-7xl z-20"
                 animate={{
                   rotate: isHovering ? -8 : 0,
                   scale: isHovering ? 1.1 : 1
@@ -107,12 +127,17 @@ const GiftCard = ({ children, delay = 0 }) => {
                   ease: "easeOut"
                 }}
                 style={{
-                  filter: 'drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6))'
+                  filter: `drop-shadow(${currentTheme.bowShadow})`
                 }}
               >
                 🎀
               </motion.div>
-            </motion.div>
+
+              {/* Invisible content for sizing */}
+              <div className="invisible" aria-hidden="true">
+                {children}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

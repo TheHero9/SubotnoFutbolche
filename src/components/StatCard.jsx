@@ -3,7 +3,7 @@ import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import GiftCard from './GiftCard';
 
-const StatCard = ({ children, delay = 0, asGift = false }) => {
+const StatCard = ({ children, delay = 0, asGift = false, giftTheme = 'yellow' }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -33,7 +33,7 @@ const StatCard = ({ children, delay = 0, asGift = false }) => {
     return (
       <div ref={ref} className="mb-6">
         {isInView && (
-          <GiftCard delay={delay}>
+          <GiftCard delay={delay} theme={giftTheme}>
             <div
               className="rounded-2xl p-8 border transition-colors"
               style={{

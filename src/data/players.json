@@ -2,10 +2,6 @@
   "players": [
     {
       "name": "Дими",
-      "total2024": 37,
-      "total2025": 41,
-      "difference": 4,
-      "totalAllTime": 82,
       "dates2024": [
         "28/12",
         "24/12",
@@ -87,45 +83,10 @@
         "18/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 3,
-        "february": 3,
-        "march": 3,
-        "april": 3,
-        "may": 3,
-        "june": 3,
-        "july": 2,
-        "august": 2,
-        "september": 3,
-        "october": 2,
-        "november": 5,
-        "december": 4
-      },
-      "games2025": {
-        "january": 4,
-        "february": 3,
-        "march": 4,
-        "april": 4,
-        "may": 5,
-        "june": 2,
-        "july": 3,
-        "august": 3,
-        "september": 3,
-        "october": 4,
-        "november": 5,
-        "december": 1
-      },
-      "rank2024": 1,
-      "rank2025": 1,
-      "rankChange": 0
+      ]
     },
     {
       "name": "Васко",
-      "total2024": 33,
-      "total2025": 37,
-      "difference": 4,
-      "totalAllTime": 74,
       "dates2024": [
         "28/12",
         "21/12",
@@ -199,45 +160,10 @@
         "18/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 3,
-        "february": 1,
-        "march": 4,
-        "april": 3,
-        "may": 2,
-        "june": 2,
-        "july": 0,
-        "august": 2,
-        "september": 3,
-        "october": 4,
-        "november": 5,
-        "december": 3
-      },
-      "games2025": {
-        "january": 4,
-        "february": 4,
-        "march": 3,
-        "april": 3,
-        "may": 0,
-        "june": 4,
-        "july": 4,
-        "august": 1,
-        "september": 3,
-        "october": 4,
-        "november": 5,
-        "december": 1
-      },
-      "rank2024": 2,
-      "rank2025": 2,
-      "rankChange": 0
+      ]
     },
     {
       "name": "Явор",
-      "total2024": 20,
-      "total2025": 35,
-      "difference": 15,
-      "totalAllTime": 70,
       "dates2024": [
         "28/12",
         "21/12",
@@ -296,45 +222,10 @@
         "18/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 3,
-        "february": 3,
-        "march": 4,
-        "april": 2,
-        "may": 3,
-        "june": 2,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 1,
-        "november": 0,
-        "december": 2
-      },
-      "games2025": {
-        "january": 4,
-        "february": 4,
-        "march": 4,
-        "april": 4,
-        "may": 4,
-        "june": 4,
-        "july": 0,
-        "august": 2,
-        "september": 2,
-        "october": 2,
-        "november": 4,
-        "december": 1
-      },
-      "rank2024": 10,
-      "rank2025": 3,
-      "rankChange": 7
+      ]
     },
     {
       "name": "Кико",
-      "total2024": 33,
-      "total2025": 34,
-      "difference": 1,
-      "totalAllTime": 68,
       "dates2024": [
         "28/12",
         "24/12",
@@ -405,45 +296,10 @@
         "18/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 1,
-        "february": 3,
-        "march": 4,
-        "april": 3,
-        "may": 2,
-        "june": 3,
-        "july": 2,
-        "august": 1,
-        "september": 3,
-        "october": 2,
-        "november": 4,
-        "december": 4
-      },
-      "games2025": {
-        "january": 4,
-        "february": 3,
-        "march": 5,
-        "april": 2,
-        "may": 3,
-        "june": 3,
-        "july": 3,
-        "august": 2,
-        "september": 2,
-        "october": 3,
-        "november": 4,
-        "december": 0
-      },
-      "rank2024": 3,
-      "rank2025": 4,
-      "rankChange": -1
+      ]
     },
     {
       "name": "Нани",
-      "total2024": 13,
-      "total2025": 33,
-      "difference": 20,
-      "totalAllTime": 66,
       "dates2024": [
         "28/12",
         "24/12",
@@ -493,45 +349,10 @@
         "01/02",
         "25/01",
         "11/01"
-      ],
-      "games2024": {
-        "january": 1,
-        "february": 1,
-        "march": 2,
-        "april": 0,
-        "may": 2,
-        "june": 1,
-        "july": 1,
-        "august": 0,
-        "september": 1,
-        "october": 1,
-        "november": 0,
-        "december": 3
-      },
-      "games2025": {
-        "january": 2,
-        "february": 4,
-        "march": 3,
-        "april": 4,
-        "may": 4,
-        "june": 3,
-        "july": 4,
-        "august": 2,
-        "september": 3,
-        "october": 2,
-        "november": 2,
-        "december": 0
-      },
-      "rank2024": 17,
-      "rank2025": 5,
-      "rankChange": 12
+      ]
     },
     {
       "name": "Жоро Зотов",
-      "total2024": 13,
-      "total2025": 29,
-      "difference": 16,
-      "totalAllTime": 58,
       "dates2024": [
         "28/12",
         "24/12",
@@ -577,45 +398,10 @@
         "15/02",
         "08/02",
         "04/01"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 2,
-        "june": 1,
-        "july": 1,
-        "august": 0,
-        "september": 2,
-        "october": 4,
-        "november": 1,
-        "december": 2
-      },
-      "games2025": {
-        "january": 1,
-        "february": 3,
-        "march": 4,
-        "april": 3,
-        "may": 4,
-        "june": 3,
-        "july": 2,
-        "august": 2,
-        "september": 2,
-        "october": 4,
-        "november": 1,
-        "december": 0
-      },
-      "rank2024": 18,
-      "rank2025": 6,
-      "rankChange": 12
+      ]
     },
     {
       "name": "Ицо",
-      "total2024": 32,
-      "total2025": 28,
-      "difference": -4,
-      "totalAllTime": 56,
       "dates2024": [
         "28/12",
         "24/12",
@@ -679,45 +465,10 @@
         "18/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 2,
-        "february": 2,
-        "march": 4,
-        "april": 3,
-        "may": 1,
-        "june": 0,
-        "july": 2,
-        "august": 2,
-        "september": 2,
-        "october": 4,
-        "november": 5,
-        "december": 4
-      },
-      "games2025": {
-        "january": 4,
-        "february": 2,
-        "march": 0,
-        "april": 2,
-        "may": 3,
-        "june": 3,
-        "july": 0,
-        "august": 2,
-        "september": 3,
-        "october": 4,
-        "november": 4,
-        "december": 1
-      },
-      "rank2024": 4,
-      "rank2025": 7,
-      "rankChange": -3
+      ]
     },
     {
       "name": "Фичо",
-      "total2024": 25,
-      "total2025": 26,
-      "difference": 1,
-      "totalAllTime": 52,
       "dates2024": [
         "28/12",
         "24/12",
@@ -772,45 +523,10 @@
         "25/01",
         "18/01",
         "11/01"
-      ],
-      "games2024": {
-        "january": 3,
-        "february": 3,
-        "march": 1,
-        "april": 2,
-        "may": 2,
-        "june": 0,
-        "july": 0,
-        "august": 2,
-        "september": 2,
-        "october": 1,
-        "november": 4,
-        "december": 4
-      },
-      "games2025": {
-        "january": 3,
-        "february": 2,
-        "march": 3,
-        "april": 1,
-        "may": 3,
-        "june": 2,
-        "july": 0,
-        "august": 2,
-        "september": 2,
-        "october": 3,
-        "november": 5,
-        "december": 0
-      },
-      "rank2024": 6,
-      "rank2025": 8,
-      "rankChange": -2
+      ]
     },
     {
       "name": "Иван",
-      "total2024": 0,
-      "total2025": 26,
-      "difference": 26,
-      "totalAllTime": 52,
       "dates2024": [],
       "dates2025": [
         "22/11",
@@ -839,45 +555,10 @@
         "17/05",
         "10/05",
         "15/03"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 1,
-        "april": 0,
-        "may": 4,
-        "june": 3,
-        "july": 3,
-        "august": 3,
-        "september": 4,
-        "october": 4,
-        "november": 4,
-        "december": 0
-      },
-      "rank2024": 39,
-      "rank2025": 9,
-      "rankChange": 30
+      ]
     },
     {
       "name": "Калата",
-      "total2024": 15,
-      "total2025": 25,
-      "difference": 10,
-      "totalAllTime": 50,
       "dates2024": [
         "28/12",
         "24/12",
@@ -921,45 +602,10 @@
         "18/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 1,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 1,
-        "june": 0,
-        "july": 2,
-        "august": 2,
-        "september": 2,
-        "october": 2,
-        "november": 1,
-        "december": 3
-      },
-      "games2025": {
-        "january": 4,
-        "february": 4,
-        "march": 2,
-        "april": 2,
-        "may": 3,
-        "june": 3,
-        "july": 3,
-        "august": 1,
-        "september": 2,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 14,
-      "rank2025": 10,
-      "rankChange": 4
+      ]
     },
     {
       "name": "Алекс",
-      "total2024": 24,
-      "total2025": 21,
-      "difference": -3,
-      "totalAllTime": 42,
       "dates2024": [
         "28/12",
         "24/12",
@@ -1008,45 +654,10 @@
         "05/04",
         "22/02",
         "08/02"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 4,
-        "april": 3,
-        "may": 3,
-        "june": 2,
-        "july": 2,
-        "august": 0,
-        "september": 2,
-        "october": 3,
-        "november": 3,
-        "december": 2
-      },
-      "games2025": {
-        "january": 0,
-        "february": 2,
-        "march": 0,
-        "april": 3,
-        "may": 2,
-        "june": 2,
-        "july": 3,
-        "august": 1,
-        "september": 0,
-        "october": 4,
-        "november": 3,
-        "december": 1
-      },
-      "rank2024": 8,
-      "rank2025": 11,
-      "rankChange": -3
+      ]
     },
     {
       "name": "Никола  Радилов",
-      "total2024": 0,
-      "total2025": 21,
-      "difference": 21,
-      "totalAllTime": 42,
       "dates2024": [],
       "dates2025": [
         "29/11",
@@ -1070,45 +681,10 @@
         "10/05",
         "26/04",
         "19/04"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 2,
-        "may": 4,
-        "june": 4,
-        "july": 0,
-        "august": 2,
-        "september": 2,
-        "october": 3,
-        "november": 4,
-        "december": 0
-      },
-      "rank2024": 40,
-      "rank2025": 12,
-      "rankChange": 28
+      ]
     },
     {
       "name": "Викшата",
-      "total2024": 9,
-      "total2025": 18,
-      "difference": 9,
-      "totalAllTime": 36,
       "dates2024": [
         "24/12",
         "21/12",
@@ -1139,45 +715,10 @@
         "08/02",
         "01/02",
         "25/01"
-      ],
-      "games2024": {
-        "january": 1,
-        "february": 1,
-        "march": 2,
-        "april": 0,
-        "may": 1,
-        "june": 1,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 1,
-        "november": 0,
-        "december": 2
-      },
-      "games2025": {
-        "january": 1,
-        "february": 3,
-        "march": 3,
-        "april": 2,
-        "may": 2,
-        "june": 2,
-        "july": 2,
-        "august": 1,
-        "september": 1,
-        "october": 0,
-        "november": 1,
-        "december": 0
-      },
-      "rank2024": 20,
-      "rank2025": 13,
-      "rankChange": 7
+      ]
     },
     {
       "name": "Стефан Ятански",
-      "total2024": 0,
-      "total2025": 18,
-      "difference": 18,
-      "totalAllTime": 36,
       "dates2024": [],
       "dates2025": [
         "06/09",
@@ -1198,45 +739,10 @@
         "26/04",
         "19/04",
         "05/04"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 3,
-        "may": 3,
-        "june": 4,
-        "july": 4,
-        "august": 3,
-        "september": 1,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 41,
-      "rank2025": 14,
-      "rankChange": 27
+      ]
     },
     {
       "name": "Фил",
-      "total2024": 16,
-      "total2025": 17,
-      "difference": 1,
-      "totalAllTime": 34,
       "dates2024": [
         "28/12",
         "24/12",
@@ -1273,45 +779,10 @@
         "18/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 2,
-        "august": 2,
-        "september": 1,
-        "october": 4,
-        "november": 4,
-        "december": 3
-      },
-      "games2025": {
-        "january": 4,
-        "february": 2,
-        "march": 3,
-        "april": 2,
-        "may": 2,
-        "june": 1,
-        "july": 1,
-        "august": 2,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 13,
-      "rank2025": 15,
-      "rankChange": -2
+      ]
     },
     {
       "name": "Петър Димитров",
-      "total2024": 7,
-      "total2025": 17,
-      "difference": 10,
-      "totalAllTime": 34,
       "dates2024": [
         "24/12",
         "21/12",
@@ -1339,45 +810,10 @@
         "25/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 3,
-        "december": 3
-      },
-      "games2025": {
-        "january": 3,
-        "february": 4,
-        "march": 3,
-        "april": 2,
-        "may": 2,
-        "june": 0,
-        "july": 0,
-        "august": 1,
-        "september": 0,
-        "october": 1,
-        "november": 1,
-        "december": 0
-      },
-      "rank2024": 22,
-      "rank2025": 16,
-      "rankChange": 6
+      ]
     },
     {
       "name": "Кристофър",
-      "total2024": 26,
-      "total2025": 16,
-      "difference": -10,
-      "totalAllTime": 32,
       "dates2024": [
         "28/12",
         "21/12",
@@ -1423,45 +859,10 @@
         "22/02",
         "15/02",
         "18/01"
-      ],
-      "games2024": {
-        "january": 2,
-        "february": 2,
-        "march": 2,
-        "april": 2,
-        "may": 2,
-        "june": 1,
-        "july": 2,
-        "august": 0,
-        "september": 2,
-        "october": 2,
-        "november": 5,
-        "december": 3
-      },
-      "games2025": {
-        "january": 1,
-        "february": 2,
-        "march": 3,
-        "april": 1,
-        "may": 3,
-        "june": 1,
-        "july": 4,
-        "august": 0,
-        "september": 0,
-        "october": 1,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 5,
-      "rank2025": 17,
-      "rankChange": -12
+      ]
     },
     {
       "name": "Жоро М.",
-      "total2024": 20,
-      "total2025": 16,
-      "difference": -4,
-      "totalAllTime": 32,
       "dates2024": [
         "14/12",
         "30/11",
@@ -1501,45 +902,10 @@
         "01/02",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 2,
-        "february": 3,
-        "march": 1,
-        "april": 1,
-        "may": 2,
-        "june": 1,
-        "july": 0,
-        "august": 2,
-        "september": 0,
-        "october": 2,
-        "november": 5,
-        "december": 1
-      },
-      "games2025": {
-        "january": 2,
-        "february": 1,
-        "march": 2,
-        "april": 1,
-        "may": 0,
-        "june": 2,
-        "july": 0,
-        "august": 0,
-        "september": 2,
-        "october": 3,
-        "november": 2,
-        "december": 1
-      },
-      "rank2024": 11,
-      "rank2025": 18,
-      "rankChange": -7
+      ]
     },
     {
       "name": "Емо ",
-      "total2024": 14,
-      "total2025": 16,
-      "difference": 2,
-      "totalAllTime": 32,
       "dates2024": [
         "24/12",
         "09/11",
@@ -1573,45 +939,10 @@
         "19/04",
         "01/02",
         "04/01"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 2,
-        "march": 2,
-        "april": 1,
-        "may": 2,
-        "june": 1,
-        "july": 1,
-        "august": 1,
-        "september": 0,
-        "october": 2,
-        "november": 1,
-        "december": 1
-      },
-      "games2025": {
-        "january": 1,
-        "february": 1,
-        "march": 0,
-        "april": 1,
-        "may": 2,
-        "june": 1,
-        "july": 1,
-        "august": 1,
-        "september": 4,
-        "october": 0,
-        "november": 3,
-        "december": 1
-      },
-      "rank2024": 16,
-      "rank2025": 19,
-      "rankChange": -3
+      ]
     },
     {
       "name": "Ники",
-      "total2024": 22,
-      "total2025": 15,
-      "difference": -7,
-      "totalAllTime": 30,
       "dates2024": [
         "28/12",
         "24/12",
@@ -1652,45 +983,10 @@
         "08/02",
         "01/02",
         "25/01"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 1,
-        "march": 4,
-        "april": 3,
-        "may": 2,
-        "june": 3,
-        "july": 2,
-        "august": 0,
-        "september": 1,
-        "october": 1,
-        "november": 2,
-        "december": 3
-      },
-      "games2025": {
-        "january": 1,
-        "february": 2,
-        "march": 1,
-        "april": 2,
-        "may": 1,
-        "june": 0,
-        "july": 4,
-        "august": 0,
-        "september": 0,
-        "october": 2,
-        "november": 2,
-        "december": 0
-      },
-      "rank2024": 9,
-      "rank2025": 20,
-      "rankChange": -11
+      ]
     },
     {
       "name": "Сами Маркузов",
-      "total2024": 18,
-      "total2025": 15,
-      "difference": -3,
-      "totalAllTime": 30,
       "dates2024": [
         "23/11",
         "02/11",
@@ -1727,46 +1023,17 @@
         "15/03",
         "08/03",
         "18/01"
-      ],
-      "games2024": {
-        "january": 2,
-        "february": 2,
-        "march": 2,
-        "april": 2,
-        "may": 1,
-        "june": 2,
-        "july": 0,
-        "august": 1,
-        "september": 3,
-        "october": 1,
-        "november": 2,
-        "december": 0
-      },
-      "games2025": {
-        "january": 1,
-        "february": 0,
-        "march": 2,
-        "april": 1,
-        "may": 4,
-        "june": 0,
-        "july": 1,
-        "august": 1,
-        "september": 1,
-        "october": 1,
-        "november": 3,
-        "december": 0
-      },
-      "rank2024": 12,
-      "rank2025": 21,
-      "rankChange": -9
+      ]
     },
     {
       "name": "Атанас",
-      "total2024": 5,
-      "total2025": 15,
-      "difference": 10,
-      "totalAllTime": 30,
-      "dates2024": ["08/06", "04/05", "27/04", "13/04", "02/03"],
+      "dates2024": [
+        "08/06",
+        "04/05",
+        "27/04",
+        "13/04",
+        "02/03"
+      ],
       "dates2025": [
         "30/08",
         "02/08",
@@ -1783,46 +1050,14 @@
         "15/02",
         "01/02",
         "11/01"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 1,
-        "april": 2,
-        "may": 1,
-        "june": 1,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 1,
-        "february": 2,
-        "march": 3,
-        "april": 1,
-        "may": 4,
-        "june": 1,
-        "july": 1,
-        "august": 2,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 26,
-      "rank2025": 22,
-      "rankChange": 4
+      ]
     },
     {
       "name": "Пацо",
-      "total2024": 2,
-      "total2025": 15,
-      "difference": 13,
-      "totalAllTime": 30,
-      "dates2024": ["16/11", "26/10"],
+      "dates2024": [
+        "16/11",
+        "26/10"
+      ],
       "dates2025": [
         "06/12",
         "08/11",
@@ -1839,46 +1074,18 @@
         "15/03",
         "08/03",
         "15/02"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 1,
-        "november": 1,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 1,
-        "march": 3,
-        "april": 1,
-        "may": 1,
-        "june": 1,
-        "july": 1,
-        "august": 1,
-        "september": 1,
-        "october": 2,
-        "november": 2,
-        "december": 1
-      },
-      "rank2024": 34,
-      "rank2025": 23,
-      "rankChange": 11
+      ]
     },
     {
       "name": "Данката",
-      "total2024": 6,
-      "total2025": 14,
-      "difference": 8,
-      "totalAllTime": 28,
-      "dates2024": ["21/12", "14/12", "26/10", "05/10", "06/01", "27/01"],
+      "dates2024": [
+        "21/12",
+        "14/12",
+        "26/10",
+        "05/10",
+        "06/01",
+        "27/01"
+      ],
       "dates2025": [
         "06/12",
         "29/11",
@@ -1894,45 +1101,10 @@
         "03/05",
         "22/03",
         "08/02"
-      ],
-      "games2024": {
-        "january": 2,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 2,
-        "november": 0,
-        "december": 2
-      },
-      "games2025": {
-        "january": 0,
-        "february": 1,
-        "march": 1,
-        "april": 0,
-        "may": 3,
-        "june": 0,
-        "july": 2,
-        "august": 1,
-        "september": 3,
-        "october": 0,
-        "november": 2,
-        "december": 1
-      },
-      "rank2024": 24,
-      "rank2025": 24,
-      "rankChange": 0
+      ]
     },
     {
       "name": "Бобката",
-      "total2024": 7,
-      "total2025": 12,
-      "difference": 5,
-      "totalAllTime": 24,
       "dates2024": [
         "16/11",
         "02/11",
@@ -1955,46 +1127,15 @@
         "15/03",
         "25/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 2,
-        "february": 2,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 1,
-        "november": 2,
-        "december": 0
-      },
-      "games2025": {
-        "january": 2,
-        "february": 0,
-        "march": 1,
-        "april": 1,
-        "may": 0,
-        "june": 0,
-        "july": 1,
-        "august": 1,
-        "september": 3,
-        "october": 0,
-        "november": 2,
-        "december": 1
-      },
-      "rank2024": 23,
-      "rank2025": 25,
-      "rankChange": -2
+      ]
     },
     {
       "name": "Алекс Шопов",
-      "total2024": 3,
-      "total2025": 11,
-      "difference": 8,
-      "totalAllTime": 22,
-      "dates2024": ["7/12", "11/05", "17/02"],
+      "dates2024": [
+        "7/12",
+        "11/05",
+        "17/02"
+      ],
       "dates2025": [
         "15/11",
         "08/11",
@@ -2007,46 +1148,18 @@
         "30/08",
         "23/08",
         "05/04"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 1,
-        "march": 0,
-        "april": 0,
-        "may": 1,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 1,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 2,
-        "september": 2,
-        "october": 3,
-        "november": 3,
-        "december": 0
-      },
-      "rank2024": 28,
-      "rank2025": 26,
-      "rankChange": 2
+      ]
     },
     {
       "name": "Еркан",
-      "total2024": 6,
-      "total2025": 8,
-      "difference": 2,
-      "totalAllTime": 16,
-      "dates2024": ["7/12", "23/11", "09/11", "02/11", "24/02", "17/02"],
+      "dates2024": [
+        "7/12",
+        "23/11",
+        "09/11",
+        "02/11",
+        "24/02",
+        "17/02"
+      ],
       "dates2025": [
         "06/12",
         "25/10",
@@ -2056,45 +1169,10 @@
         "19/04",
         "18/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 0,
-        "february": 2,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 3,
-        "december": 0
-      },
-      "games2025": {
-        "january": 2,
-        "february": 0,
-        "march": 0,
-        "april": 1,
-        "may": 1,
-        "june": 1,
-        "july": 0,
-        "august": 0,
-        "september": 1,
-        "october": 1,
-        "november": 0,
-        "december": 1
-      },
-      "rank2024": 25,
-      "rank2025": 27,
-      "rankChange": -2
+      ]
     },
     {
       "name": "Самуел Ефтимов",
-      "total2024": 15,
-      "total2025": 7,
-      "difference": -8,
-      "totalAllTime": 14,
       "dates2024": [
         "23/11",
         "09/11",
@@ -2120,125 +1198,33 @@
         "25/01",
         "11/01",
         "04/01"
-      ],
-      "games2024": {
-        "january": 2,
-        "february": 0,
-        "march": 1,
-        "april": 1,
-        "may": 0,
-        "june": 2,
-        "july": 2,
-        "august": 2,
-        "september": 1,
-        "october": 2,
-        "november": 2,
-        "december": 0
-      },
-      "games2025": {
-        "january": 3,
-        "february": 1,
-        "march": 0,
-        "april": 2,
-        "may": 1,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 15,
-      "rank2025": 28,
-      "rankChange": -13
+      ]
     },
     {
       "name": "Браян",
-      "total2024": 0,
-      "total2025": 6,
-      "difference": 6,
-      "totalAllTime": 12,
       "dates2024": [],
-      "dates2025": ["15/11", "08/11", "01/11", "18/10", "04/10", "06/09"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 1,
-        "october": 2,
-        "november": 3,
-        "december": 0
-      },
-      "rank2024": 42,
-      "rank2025": 29,
-      "rankChange": 13
+      "dates2025": [
+        "15/11",
+        "08/11",
+        "01/11",
+        "18/10",
+        "04/10",
+        "06/09"
+      ]
     },
     {
       "name": "Явор Цаков",
-      "total2024": 0,
-      "total2025": 5,
-      "difference": 5,
-      "totalAllTime": 10,
       "dates2024": [],
-      "dates2025": ["30/08", "26/07", "28/06", "14/06", "07/06"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 3,
-        "july": 1,
-        "august": 1,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 43,
-      "rank2025": 30,
-      "rankChange": 13
+      "dates2025": [
+        "30/08",
+        "26/07",
+        "28/06",
+        "14/06",
+        "07/06"
+      ]
     },
     {
       "name": "Сашо",
-      "total2024": 25,
-      "total2025": 4,
-      "difference": -21,
-      "totalAllTime": 8,
       "dates2024": [
         "28/12",
         "14/12",
@@ -2266,45 +1252,15 @@
         "16/03",
         "23/03"
       ],
-      "dates2025": ["14/06", "07/06", "31/05", "11/01"],
-      "games2024": {
-        "january": 1,
-        "february": 3,
-        "march": 4,
-        "april": 2,
-        "may": 2,
-        "june": 2,
-        "july": 1,
-        "august": 0,
-        "september": 3,
-        "october": 1,
-        "november": 3,
-        "december": 2
-      },
-      "games2025": {
-        "january": 1,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 1,
-        "june": 2,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 7,
-      "rank2025": 31,
-      "rankChange": -24
+      "dates2025": [
+        "14/06",
+        "07/06",
+        "31/05",
+        "11/01"
+      ]
     },
     {
       "name": "Пепи Христов",
-      "total2024": 10,
-      "total2025": 4,
-      "difference": -6,
-      "totalAllTime": 8,
       "dates2024": [
         "21/12",
         "14/12",
@@ -2317,365 +1273,96 @@
         "25/03",
         "23/03"
       ],
-      "dates2025": ["06/12", "05/04", "29/03", "08/02"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 2,
-        "april": 1,
-        "may": 0,
-        "june": 0,
-        "july": 2,
-        "august": 2,
-        "september": 0,
-        "october": 0,
-        "november": 1,
-        "december": 2
-      },
-      "games2025": {
-        "january": 0,
-        "february": 1,
-        "march": 1,
-        "april": 1,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 1
-      },
-      "rank2024": 19,
-      "rank2025": 32,
-      "rankChange": -13
+      "dates2025": [
+        "06/12",
+        "05/04",
+        "29/03",
+        "08/02"
+      ]
     },
     {
       "name": "Неджи",
-      "total2024": 0,
-      "total2025": 3,
-      "difference": 3,
-      "totalAllTime": 6,
       "dates2024": [],
-      "dates2025": ["22/11", "15/11", "20/09"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 1,
-        "october": 0,
-        "november": 2,
-        "december": 0
-      },
-      "rank2024": 44,
-      "rank2025": 33,
-      "rankChange": 11
+      "dates2025": [
+        "22/11",
+        "15/11",
+        "20/09"
+      ]
     },
     {
       "name": "Теодор",
-      "total2024": 0,
-      "total2025": 3,
-      "difference": 3,
-      "totalAllTime": 6,
       "dates2024": [],
-      "dates2025": ["11/10", "15/03", "22/02"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 1,
-        "march": 1,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 1,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 45,
-      "rank2025": 34,
-      "rankChange": 11
+      "dates2025": [
+        "11/10",
+        "15/03",
+        "22/02"
+      ]
     },
     {
       "name": "Камбата",
-      "total2024": 4,
-      "total2025": 2,
-      "difference": -2,
-      "totalAllTime": 4,
-      "dates2024": ["24/12", "14/12", "7/12", "14/09"],
-      "dates2025": ["01/03", "18/01"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 1,
-        "october": 0,
-        "november": 0,
-        "december": 2
-      },
-      "games2025": {
-        "january": 1,
-        "february": 0,
-        "march": 1,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 27,
-      "rank2025": 35,
-      "rankChange": -8
+      "dates2024": [
+        "24/12",
+        "14/12",
+        "7/12",
+        "14/09"
+      ],
+      "dates2025": [
+        "01/03",
+        "18/01"
+      ]
     },
     {
       "name": "Ефо",
-      "total2024": 3,
-      "total2025": 2,
-      "difference": -1,
-      "totalAllTime": 4,
-      "dates2024": ["7/12", "23/11", "14/09"],
-      "dates2025": ["01/03", "18/01"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 1,
-        "october": 0,
-        "november": 1,
-        "december": 0
-      },
-      "games2025": {
-        "january": 1,
-        "february": 0,
-        "march": 1,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 29,
-      "rank2025": 36,
-      "rankChange": -7
+      "dates2024": [
+        "7/12",
+        "23/11",
+        "14/09"
+      ],
+      "dates2025": [
+        "01/03",
+        "18/01"
+      ]
     },
     {
       "name": "Крис Цонев",
-      "total2024": 3,
-      "total2025": 2,
-      "difference": -1,
-      "totalAllTime": 4,
-      "dates2024": ["????", "23/11", "09/11"],
-      "dates2025": ["22/03", "22/02"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 2,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 1,
-        "march": 1,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 30,
-      "rank2025": 37,
-      "rankChange": -7
+      "dates2024": [
+        "????",
+        "23/11",
+        "09/11"
+      ],
+      "dates2025": [
+        "22/03",
+        "22/02"
+      ]
     },
     {
       "name": "Янис",
-      "total2024": 0,
-      "total2025": 2,
-      "difference": 2,
-      "totalAllTime": 4,
       "dates2024": [],
-      "dates2025": ["29/11", "15/03"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 1,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 1,
-        "december": 0
-      },
-      "rank2024": 46,
-      "rank2025": 38,
-      "rankChange": 8
+      "dates2025": [
+        "29/11",
+        "15/03"
+      ]
     },
     {
       "name": "Даниел Зуев",
-      "total2024": 3,
-      "total2025": 1,
-      "difference": -2,
-      "totalAllTime": 2,
-      "dates2024": ["09/11", "19/10", "12/10"],
-      "dates2025": ["29/03"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 2,
-        "november": 1,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 1,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 31,
-      "rank2025": 39,
-      "rankChange": -8
+      "dates2024": [
+        "09/11",
+        "19/10",
+        "12/10"
+      ],
+      "dates2025": [
+        "29/03"
+      ]
     },
     {
       "name": "Георги Георгиев",
-      "total2024": 0,
-      "total2025": 1,
-      "difference": 1,
-      "totalAllTime": 2,
       "dates2024": [],
-      "dates2025": ["22/02"],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 1,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 47,
-      "rank2025": 40,
-      "rankChange": 7
+      "dates2025": [
+        "22/02"
+      ]
     },
     {
       "name": "Крис (баща) ",
-      "total2024": 8,
-      "total2025": 0,
-      "difference": -8,
-      "totalAllTime": 0,
       "dates2024": [
         "15/06",
         "08/06",
@@ -2686,321 +1373,60 @@
         "10/02",
         "16/03"
       ],
-      "dates2025": [],
-      "games2024": {
-        "january": 1,
-        "february": 2,
-        "march": 2,
-        "april": 0,
-        "may": 1,
-        "june": 2,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 21,
-      "rank2025": 41,
-      "rankChange": -20
+      "dates2025": []
     },
     {
       "name": "Имануел",
-      "total2024": 3,
-      "total2025": 0,
-      "difference": -3,
-      "totalAllTime": 0,
-      "dates2024": ["03/08", "27/07", "20/07"],
-      "dates2025": [],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 2,
-        "august": 1,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 32,
-      "rank2025": 42,
-      "rankChange": -10
+      "dates2024": [
+        "03/08",
+        "27/07",
+        "20/07"
+      ],
+      "dates2025": []
     },
     {
       "name": "Тити",
-      "total2024": 3,
-      "total2025": 0,
-      "difference": -3,
-      "totalAllTime": 0,
-      "dates2024": ["03/08", "18/05", "20/01"],
-      "dates2025": [],
-      "games2024": {
-        "january": 1,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 1,
-        "june": 0,
-        "july": 0,
-        "august": 1,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 33,
-      "rank2025": 43,
-      "rankChange": -10
+      "dates2024": [
+        "03/08",
+        "18/05",
+        "20/01"
+      ],
+      "dates2025": []
     },
     {
       "name": "Ерван",
-      "total2024": 2,
-      "total2025": 0,
-      "difference": -2,
-      "totalAllTime": 0,
-      "dates2024": ["05/10", "21/09"],
-      "dates2025": [],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 1,
-        "october": 1,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 35,
-      "rank2025": 44,
-      "rankChange": -9
+      "dates2024": [
+        "05/10",
+        "21/09"
+      ],
+      "dates2025": []
     },
     {
       "name": "Петър Петров",
-      "total2024": 2,
-      "total2025": 0,
-      "difference": -2,
-      "totalAllTime": 0,
-      "dates2024": ["20/01", "27/01"],
-      "dates2025": [],
-      "games2024": {
-        "january": 2,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 36,
-      "rank2025": 45,
-      "rankChange": -9
+      "dates2024": [
+        "20/01",
+        "27/01"
+      ],
+      "dates2025": []
     },
     {
       "name": "Дани Свиленов",
-      "total2024": 1,
-      "total2025": 0,
-      "difference": -1,
-      "totalAllTime": 0,
-      "dates2024": ["17/02"],
-      "dates2025": [],
-      "games2024": {
-        "january": 0,
-        "february": 1,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 37,
-      "rank2025": 46,
-      "rankChange": -9
+      "dates2024": [
+        "17/02"
+      ],
+      "dates2025": []
     },
     {
       "name": "Никсъна",
-      "total2024": 1,
-      "total2025": 0,
-      "difference": -1,
-      "totalAllTime": 0,
-      "dates2024": ["06/04"],
-      "dates2025": [],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 1,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 38,
-      "rank2025": 47,
-      "rankChange": -9
+      "dates2024": [
+        "06/04"
+      ],
+      "dates2025": []
     },
     {
       "name": "Марти Врачев",
-      "total2024": 0,
-      "total2025": 0,
-      "difference": 0,
-      "totalAllTime": 0,
       "dates2024": [],
-      "dates2025": [],
-      "games2024": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "games2025": {
-        "january": 0,
-        "february": 0,
-        "march": 0,
-        "april": 0,
-        "may": 0,
-        "june": 0,
-        "july": 0,
-        "august": 0,
-        "september": 0,
-        "october": 0,
-        "november": 0,
-        "december": 0
-      },
-      "rank2024": 48,
-      "rank2025": 48,
-      "rankChange": 0
+      "dates2025": []
     }
-  ],
-  "totalPlayers": 48,
-  "seasonName": "Съботно Футболче 2025",
-  "exportDate": "2025-12-09T21:30:17.150Z"
+  ]
 }

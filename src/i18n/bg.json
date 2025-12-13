@@ -33,7 +33,13 @@
     "hideDates": "Скрий датите",
     "showRanking": "Виж класацията",
     "fullRanking": "Пълна класация 2025",
-    "hideRanking": "Скрий класацията"
+    "hideRanking": "Скрий класацията",
+    "footballBuddies": "Твоето футболно влияние",
+    "footballBuddiesSubtitle": "Играчите, на чиито мачове присъстваш най-много",
+    "gamesTogether": "мача заедно",
+    "ofTheirGames": "от техните мачове",
+    "notEnoughGames": "Играй повече мачове за да видиш влиянието си!",
+    "footballBuddiesInfo": "* Показва в какъв % от мачовете на всеки играч си участвал"
   },
   "community": {
     "title": "Съботно Футболче",

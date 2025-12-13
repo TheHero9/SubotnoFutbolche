@@ -5,6 +5,7 @@ import confetti from 'canvas-confetti';
 import type { StorySectionProps, CommunityStatsRaw } from '../types';
 import StoryCard from './StoryCard';
 import { getRankTitle, getRankChange, calculateCommunityStats } from '../utils/calculations';
+import { getFootballBuddies } from '../utils/footballBuddies';
 import communityStatsRaw from '../data/communityStats.json';
 
 const rawStats = communityStatsRaw as CommunityStatsRaw;
@@ -22,6 +23,9 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
 
   // Calculate community stats from raw data
   const communityStats = useMemo(() => calculateCommunityStats(rawStats), []);
+
+  // Calculate football buddies using affinity algorithm
+  const footballBuddies = useMemo(() => getFootballBuddies(player, allPlayers), [player, allPlayers]);
 
   // Format dates to dd.mm format (EU style)
   const formatDateEU = (dateStr: string): string => {
@@ -56,9 +60,9 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const rankChange = getRankChange(player.rank2024, player.rank2025);
   const rankTitle = getRankTitle(player.rank2025, i18n.language as 'bg' | 'en');
 
-  // Trigger confetti on community stats and rank reveal
+  // Trigger confetti on rank reveal and community stats
   useEffect(() => {
-    if (currentStory === 2 || currentStory === 6) {
+    if (currentStory === 2 || currentStory === 7) {
       confetti({
         particleCount: 100,
         spread: 70,
@@ -383,7 +387,93 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 5: Community - Total Games 2025
+    // Story 5: Football Buddies
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          <motion.div
+            className="text-6xl mb-4"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", duration: 0.8 }}
+          >
+            🤝
+          </motion.div>
+          <motion.h2
+            className="text-2xl md:text-3xl font-bold mb-2"
+            style={{ color: 'var(--color-accent-green)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {t('story.footballBuddies')}
+          </motion.h2>
+          <motion.p
+            className="text-sm mb-6"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            {t('story.footballBuddiesSubtitle')}
+          </motion.p>
+
+          {footballBuddies.length > 0 ? (
+            <>
+              <div className="space-y-3">
+                {footballBuddies.map((buddy, index) => (
+                  <motion.div
+                    key={buddy.name}
+                    className="flex items-center justify-between px-4 py-3 rounded-xl"
+                    style={{ backgroundColor: 'var(--color-bg-card)' }}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 + index * 0.15 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+                        {index + 1}.
+                      </span>
+                      <span className="font-semibold text-sm md:text-base">
+                        {buddy.name}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold" style={{ color: 'var(--color-accent-green)' }}>
+                        {buddy.gamesWithYou} {t('story.gamesTogether')}
+                      </div>
+                      <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                        {buddy.influenceOnThem}% {t('story.ofTheirGames')}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              <motion.p
+                className="text-xs mt-4 px-2"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.4 }}
+              >
+                {t('story.footballBuddiesInfo')}
+              </motion.p>
+            </>
+          ) : (
+            <motion.p
+              className="text-lg"
+              style={{ color: 'var(--color-text-secondary)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              {t('story.notEnoughGames')}
+            </motion.p>
+          )}
+        </div>
+      )
+    },
+    // Story 6: Community - Total Games 2025
     {
       content: (
         <div>
@@ -443,7 +533,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 6: Community - Average Players & Success Rate
+    // Story 7: Community - Average Players & Success Rate
     {
       content: (
         <div>
@@ -482,7 +572,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 7: Community - Favorite Fields 2025
+    // Story 8: Community - Favorite Fields 2025
     {
       content: (
         <div>

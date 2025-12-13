@@ -33,7 +33,13 @@
     "hideDates": "Hide dates",
     "showRanking": "View full ranking",
     "fullRanking": "Full Ranking 2025",
-    "hideRanking": "Hide ranking"
+    "hideRanking": "Hide ranking",
+    "footballBuddies": "Your Football Impact",
+    "footballBuddiesSubtitle": "Players whose games you attended most",
+    "gamesTogether": "games together",
+    "ofTheirGames": "of their games",
+    "notEnoughGames": "Play more games to see your impact!",
+    "footballBuddiesInfo": "* Shows what % of each player's games you participated in"
   },
   "community": {
     "title": "Saturday Football",

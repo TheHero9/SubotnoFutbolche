@@ -52,6 +52,15 @@ export interface StreakData {
   dates: string[];
 }
 
+export interface FootballBuddy {
+  name: string;
+  gamesWithYou: number;
+  theirTotalGames: number;
+  percentageOfYourGames: number;   // What % of YOUR games were with them
+  influenceOnThem: number;         // What % of THEIR games you were part of (your influence!)
+  affinity: number;                // Lift metric: actual overlap / expected overlap
+}
+
 export type Language = 'bg' | 'en';
 export type MonthKey = 'january' | 'february' | 'march' | 'april' | 'may' | 'june' |
                        'july' | 'august' | 'september' | 'october' | 'november' | 'december';

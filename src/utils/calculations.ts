@@ -399,3 +399,4 @@ export const calculateCommunityStats = (rawStats: CommunityStatsRaw): CommunityS
     totalGamesAllTime: stats2024.gamesPlayed + stats2025.gamesPlayed
   };
 };
+

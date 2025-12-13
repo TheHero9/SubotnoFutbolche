@@ -26,7 +26,11 @@
     "rankSame": "Запази позицията си",
     "positions": "позиции",
     "position": "позиция",
-    "tapToContinue": "Докосни за продължаване"
+    "tapToContinue": "Докосни за продължаване",
+    "tapBack": "Назад",
+    "tapForward": "Напред",
+    "showDates": "Покажи датите",
+    "hideDates": "Скрий датите"
   },
   "community": {
     "title": "Съботно Футболче",
@@ -54,7 +58,15 @@
     "bestSeason": "Най-добър сезон",
     "worstSeason": "Най-слаб сезон",
     "achievements": "Постижения",
-    "summary": "Твоят 2025 Wrapped"
+    "summary": "Твоят 2025 Wrapped",
+    "yourStreak": "Твоята серия",
+    "consecutiveGames": "поредни мача",
+    "inStreakRanking": "в класацията по серии",
+    "showStreakDates": "Покажи датите",
+    "hideDates": "Скрий",
+    "showStreakRanking": "Виж класацията",
+    "streakLeaderboard": "Топ 10 по серия 2025",
+    "hideRanking": "Скрий класацията"
   },
   "achievements": {
     "moreGames": "Ти игра повече от {{percent}}% от всички играчи",

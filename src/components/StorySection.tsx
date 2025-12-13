@@ -12,6 +12,20 @@ const communityStats = communityStatsData as CommunityStats;
 const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onComplete }) => {
   const { t, i18n } = useTranslation();
   const [currentStory, setCurrentStory] = useState<number>(0);
+  const [showGameDates, setShowGameDates] = useState<boolean>(false);
+
+  // Format dates to dd.mm format (EU style)
+  const formatDateEU = (dateStr: string): string => {
+    const [day, month] = dateStr.split('/');
+    return `${day.padStart(2, '0')}.${month.padStart(2, '0')}`;
+  };
+
+  const sortedDates2025 = [...(player.dates2025 || [])].sort((a, b) => {
+    const [dayA, monthA] = a.split('/').map(Number);
+    const [dayB, monthB] = b.split('/').map(Number);
+    if (monthA !== monthB) return monthA - monthB;
+    return dayA - dayB;
+  });
 
   const rankChange = getRankChange(player.rank2024, player.rank2025);
   const rankTitle = getRankTitle(player.rank2025, i18n.language as 'bg' | 'en');
@@ -65,23 +79,91 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
           >
             {t('story.gamesPlayed')}
           </motion.p>
-          <motion.div
-            className="text-9xl font-bold mb-4"
-            style={{ color: 'var(--color-accent-green)' }}
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", duration: 1 }}
-          >
-            {player.total2025}
-          </motion.div>
-          <motion.p
-            className="text-3xl"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {t('story.games')}
-          </motion.p>
+
+          {!showGameDates ? (
+            <>
+              <motion.div
+                className="text-9xl font-bold mb-4"
+                style={{ color: 'var(--color-accent-green)' }}
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", duration: 1 }}
+              >
+                {player.total2025}
+              </motion.div>
+              <motion.p
+                className="text-3xl mb-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {t('story.games')}
+              </motion.p>
+              <motion.button
+                className="px-6 py-3 rounded-full text-lg font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  color: 'var(--color-accent-green)',
+                  border: '2px solid var(--color-accent-green)'
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowGameDates(true);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                📅 {t('story.showDates')}
+              </motion.button>
+            </>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full"
+            >
+              <div
+                className="max-h-64 overflow-y-auto px-4 py-3 rounded-xl mb-4"
+                style={{ backgroundColor: 'var(--color-bg-card)' }}
+              >
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {sortedDates2025.map((date, index) => (
+                    <motion.span
+                      key={date}
+                      className="px-3 py-1 rounded-full text-sm font-medium"
+                      style={{
+                        backgroundColor: 'var(--color-accent-green)',
+                        color: 'var(--color-bg-primary)'
+                      }}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.03 }}
+                    >
+                      {formatDateEU(date)}
+                    </motion.span>
+                  ))}
+                </div>
+              </div>
+              <motion.button
+                className="px-6 py-2 rounded-full text-sm font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  color: 'var(--color-text-secondary)'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowGameDates(false);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ← {t('story.hideDates')}
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       )
     },
@@ -284,6 +366,16 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
     }
   };
 
+  const handlePrev = (): void => {
+    if (currentStory > 0) {
+      setCurrentStory(prev => prev - 1);
+      // Reset showGameDates when going back to story 1 (index 1)
+      if (currentStory === 1) {
+        setShowGameDates(false);
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-40">
       {/* Progress indicators */}
@@ -307,7 +399,12 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
 
       {/* Story cards */}
       <AnimatePresence mode="wait">
-        <StoryCard key={currentStory} onNext={handleNext}>
+        <StoryCard
+          key={currentStory}
+          onNext={handleNext}
+          onPrev={handlePrev}
+          canGoBack={currentStory > 0}
+        >
           {stories[currentStory].content}
         </StoryCard>
       </AnimatePresence>

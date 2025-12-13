@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import type { ScrollSectionProps, MonthKey, SeasonKey } from '../types';
 import StatCard from './StatCard';
@@ -13,10 +14,34 @@ import {
   getPercentile,
   getFutureProjection
 } from '../utils/calculations';
-import { formatMonthName, formatSeasonName } from '../utils/helpers';
+import { formatMonthName, formatSeasonName, getSeasonEmoji } from '../utils/helpers';
 
-const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers }) => {
+const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, allPlayers }) => {
   const { t, i18n } = useTranslation();
+  const [showStreakDates, setShowStreakDates] = useState<boolean>(false);
+  const [showStreakRanking, setShowStreakRanking] = useState<boolean>(false);
+
+  // Format date to dd.mm EU format
+  const formatDateEU = (dateStr: string): string => {
+    const [day, month] = dateStr.split('/');
+    return `${day.padStart(2, '0')}.${month.padStart(2, '0')}`;
+  };
+
+  // Rank all players by longest streak
+  const streakRanking = useMemo(() => {
+    return [...allPlayers]
+      .filter(p => (p.longestStreak2025 || 0) > 0)
+      .sort((a, b) => (b.longestStreak2025 || 0) - (a.longestStreak2025 || 0))
+      .slice(0, 10);
+  }, [allPlayers]);
+
+  // Find current player's rank in streak leaderboard
+  const playerStreakRank = useMemo(() => {
+    const sorted = [...allPlayers]
+      .filter(p => (p.longestStreak2025 || 0) > 0)
+      .sort((a, b) => (b.longestStreak2025 || 0) - (a.longestStreak2025 || 0));
+    return sorted.findIndex(p => p.name === player.name) + 1;
+  }, [allPlayers, player.name]);
 
   const bestWorst = getBestWorstMonths(player.games2025);
   const seasons = getBestSeason(player.games2025);
@@ -29,17 +54,23 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers }) =
       <div className="max-w-4xl mx-auto">
         {/* Monthly breakdown chart */}
         <StatCard>
-          <h2 className="text-3xl font-bold mb-6" style={{ color: 'var(--color-accent-green)' }}>
+          <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-accent-green)' }}>
             {t('scroll.monthlyBreakdown')}
           </h2>
+          <p className="text-lg mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+            📊 {player.name}
+          </p>
           <MonthlyChart data={player.games2025} year="2025" />
         </StatCard>
 
         {/* Comparison with 2024 */}
         <StatCard delay={0.1}>
-          <h2 className="text-3xl font-bold mb-6" style={{ color: 'var(--color-accent-gold)' }}>
+          <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
             {t('scroll.comparison2024')}
           </h2>
+          <p className="text-lg mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+            📈 {player.name}
+          </p>
           <ComparisonChart
             data2024={player.games2024}
             data2025={player.games2025}
@@ -92,7 +123,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers }) =
               <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--color-accent-green)' }}>
                 {t('scroll.bestSeason')}
               </h3>
-              <div className="text-6xl mb-3">☀️</div>
+              <div className="text-6xl mb-3">{getSeasonEmoji(seasons.best[0] as SeasonKey)}</div>
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
                 {formatSeasonName(seasons.best[0] as SeasonKey, i18n.language as 'bg' | 'en')}
               </div>
@@ -104,7 +135,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers }) =
               <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--color-accent-red)' }}>
                 {t('scroll.worstSeason')}
               </h3>
-              <div className="text-6xl mb-3">❄️</div>
+              <div className="text-6xl mb-3">{getSeasonEmoji(seasons.worst[0] as SeasonKey)}</div>
               <div className="text-3xl font-bold">
                 {formatSeasonName(seasons.worst[0] as SeasonKey, i18n.language as 'bg' | 'en')}
               </div>
@@ -128,11 +159,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers }) =
             />
             <AchievementBadge
               icon="🔥"
-              text={
-                player.longestStreakStart && player.longestStreakEnd
-                  ? `${t('achievements.longestStreak', { streak: player.longestStreak2025 || 0 })} (${player.longestStreakStart} - ${player.longestStreakEnd})`
-                  : t('achievements.longestStreak', { streak: player.longestStreak2025 || 0 })
-              }
+              text={t('achievements.longestStreak', { streak: player.longestStreak2025 || 0 })}
               delay={0.2}
             />
             <AchievementBadge
@@ -163,6 +190,164 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers }) =
             )}
           </div>
         </StatCard>
+
+        {/* Longest Streak Details */}
+        {(player.longestStreak2025 || 0) > 0 && (
+          <StatCard delay={0.6}>
+            <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: 'var(--color-accent-green)' }}>
+              🔥 {t('scroll.yourStreak')}
+            </h2>
+
+            <div className="text-center mb-6">
+              <div className="text-6xl font-bold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
+                {player.longestStreak2025}
+              </div>
+              <div style={{ color: 'var(--color-text-secondary)' }}>
+                {t('scroll.consecutiveGames')}
+              </div>
+              {playerStreakRank > 0 && (
+                <div className="mt-2 text-lg" style={{ color: 'var(--color-accent-green)' }}>
+                  #{playerStreakRank} {t('scroll.inStreakRanking')}
+                </div>
+              )}
+            </div>
+
+            {/* Show Dates Button */}
+            {player.longestStreakDates && player.longestStreakDates.length > 0 && (
+              <div className="text-center mb-4">
+                {!showStreakDates ? (
+                  <motion.button
+                    className="px-6 py-3 rounded-full text-lg font-semibold"
+                    style={{
+                      backgroundColor: 'var(--color-bg-card)',
+                      color: 'var(--color-accent-green)',
+                      border: '2px solid var(--color-accent-green)'
+                    }}
+                    onClick={() => setShowStreakDates(true)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    📅 {t('scroll.showStreakDates')}
+                  </motion.button>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="mb-4"
+                  >
+                    <div className="text-lg mb-3" style={{ color: 'var(--color-text-secondary)' }}>
+                      {player.longestStreakStart && player.longestStreakEnd && (
+                        <span>
+                          {formatDateEU(player.longestStreakStart)} → {formatDateEU(player.longestStreakEnd)}
+                        </span>
+                      )}
+                    </div>
+                    <div
+                      className="max-h-40 overflow-y-auto px-4 py-3 rounded-xl mb-4"
+                      style={{ backgroundColor: 'var(--color-bg-card)' }}
+                    >
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {player.longestStreakDates.map((date, index) => (
+                          <motion.span
+                            key={date}
+                            className="px-3 py-1 rounded-full text-sm font-medium"
+                            style={{
+                              backgroundColor: 'var(--color-accent-green)',
+                              color: 'var(--color-bg-primary)'
+                            }}
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: index * 0.05 }}
+                          >
+                            {formatDateEU(date)}
+                          </motion.span>
+                        ))}
+                      </div>
+                    </div>
+                    <motion.button
+                      className="px-4 py-2 rounded-full text-sm"
+                      style={{
+                        backgroundColor: 'var(--color-bg-card)',
+                        color: 'var(--color-text-secondary)'
+                      }}
+                      onClick={() => setShowStreakDates(false)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      ← {t('scroll.hideDates')}
+                    </motion.button>
+                  </motion.div>
+                )}
+              </div>
+            )}
+
+            {/* Show Ranking Button */}
+            <div className="text-center">
+              {!showStreakRanking ? (
+                <motion.button
+                  className="px-6 py-3 rounded-full text-lg font-semibold"
+                  style={{
+                    backgroundColor: 'var(--color-bg-card)',
+                    color: 'var(--color-accent-gold)',
+                    border: '2px solid var(--color-accent-gold)'
+                  }}
+                  onClick={() => setShowStreakRanking(true)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  🏆 {t('scroll.showStreakRanking')}
+                </motion.button>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <h3 className="text-xl font-bold mb-4" style={{ color: 'var(--color-accent-gold)' }}>
+                    🏆 {t('scroll.streakLeaderboard')}
+                  </h3>
+                  <div className="space-y-2">
+                    {streakRanking.map((p, index) => (
+                      <motion.div
+                        key={p.name}
+                        className="flex justify-between items-center px-4 py-2 rounded-lg"
+                        style={{
+                          backgroundColor: p.name === player.name
+                            ? 'var(--color-accent-green)'
+                            : 'var(--color-bg-card)',
+                          color: p.name === player.name
+                            ? 'var(--color-bg-primary)'
+                            : 'var(--color-text-primary)'
+                        }}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <span className="font-semibold">
+                          {index + 1}. {p.name}
+                        </span>
+                        <span className="font-bold">
+                          🔥 {p.longestStreak2025}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <motion.button
+                    className="mt-4 px-4 py-2 rounded-full text-sm"
+                    style={{
+                      backgroundColor: 'var(--color-bg-card)',
+                      color: 'var(--color-text-secondary)'
+                    }}
+                    onClick={() => setShowStreakRanking(false)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    ← {t('scroll.hideRanking')}
+                  </motion.button>
+                </motion.div>
+              )}
+            </div>
+          </StatCard>
+        )}
 
         {/* Summary Card */}
         <SummaryCard player={player} totalPlayers={totalPlayers} />

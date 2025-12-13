@@ -99,6 +99,8 @@ export interface PlayerSelectProps {
 export interface StoryCardProps {
   children: React.ReactNode;
   onNext: () => void;
+  onPrev?: () => void;
+  canGoBack?: boolean;
 }
 
 export interface AchievementBadgeProps {
@@ -132,6 +134,7 @@ export interface SummaryCardProps {
 export interface ScrollSectionProps {
   player: ProcessedPlayer;
   totalPlayers: number;
+  allPlayers: ProcessedPlayer[];
 }
 
 export interface StorySectionProps {

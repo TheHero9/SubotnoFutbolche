@@ -26,7 +26,11 @@
     "rankSame": "Kept your position",
     "positions": "positions",
     "position": "position",
-    "tapToContinue": "Tap to continue"
+    "tapToContinue": "Tap to continue",
+    "tapBack": "Back",
+    "tapForward": "Forward",
+    "showDates": "Show dates",
+    "hideDates": "Hide dates"
   },
   "community": {
     "title": "Saturday Football",
@@ -54,7 +58,15 @@
     "bestSeason": "Best Season",
     "worstSeason": "Worst Season",
     "achievements": "Achievements",
-    "summary": "Your 2025 Wrapped"
+    "summary": "Your 2025 Wrapped",
+    "yourStreak": "Your Streak",
+    "consecutiveGames": "consecutive games",
+    "inStreakRanking": "in streak ranking",
+    "showStreakDates": "Show dates",
+    "hideDates": "Hide",
+    "showStreakRanking": "View ranking",
+    "streakLeaderboard": "Top 10 Streaks 2025",
+    "hideRanking": "Hide ranking"
   },
   "achievements": {
     "moreGames": "You played more than {{percent}}% of all players",

@@ -76,6 +76,7 @@ function App(): JSX.Element {
         <ScrollSection
           player={selectedPlayer}
           totalPlayers={processedPlayers.length}
+          allPlayers={processedPlayers}
         />
       )}
     </div>

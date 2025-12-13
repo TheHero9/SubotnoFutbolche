@@ -62,3 +62,16 @@ export const formatMonthName = (month: MonthKey, language: Language = 'bg'): str
 export const formatSeasonName = (season: SeasonKey, language: Language = 'bg'): string => {
   return SEASONS[language][season] || season;
 };
+
+/**
+ * Get emoji for season
+ */
+export const getSeasonEmoji = (season: SeasonKey): string => {
+  const seasonEmojis: Record<SeasonKey, string> = {
+    winter: '❄️',
+    spring: '🌸',
+    summer: '☀️',
+    autumn: '🍂'
+  };
+  return seasonEmojis[season] || '🌍';
+};

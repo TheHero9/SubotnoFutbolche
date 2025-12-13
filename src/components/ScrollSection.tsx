@@ -1,25 +1,33 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import type { ScrollSectionProps, MonthKey, SeasonKey } from '../types';
+import type { ScrollSectionProps, MonthKey, SeasonKey, CommunityStatsRaw } from '../types';
 import StatCard from './StatCard';
 import AchievementBadge from './AchievementBadge';
 import MonthlyChart from './MonthlyChart';
 import ComparisonChart from './ComparisonChart';
+import CommunityChart from './CommunityChart';
 import SummaryCard from './SummaryCard';
 import ScrollToTop from './ScrollToTop';
 import {
   getBestWorstMonths,
   getBestSeason,
   getPercentile,
-  getFutureProjection
+  getFutureProjection,
+  calculateCommunityStats
 } from '../utils/calculations';
 import { formatMonthName, formatSeasonName, getSeasonEmoji } from '../utils/helpers';
+import communityStatsRaw from '../data/communityStats.json';
+
+const rawCommunityStats = communityStatsRaw as CommunityStatsRaw;
 
 const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, allPlayers }) => {
   const { t, i18n } = useTranslation();
   const [showStreakDates, setShowStreakDates] = useState<boolean>(false);
   const [showStreakRanking, setShowStreakRanking] = useState<boolean>(false);
+
+  // Calculate community stats
+  const communityStats = useMemo(() => calculateCommunityStats(rawCommunityStats), []);
 
   // Format date to dd.mm EU format
   const formatDateEU = (dateStr: string): string => {
@@ -348,6 +356,56 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
             </div>
           </StatCard>
         )}
+
+        {/* Community Stats Section */}
+        <StatCard delay={0.7}>
+          <h2 className="text-3xl font-bold mb-2 text-center" style={{ color: 'var(--color-accent-green)' }}>
+            📊 {t('scroll.communityStats')}
+          </h2>
+          <p className="text-center mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+            {t('scroll.communityGamesComparison')}
+          </p>
+          <CommunityChart
+            gamesPerMonth2024={communityStats.gamesPerMonth2024}
+            gamesPerMonth2025={communityStats.gamesPerMonth2025}
+          />
+
+          {/* Community stats summary */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+                {communityStats.gamesPlayed2025}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('scroll.games2025')}
+              </div>
+            </div>
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
+                {communityStats.gamesPlayed2024}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('scroll.games2024')}
+              </div>
+            </div>
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
+                {communityStats.avgPlayers2025}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('scroll.avgPlayers2025')}
+              </div>
+            </div>
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-2xl font-bold" style={{ color: communityStats.gamesChange >= 0 ? 'var(--color-accent-green)' : 'var(--color-accent-red)' }}>
+                {communityStats.gamesChange >= 0 ? '+' : ''}{communityStats.gamesChange}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('scroll.changeVs2024')}
+              </div>
+            </div>
+          </div>
+        </StatCard>
 
         {/* Summary Card */}
         <SummaryCard player={player} totalPlayers={totalPlayers} />

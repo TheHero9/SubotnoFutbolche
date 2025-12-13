@@ -1,23 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
-import type { StorySectionProps, CommunityStats } from '../types';
+import type { StorySectionProps, CommunityStatsRaw } from '../types';
 import StoryCard from './StoryCard';
-import { getRankTitle, getRankChange } from '../utils/calculations';
-import communityStatsData from '../data/communityStats.json';
+import { getRankTitle, getRankChange, calculateCommunityStats } from '../utils/calculations';
+import communityStatsRaw from '../data/communityStats.json';
 
-const communityStats = communityStatsData as CommunityStats;
+const rawStats = communityStatsRaw as CommunityStatsRaw;
 
 const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onComplete }) => {
   const { t, i18n } = useTranslation();
   const [currentStory, setCurrentStory] = useState<number>(0);
   const [showGameDates, setShowGameDates] = useState<boolean>(false);
 
+  // Calculate community stats from raw data
+  const communityStats = useMemo(() => calculateCommunityStats(rawStats), []);
+
   // Format dates to dd.mm format (EU style)
   const formatDateEU = (dateStr: string): string => {
     const [day, month] = dateStr.split('/');
     return `${day.padStart(2, '0')}.${month.padStart(2, '0')}`;
+  };
+
+  // Season colors
+  const seasonColors = {
+    winter: { bg: '#3b82f6', text: '#ffffff' },   // Blue
+    spring: { bg: '#ec4899', text: '#ffffff' },   // Pink
+    summer: { bg: '#eab308', text: '#000000' },   // Yellow
+    autumn: { bg: '#f97316', text: '#ffffff' }    // Orange
+  };
+
+  // Get season from date string (DD/MM format)
+  const getSeasonFromDate = (dateStr: string): 'winter' | 'spring' | 'summer' | 'autumn' => {
+    const [, month] = dateStr.split('/').map(Number);
+    if (month === 12 || month === 1 || month === 2) return 'winter';
+    if (month >= 3 && month <= 5) return 'spring';
+    if (month >= 6 && month <= 8) return 'summer';
+    return 'autumn';
   };
 
   const sortedDates2025 = [...(player.dates2025 || [])].sort((a, b) => {
@@ -126,27 +146,56 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
               className="w-full"
             >
               <div
-                className="max-h-64 overflow-y-auto px-4 py-3 rounded-xl mb-4"
+                className="max-h-48 overflow-y-auto px-4 py-3 rounded-xl mb-4"
                 style={{ backgroundColor: 'var(--color-bg-card)' }}
               >
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {sortedDates2025.map((date, index) => (
-                    <motion.span
-                      key={date}
-                      className="px-3 py-1 rounded-full text-sm font-medium"
-                      style={{
-                        backgroundColor: 'var(--color-accent-green)',
-                        color: 'var(--color-bg-primary)'
-                      }}
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.03 }}
-                    >
-                      {formatDateEU(date)}
-                    </motion.span>
-                  ))}
+                  {sortedDates2025.map((date, index) => {
+                    const season = getSeasonFromDate(date);
+                    return (
+                      <motion.span
+                        key={date}
+                        className="px-3 py-1 rounded-full text-sm font-medium"
+                        style={{
+                          backgroundColor: seasonColors[season].bg,
+                          color: seasonColors[season].text
+                        }}
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.03 }}
+                      >
+                        {formatDateEU(date)}
+                      </motion.span>
+                    );
+                  })}
                 </div>
               </div>
+
+              {/* Season Legend */}
+              <motion.div
+                className="flex flex-wrap justify-center gap-3 mb-4 px-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.winter.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>❄️ {t('seasons.winter')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.spring.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🌸 {t('seasons.spring')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.summer.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>☀️ {t('seasons.summer')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.autumn.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🍂 {t('seasons.autumn')}</span>
+                </div>
+              </motion.div>
+
               <motion.button
                 className="px-6 py-2 rounded-full text-sm font-semibold"
                 style={{
@@ -250,7 +299,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
         </div>
       )
     },
-    // Story 5: Community - Total Games
+    // Story 5: Community - Total Games 2025
     {
       content: (
         <div>
@@ -263,7 +312,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
             {t('community.title')}
           </motion.h2>
           <motion.p
-            className="text-xl mb-8"
+            className="text-xl mb-6"
             style={{ color: 'var(--color-text-secondary)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -272,26 +321,45 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
             {t('community.subtitle')}
           </motion.p>
           <motion.div
-            className="text-8xl font-bold mb-4"
+            className="text-8xl font-bold mb-2"
             style={{ color: 'var(--color-accent-gold)' }}
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", duration: 1 }}
           >
-            {communityStats.totalGamesAllTime}
+            {communityStats.gamesPlayed2025}
           </motion.div>
           <motion.p
-            className="text-2xl"
+            className="text-2xl mb-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            {t('community.totalGamesAllTime', { count: communityStats.totalGamesAllTime })}
+            {t('community.gamesIn2025')}
           </motion.p>
+          <motion.div
+            className="flex justify-center gap-6 mt-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            <div className="text-center">
+              <div className="text-3xl font-bold" style={{ color: communityStats.gamesChange >= 0 ? 'var(--color-accent-green)' : 'var(--color-accent-red)' }}>
+                {communityStats.gamesChange >= 0 ? '+' : ''}{communityStats.gamesChange}
+              </div>
+              <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{t('community.vs2024')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
+                {communityStats.totalGamesAllTime}
+              </div>
+              <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{t('community.allTime')}</div>
+            </div>
+          </motion.div>
         </div>
       )
     },
-    // Story 6: Community - Longest Streak & Average Players
+    // Story 6: Community - Average Players & Success Rate
     {
       content: (
         <div>
@@ -300,12 +368,15 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="text-6xl mb-3">🔥</div>
+            <div className="text-5xl mb-3">⚽</div>
             <div className="text-5xl font-bold mb-2" style={{ color: 'var(--color-accent-green)' }}>
-              {communityStats.longestStreak}
+              {communityStats.avgPlayers2025}
             </div>
-            <div className="text-xl" style={{ color: 'var(--color-text-secondary)' }}>
-              {t('community.streakText', { count: communityStats.longestStreak })}
+            <div className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+              {t('community.avgPlayersPerGame')}
+            </div>
+            <div className="text-xl mt-2" style={{ color: communityStats.avgPlayersChange >= 0 ? 'var(--color-accent-green)' : 'var(--color-accent-red)' }}>
+              {communityStats.avgPlayersChange >= 0 ? '↑' : '↓'} {Math.abs(communityStats.avgPlayersChange)} {t('community.vs2024')}
             </div>
           </motion.div>
           <motion.div
@@ -313,18 +384,21 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <div className="text-6xl mb-3">⚽</div>
+            <div className="text-5xl mb-3">✅</div>
             <div className="text-5xl font-bold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
-              {communityStats.averagePlayersPerMatch}
+              {communityStats.successRate2025}%
             </div>
-            <div className="text-xl" style={{ color: 'var(--color-text-secondary)' }}>
-              {t('community.playersText', { count: communityStats.averagePlayersPerMatch })}
+            <div className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+              {t('community.successRate')}
+            </div>
+            <div className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>
+              {communityStats.gamesCancelled2025} {t('community.gamesCancelled')}
             </div>
           </motion.div>
         </div>
       )
     },
-    // Story 7: Community - Favorite Fields
+    // Story 7: Community - Favorite Fields 2025
     {
       content: (
         <div>
@@ -334,10 +408,13 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            {t('community.favoriteFields')}
+            {t('community.favoriteFields')} 2025
           </motion.h3>
           <div className="space-y-4">
-            {Object.entries(communityStats.fields).slice(0, 3).map(([field, count], index) => (
+            {Object.entries(communityStats.fields2025)
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 3)
+              .map(([field, count], index) => (
               <motion.div
                 key={field}
                 className="flex justify-between items-center px-6 py-4 rounded-xl"

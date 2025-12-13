@@ -34,21 +34,14 @@
   },
   "community": {
     "title": "Съботно Футболче",
-    "subtitle": "Нашата общност",
-    "totalGames": "Общо мачове",
-    "totalGames2024": "{{count}} мача през 2024",
-    "totalGames2025": "{{count}} мача през 2025",
-    "totalGamesAllTime": "{{count}} мача общо",
-    "longestStreak": "Най-дълга поредица",
-    "streakText": "{{count}} седмици без пропуск",
-    "averagePlayers": "Средно играчи на мач",
-    "playersText": "{{count}} души",
-    "favoriteFields": "Любими терени",
-    "fieldGames": "{{count}} мача",
-    "comparisonTitle": "Сравнение с 2024",
-    "moreGames": "+{{count}} мача",
-    "lessGames": "-{{count}} мача",
-    "sameGames": "Същия брой мачове"
+    "subtitle": "Нашата общност през 2025",
+    "gamesIn2025": "мача през 2025",
+    "vs2024": "спрямо 2024",
+    "allTime": "общо",
+    "avgPlayersPerGame": "средно играчи на мач",
+    "successRate": "успеваемост",
+    "gamesCancelled": "отменени мача",
+    "favoriteFields": "Любими терени"
   },
   "scroll": {
     "monthlyBreakdown": "Разпределение по месеци - 2025",
@@ -66,12 +59,17 @@
     "hideDates": "Скрий",
     "showStreakRanking": "Виж класацията",
     "streakLeaderboard": "Топ 10 по серия 2025",
-    "hideRanking": "Скрий класацията"
+    "hideRanking": "Скрий класацията",
+    "communityStats": "Общността",
+    "communityGamesComparison": "Мачове по месеци: 2024 vs 2025",
+    "games2025": "Мача 2025",
+    "games2024": "Мача 2024",
+    "avgPlayers2025": "Средно играчи",
+    "changeVs2024": "Промяна"
   },
   "achievements": {
     "moreGames": "Ти игра повече от {{percent}}% от всички играчи",
     "futureProjection": "Ако продължиш така, след 10 години ще имаш {{games}} мача!",
-    "favoriteMonth": "Твоят любим месец е {{month}} - никога не го пропускаш!",
     "moreThanLastYear": "Ти игра {{diff}} повече мача от миналата година",
     "lessThanLastYear": "Ти игра {{diff}} по-малко мача от миналата година",
     "sameAsLastYear": "Същия брой мачове като миналата година",
@@ -91,19 +89,5 @@
     "spring": "Пролет",
     "summer": "Лято",
     "autumn": "Есен"
-  },
-  "months": {
-    "january": "Януари",
-    "february": "Февруари",
-    "march": "Март",
-    "april": "Април",
-    "may": "Май",
-    "june": "Юни",
-    "july": "Юли",
-    "august": "Август",
-    "september": "Септември",
-    "october": "Октомври",
-    "november": "Ноември",
-    "december": "Декември"
   }
 }

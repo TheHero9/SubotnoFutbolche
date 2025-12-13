@@ -8,7 +8,10 @@ import type {
   BestWorstSeason,
   StreakData,
   Language,
-  MonthKey
+  MonthKey,
+  GameRecord,
+  CommunityStatsRaw,
+  CommunityStatsCalculated
 } from '../types';
 
 type RankTitleMap = Record<Language, Record<string, RankTitle>>;
@@ -323,4 +326,76 @@ export const processPlayerData = (rawPlayers: Player[]): ProcessedPlayer[] => {
       dates2025: player.dates2025
     } as ProcessedPlayer;
   });
+};
+
+/**
+ * Calculate community stats from raw game records
+ */
+export const calculateCommunityStats = (rawStats: CommunityStatsRaw): CommunityStatsCalculated => {
+  const calcYearStats = (games: GameRecord[]) => {
+    const playedGames = games.filter(g => g.played);
+    const cancelledGames = games.filter(g => !g.played);
+
+    // Games per month
+    const gamesPerMonth: Record<string, number> = {};
+    playedGames.forEach(g => {
+      gamesPerMonth[g.month] = (gamesPerMonth[g.month] || 0) + 1;
+    });
+
+    // Fields count
+    const fields: Record<string, number> = {};
+    playedGames.forEach(g => {
+      if (g.field) {
+        fields[g.field] = (fields[g.field] || 0) + 1;
+      }
+    });
+
+    // Average players
+    const totalPlayers = playedGames.reduce((sum, g) => sum + (g.players || 0), 0);
+    const avgPlayers = playedGames.length > 0 ? totalPlayers / playedGames.length : 0;
+
+    // Success rate
+    const successRate = games.length > 0 ? (playedGames.length / games.length) * 100 : 0;
+
+    return {
+      gamesPlayed: playedGames.length,
+      gamesCancelled: cancelledGames.length,
+      totalAttempted: games.length,
+      avgPlayers: Math.round(avgPlayers * 10) / 10,
+      successRate: Math.round(successRate),
+      gamesPerMonth,
+      fields
+    };
+  };
+
+  const stats2024 = calcYearStats(rawStats.games2024);
+  const stats2025 = calcYearStats(rawStats.games2025);
+
+  return {
+    // 2024
+    gamesPlayed2024: stats2024.gamesPlayed,
+    gamesCancelled2024: stats2024.gamesCancelled,
+    totalAttempted2024: stats2024.totalAttempted,
+    avgPlayers2024: stats2024.avgPlayers,
+    successRate2024: stats2024.successRate,
+    gamesPerMonth2024: stats2024.gamesPerMonth,
+    fields2024: stats2024.fields,
+
+    // 2025
+    gamesPlayed2025: stats2025.gamesPlayed,
+    gamesCancelled2025: stats2025.gamesCancelled,
+    totalAttempted2025: stats2025.totalAttempted,
+    avgPlayers2025: stats2025.avgPlayers,
+    successRate2025: stats2025.successRate,
+    gamesPerMonth2025: stats2025.gamesPerMonth,
+    fields2025: stats2025.fields,
+
+    // Comparisons
+    gamesChange: stats2025.gamesPlayed - stats2024.gamesPlayed,
+    avgPlayersChange: Math.round((stats2025.avgPlayers - stats2024.avgPlayers) * 10) / 10,
+    successRateChange: stats2025.successRate - stats2024.successRate,
+
+    // All time
+    totalGamesAllTime: stats2024.gamesPlayed + stats2025.gamesPlayed
+  };
 };

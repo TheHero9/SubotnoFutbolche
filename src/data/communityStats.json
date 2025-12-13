@@ -1,18 +1,741 @@
 {
-  "totalGames2024": 52,
-  "totalGames2025": 48,
-  "totalGamesAllTime": 156,
-  "longestStreak": 12,
-  "averagePlayersPerMatch": 11.5,
-  "fields": {
-    "Левски Г": 45,
-    "Спортна София": 38,
-    "Герена": 28,
-    "Младост": 25,
-    "Други": 20
-  },
-  "comparisonLastYear": {
-    "gamesChange": -4,
-    "averagePlayersChange": 0.5
-  }
+  "games2024": [
+    {
+      "month": "January",
+      "date": "06/01",
+      "played": true,
+      "players": 10,
+      "field": "Старо"
+    },
+    {
+      "month": "January",
+      "date": "13/01",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "January",
+      "date": "20/01",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "January",
+      "date": "27/01",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "February",
+      "date": "03/02",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "February",
+      "date": "10/02",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "February",
+      "date": "17/02",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "February",
+      "date": "24/02",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "March",
+      "date": "02/03",
+      "played": true,
+      "players": 16,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "March",
+      "date": "09/03",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "March",
+      "date": "16/03",
+      "played": true,
+      "players": 12,
+      "field": "Старо"
+    },
+    {
+      "month": "March",
+      "date": "23/03",
+      "played": true,
+      "players": 12,
+      "field": "Старо"
+    },
+    {
+      "month": "March",
+      "date": "30/03",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "April",
+      "date": "06/04",
+      "played": true,
+      "players": 9,
+      "field": "Малкото"
+    },
+    {
+      "month": "April",
+      "date": "13/04",
+      "played": true,
+      "players": 12,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "April",
+      "date": "20/04",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "April",
+      "date": "27/04",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "May",
+      "date": "04/05",
+      "played": true,
+      "players": 12,
+      "field": "Старо"
+    },
+    {
+      "month": "May",
+      "date": "11/05",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "May",
+      "date": "18/05",
+      "played": true,
+      "players": 10,
+      "field": "Старо"
+    },
+    {
+      "month": "May",
+      "date": "25/05",
+      "played": true,
+      "players": 10,
+      "field": "Старо"
+    },
+    {
+      "month": "June",
+      "date": "01/06",
+      "played": true,
+      "players": 16,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "June",
+      "date": "08/06",
+      "played": true,
+      "players": 12,
+      "field": "Старо"
+    },
+    {
+      "month": "June",
+      "date": "15/06",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "June",
+      "date": "22/06",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "June",
+      "date": "29/06",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "July",
+      "date": "06/07",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "July",
+      "date": "13/07",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "July",
+      "date": "20/07",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "July",
+      "date": "27/07",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "August",
+      "date": "03/08",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "August",
+      "date": "10/08",
+      "played": true,
+      "players": 10,
+      "field": "Старо"
+    },
+    {
+      "month": "August",
+      "date": "17/08",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "August",
+      "date": "24/08",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "August",
+      "date": "31/08",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "September",
+      "date": "07/09",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "September",
+      "date": "14/09",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "September",
+      "date": "21/09",
+      "played": true,
+      "players": 16,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "September",
+      "date": "28/09",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "October",
+      "date": "05/10",
+      "played": true,
+      "players": 12,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "October",
+      "date": "12/10",
+      "played": true,
+      "players": 15,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "October",
+      "date": "19/10",
+      "played": true,
+      "players": 16,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "October",
+      "date": "26/10",
+      "played": true,
+      "players": 12,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "02/11",
+      "played": true,
+      "players": 16,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "09/11",
+      "played": true,
+      "players": 15,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "16/11",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "23/11",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "30/11",
+      "played": true,
+      "players": 10,
+      "field": "Старо"
+    },
+    {
+      "month": "December",
+      "date": "07/12",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "December",
+      "date": "14/12",
+      "played": true,
+      "players": 14,
+      "field": "Друго"
+    },
+    {
+      "month": "December",
+      "date": "21/12",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "December",
+      "date": "24/12",
+      "played": true,
+      "players": 15,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "December",
+      "date": "28/12",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    }
+  ],
+  "games2025": [
+    {
+      "month": "January",
+      "date": "04/01",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "January",
+      "date": "11/01",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "January",
+      "date": "18/01",
+      "played": true,
+      "players": 13,
+      "field": "Друго"
+    },
+    {
+      "month": "January",
+      "date": "25/01",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "February",
+      "date": "01/02",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "February",
+      "date": "08/02",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "February",
+      "date": "15/02",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "February",
+      "date": "22/02",
+      "played": true,
+      "players": 14,
+      "field": "Друго"
+    },
+    {
+      "month": "March",
+      "date": "01/03",
+      "played": true,
+      "players": 10,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "March",
+      "date": "08/03",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "March",
+      "date": "15/03",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "March",
+      "date": "22/03",
+      "played": true,
+      "players": 12,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "March",
+      "date": "29/03",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "April",
+      "date": "05/04",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "April",
+      "date": "12/04",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "April",
+      "date": "19/04",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "April",
+      "date": "26/04",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "May",
+      "date": "03/05",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "May",
+      "date": "10/05",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "May",
+      "date": "17/05",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "May",
+      "date": "24/05",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "May",
+      "date": "31/05",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "June",
+      "date": "07/06",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "June",
+      "date": "14/06",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "June",
+      "date": "21/06",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "June",
+      "date": "28/06",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "July",
+      "date": "05/07",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "July",
+      "date": "12/07",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "July",
+      "date": "19/07",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "July",
+      "date": "26/07",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "August",
+      "date": "02/08",
+      "played": true,
+      "players": 12,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "August",
+      "date": "09/08",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "August",
+      "date": "16/08",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "August",
+      "date": "23/08",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "August",
+      "date": "30/08",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "September",
+      "date": "06/09",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "September",
+      "date": "13/09",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "September",
+      "date": "20/09",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "September",
+      "date": "27/09",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "October",
+      "date": "04/10",
+      "played": true,
+      "players": 13,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "October",
+      "date": "11/10",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "October",
+      "date": "18/10",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "October",
+      "date": "25/10",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "01/11",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "08/11",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "15/11",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "22/11",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "November",
+      "date": "29/11",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "December",
+      "date": "06/12",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "December",
+      "date": "13/12",
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
+    },
+    {
+      "month": "December",
+      "date": "20/12",
+      "played": false,
+      "players": null,
+      "field": null
+    },
+    {
+      "month": "December",
+      "date": "27/12",
+      "played": false,
+      "players": null,
+      "field": null
+    }
+  ]
 }

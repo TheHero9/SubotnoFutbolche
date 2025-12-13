@@ -34,21 +34,14 @@
   },
   "community": {
     "title": "Saturday Football",
-    "subtitle": "Our Community",
-    "totalGames": "Total Games",
-    "totalGames2024": "{{count}} games in 2024",
-    "totalGames2025": "{{count}} games in 2025",
-    "totalGamesAllTime": "{{count}} games total",
-    "longestStreak": "Longest Streak",
-    "streakText": "{{count}} weeks without missing",
-    "averagePlayers": "Average Players per Match",
-    "playersText": "{{count}} people",
-    "favoriteFields": "Favorite Fields",
-    "fieldGames": "{{count}} games",
-    "comparisonTitle": "Comparison with 2024",
-    "moreGames": "+{{count}} games",
-    "lessGames": "-{{count}} games",
-    "sameGames": "Same number of games"
+    "subtitle": "Our Community in 2025",
+    "gamesIn2025": "games in 2025",
+    "vs2024": "vs 2024",
+    "allTime": "all time",
+    "avgPlayersPerGame": "avg players per game",
+    "successRate": "success rate",
+    "gamesCancelled": "games cancelled",
+    "favoriteFields": "Favorite Fields"
   },
   "scroll": {
     "monthlyBreakdown": "Monthly Breakdown - 2025",
@@ -66,12 +59,17 @@
     "hideDates": "Hide",
     "showStreakRanking": "View ranking",
     "streakLeaderboard": "Top 10 Streaks 2025",
-    "hideRanking": "Hide ranking"
+    "hideRanking": "Hide ranking",
+    "communityStats": "Community",
+    "communityGamesComparison": "Games per month: 2024 vs 2025",
+    "games2025": "Games 2025",
+    "games2024": "Games 2024",
+    "avgPlayers2025": "Avg Players",
+    "changeVs2024": "Change"
   },
   "achievements": {
     "moreGames": "You played more than {{percent}}% of all players",
     "futureProjection": "If you keep this up, in 10 years you'll have {{games}} games!",
-    "favoriteMonth": "Your favorite month is {{month}} - you never miss it!",
     "moreThanLastYear": "You played {{diff}} more games than last year",
     "lessThanLastYear": "You played {{diff}} fewer games than last year",
     "sameAsLastYear": "Same number of games as last year",
@@ -91,19 +89,5 @@
     "spring": "Spring",
     "summer": "Summer",
     "autumn": "Autumn"
-  },
-  "months": {
-    "january": "January",
-    "february": "February",
-    "march": "March",
-    "april": "April",
-    "may": "May",
-    "june": "June",
-    "july": "July",
-    "august": "August",
-    "september": "September",
-    "october": "October",
-    "november": "November",
-    "december": "December"
   }
 }

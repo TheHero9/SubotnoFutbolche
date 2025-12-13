@@ -37,6 +37,12 @@ A Spotify Wrapped-style single-page React app for displaying football season sta
 - No backend - all data in JSON file
 - Screenshot-friendly summary card at the end
 
+## Build Rules
+
+- **DO NOT** run `npm run build` automatically after changes
+- Only run build when explicitly requested by the user
+- Trust that TypeScript/Vite will catch errors during development
+
 ## Bonus info
 
 After finishing a task, don't start the next one except cases when it's specified.

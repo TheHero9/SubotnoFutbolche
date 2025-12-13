@@ -57,33 +57,8 @@ export type MonthKey = 'january' | 'february' | 'march' | 'april' | 'may' | 'jun
                        'july' | 'august' | 'september' | 'october' | 'november' | 'december';
 export type SeasonKey = 'winter' | 'spring' | 'summer' | 'autumn';
 
-// Stats types
-export interface PlayerStats {
-  total: number;
-  total2024: number;
-  total2025: number;
-  longestStreak: number;
-  longestStreak2025: number;
-  monthlyData: MonthlyData;
-}
-
 export interface MonthlyData {
   [month: string]: number;
-}
-
-// Chart types
-export interface ChartData {
-  labels: string[];
-  datasets: ChartDataset[];
-}
-
-export interface ChartDataset {
-  label: string;
-  data: number[];
-  backgroundColor?: string | string[];
-  borderColor?: string | string[];
-  borderWidth?: number;
-  tension?: number;
 }
 
 // Component props types
@@ -149,27 +124,44 @@ export interface GiftCardProps {
   theme?: 'yellow' | 'blue' | 'red' | 'green' | 'purple';
 }
 
-export interface ImageLoaderProps {
-  src: string;
-  alt: string;
-  className?: string;
-}
-
-export interface LoadingAnimationProps {
-  playerName: string;
-  onComplete: () => void;
-}
-
 // Community stats types
-export interface CommunityStats {
-  totalGames2024: number;
-  totalGames2025: number;
+export interface GameRecord {
+  month: string;
+  date: string;
+  played: boolean;
+  players: number | null;
+  field: string | null;
+}
+
+export interface CommunityStatsRaw {
+  games2024: GameRecord[];
+  games2025: GameRecord[];
+}
+
+export interface CommunityStatsCalculated {
+  // 2024 stats
+  gamesPlayed2024: number;
+  gamesCancelled2024: number;
+  totalAttempted2024: number;
+  avgPlayers2024: number;
+  successRate2024: number;
+  gamesPerMonth2024: Record<string, number>;
+  fields2024: Record<string, number>;
+
+  // 2025 stats
+  gamesPlayed2025: number;
+  gamesCancelled2025: number;
+  totalAttempted2025: number;
+  avgPlayers2025: number;
+  successRate2025: number;
+  gamesPerMonth2025: Record<string, number>;
+  fields2025: Record<string, number>;
+
+  // Comparisons
+  gamesChange: number;
+  avgPlayersChange: number;
+  successRateChange: number;
+
+  // All time
   totalGamesAllTime: number;
-  longestStreak: number;
-  averagePlayersPerMatch: number;
-  fields: Record<string, number>;
-  comparisonLastYear: {
-    gamesChange: number;
-    averagePlayersChange: number;
-  };
 }

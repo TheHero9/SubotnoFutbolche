@@ -68,6 +68,7 @@ function App(): JSX.Element {
         <StorySection
           player={selectedPlayer}
           totalPlayers={processedPlayers.length}
+          allPlayers={processedPlayers}
           onComplete={handleStoriesComplete}
         />
       )}

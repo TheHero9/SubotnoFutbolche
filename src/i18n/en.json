@@ -30,7 +30,10 @@
     "tapBack": "Back",
     "tapForward": "Forward",
     "showDates": "Show dates",
-    "hideDates": "Hide dates"
+    "hideDates": "Hide dates",
+    "showRanking": "View full ranking",
+    "fullRanking": "Full Ranking 2025",
+    "hideRanking": "Hide ranking"
   },
   "community": {
     "title": "Saturday Football",
@@ -46,11 +49,11 @@
   "scroll": {
     "monthlyBreakdown": "Monthly Breakdown - 2025",
     "comparison2024": "Comparison with 2024",
-    "bestMonths": "Best Months",
-    "worstMonths": "Worst Months",
-    "bestSeason": "Best Season",
-    "worstSeason": "Worst Season",
-    "achievements": "Achievements",
+    "bestMonths": "Your Best Months",
+    "worstMonths": "Your Worst Months",
+    "bestSeason": "Your Best Season",
+    "worstSeason": "Your Worst Season",
+    "achievements": "Your Achievements",
     "summary": "Your 2025 Wrapped",
     "yourStreak": "Your Streak",
     "consecutiveGames": "consecutive games",

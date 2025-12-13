@@ -9,10 +9,16 @@ import communityStatsRaw from '../data/communityStats.json';
 
 const rawStats = communityStatsRaw as CommunityStatsRaw;
 
-const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onComplete }) => {
+const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPlayers, onComplete }) => {
   const { t, i18n } = useTranslation();
   const [currentStory, setCurrentStory] = useState<number>(0);
   const [showGameDates, setShowGameDates] = useState<boolean>(false);
+  const [showRankingList, setShowRankingList] = useState<boolean>(false);
+
+  // Sort players by rank for the ranking list
+  const rankedPlayers = useMemo(() => {
+    return [...allPlayers].sort((a, b) => a.rank2025 - b.rank2025);
+  }, [allPlayers]);
 
   // Calculate community stats from raw data
   const communityStats = useMemo(() => calculateCommunityStats(rawStats), []);
@@ -220,44 +226,122 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, onCom
     {
       content: (
         <div>
-          <motion.p
-            className="text-2xl mb-8"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {t('story.rank')}
-          </motion.p>
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", duration: 0.8 }}
-          >
-            <div className="text-8xl font-bold mb-4" style={{ color: 'var(--color-accent-gold)' }}>
-              #{player.rank2025}
-            </div>
-            <div className="text-2xl" style={{ color: 'var(--color-text-secondary)' }}>
-              {t('story.outOf')} {totalPlayers} {t('story.players')}
-            </div>
-          </motion.div>
-          <motion.div
-            className="mt-8 text-xl"
-            style={{ color: 'var(--color-accent-green)' }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-          >
-            {rankTitle.title}
-          </motion.div>
-          <motion.p
-            className="mt-2"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-          >
-            {rankTitle.description}
-          </motion.p>
+          {!showRankingList ? (
+            <>
+              <motion.p
+                className="text-2xl mb-8"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                {t('story.rank')}
+              </motion.p>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", duration: 0.8 }}
+              >
+                <div className="text-8xl font-bold mb-4" style={{ color: 'var(--color-accent-gold)' }}>
+                  #{player.rank2025}
+                </div>
+                <div className="text-2xl" style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('story.outOf')} {totalPlayers} {t('story.players')}
+                </div>
+              </motion.div>
+              <motion.div
+                className="mt-8 text-xl"
+                style={{ color: 'var(--color-accent-green)' }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+              >
+                {rankTitle.title}
+              </motion.div>
+              <motion.p
+                className="mt-2 mb-6"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
+              >
+                {rankTitle.description}
+              </motion.p>
+              <motion.button
+                className="px-6 py-3 rounded-full text-lg font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  color: 'var(--color-accent-gold)',
+                  border: '2px solid var(--color-accent-gold)'
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowRankingList(true);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                🏆 {t('story.showRanking')}
+              </motion.button>
+            </>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full max-w-md mx-auto"
+            >
+              <h3 className="text-xl md:text-2xl font-bold mb-4" style={{ color: 'var(--color-accent-gold)' }}>
+                🏆 {t('story.fullRanking')}
+              </h3>
+              <div
+                className="max-h-[55vh] md:max-h-[50vh] overflow-y-auto rounded-xl mb-4"
+                style={{ backgroundColor: 'var(--color-bg-card)' }}
+              >
+                {rankedPlayers.map((p, index) => (
+                  <motion.div
+                    key={p.name}
+                    className="flex justify-between items-center px-3 md:px-4 py-3 border-b"
+                    style={{
+                      backgroundColor: p.name === player.name
+                        ? 'var(--color-accent-green)'
+                        : 'transparent',
+                      color: p.name === player.name
+                        ? 'var(--color-bg-primary)'
+                        : 'var(--color-text-primary)',
+                      borderColor: 'var(--color-bg-secondary)'
+                    }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.02 }}
+                  >
+                    <span className="font-semibold text-sm md:text-base">
+                      #{p.rank2025} {p.name}
+                    </span>
+                    <span className="font-bold text-sm md:text-base whitespace-nowrap ml-2">
+                      {p.total2025} {t('story.games')}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+              <motion.button
+                className="px-6 py-2 rounded-full text-sm font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  color: 'var(--color-text-secondary)'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowRankingList(false);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ← {t('story.hideRanking')}
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       )
     },

@@ -115,6 +115,7 @@ export interface ScrollSectionProps {
 export interface StorySectionProps {
   player: ProcessedPlayer;
   totalPlayers: number;
+  allPlayers: ProcessedPlayer[];
   onComplete: () => void;
 }
 

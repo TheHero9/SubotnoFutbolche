@@ -88,7 +88,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
         {/* Best and worst months */}
         <StatCard delay={0.2} asGift={true} giftTheme="blue">
           <h2 className="text-3xl font-bold mb-6" style={{ color: 'var(--color-accent-green)' }}>
-            {t('scroll.bestMonths')}
+            🏆 {t('scroll.bestMonths')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {bestWorst.best.map(([month, games]) => (
@@ -107,7 +107,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
 
         <StatCard delay={0.3} asGift={true} giftTheme="red">
           <h2 className="text-3xl font-bold mb-6" style={{ color: 'var(--color-accent-red)' }}>
-            {t('scroll.worstMonths')}
+            📉 {t('scroll.worstMonths')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {bestWorst.worst.map(([month, games]) => (
@@ -129,7 +129,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="text-center">
               <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--color-accent-green)' }}>
-                {t('scroll.bestSeason')}
+                🌍 {t('scroll.bestSeason')}
               </h3>
               <div className="text-6xl mb-3">{getSeasonEmoji(seasons.best[0] as SeasonKey)}</div>
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
@@ -141,7 +141,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
             </div>
             <div className="text-center">
               <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--color-accent-red)' }}>
-                {t('scroll.worstSeason')}
+                🌍 {t('scroll.worstSeason')}
               </h3>
               <div className="text-6xl mb-3">{getSeasonEmoji(seasons.worst[0] as SeasonKey)}</div>
               <div className="text-3xl font-bold">
@@ -157,7 +157,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
         {/* Achievements */}
         <StatCard delay={0.5} asGift={true} giftTheme="yellow">
           <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: 'var(--color-accent-gold)' }}>
-            {t('scroll.achievements')}
+            🎯 {t('scroll.achievements')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <AchievementBadge

@@ -30,7 +30,10 @@
     "tapBack": "Назад",
     "tapForward": "Напред",
     "showDates": "Покажи датите",
-    "hideDates": "Скрий датите"
+    "hideDates": "Скрий датите",
+    "showRanking": "Виж класацията",
+    "fullRanking": "Пълна класация 2025",
+    "hideRanking": "Скрий класацията"
   },
   "community": {
     "title": "Съботно Футболче",
@@ -46,11 +49,11 @@
   "scroll": {
     "monthlyBreakdown": "Разпределение по месеци - 2025",
     "comparison2024": "Сравнение с 2024",
-    "bestMonths": "Най-добри месеци",
-    "worstMonths": "Най-слаби месеци",
-    "bestSeason": "Най-добър сезон",
-    "worstSeason": "Най-слаб сезон",
-    "achievements": "Постижения",
+    "bestMonths": "Твоите най-добри месеци",
+    "worstMonths": "Твоите най-слаби месеци",
+    "bestSeason": "Твоят най-добър сезон",
+    "worstSeason": "Твоят най-слаб сезон",
+    "achievements": "Твоите постижения",
     "summary": "Твоят 2025 Wrapped",
     "yourStreak": "Твоята серия",
     "consecutiveGames": "поредни мача",

@@ -519,14 +519,6 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 {t(`stats.${consistency.rating}`)}
               </div>
             </div>
-            <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
-              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
-                {consistency.avgGamesGap}
-              </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                {t('stats.gamesBetweenParticipation')}
-              </div>
-            </div>
           </motion.div>
 
           {/* Clutch Player */}
@@ -559,7 +551,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 {clutchData.clutchGames}
               </div>
               <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                {t('stats.clutchGames')}
+                {t('stats.clutchGames')}*
               </div>
             </div>
             {clutchData.gamesSaved > 0 && (
@@ -698,7 +690,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               </h3>
 
               <div
-                className="max-h-52 overflow-y-auto px-4 py-3 rounded-xl mb-4"
+                className="max-h-[55vh] overflow-y-auto px-4 py-4 rounded-xl mb-4"
                 style={{ backgroundColor: 'var(--color-bg-card)' }}
               >
                 <div className="flex flex-wrap gap-2 justify-center">
@@ -722,7 +714,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                     return (
                       <motion.span
                         key={date}
-                        className="px-2 py-1 rounded-full text-xs font-medium"
+                        className="px-3 py-1.5 rounded-full text-sm font-medium"
                         style={{
                           backgroundColor: bgColor,
                           color: textColor,

@@ -51,3 +51,8 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+/* Ensure buttons have pointer cursor */
+button {
+  cursor: pointer;
+}

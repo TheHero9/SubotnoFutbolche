@@ -6,6 +6,14 @@ import type { StorySectionProps, CommunityStatsRaw } from '../types';
 import StoryCard from './StoryCard';
 import { getRankTitle, getRankChange, calculateCommunityStats } from '../utils/calculations';
 import { getFootballBuddies } from '../utils/footballBuddies';
+import {
+  calculateConsistency,
+  calculateClutchAppearances,
+  calculatePeakPerformance,
+  calculatePerfectMonths,
+  calculateDynamicDuos,
+  calculateAttendanceRate
+} from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
 
 const rawStats = communityStatsRaw as CommunityStatsRaw;
@@ -26,6 +34,32 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
 
   // Calculate football buddies using affinity algorithm
   const footballBuddies = useMemo(() => getFootballBuddies(player, allPlayers), [player, allPlayers]);
+
+  // Calculate new player stats
+  const consistency = useMemo(
+    () => calculateConsistency(player.dates2025 || [], rawStats.games2025),
+    [player.dates2025]
+  );
+  const clutchData = useMemo(
+    () => calculateClutchAppearances(player.dates2025 || [], rawStats.games2025),
+    [player.dates2025]
+  );
+  const peakPerformance = useMemo(
+    () => calculatePeakPerformance(player.dates2025 || [], rawStats.games2025),
+    [player.dates2025]
+  );
+  const perfectMonths = useMemo(
+    () => calculatePerfectMonths(player.dates2025 || [], rawStats.games2025),
+    [player.dates2025]
+  );
+  const attendanceRate = useMemo(
+    () => calculateAttendanceRate(player.dates2025 || [], rawStats.games2025),
+    [player.dates2025]
+  );
+  const dynamicDuos = useMemo(
+    () => calculateDynamicDuos(allPlayers),
+    [allPlayers]
+  );
 
   // Format dates to dd.mm format (EU style)
   const formatDateEU = (dateStr: string): string => {
@@ -60,9 +94,9 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const rankChange = getRankChange(player.rank2024, player.rank2025);
   const rankTitle = getRankTitle(player.rank2025, i18n.language as 'bg' | 'en');
 
-  // Trigger confetti on rank reveal and community stats
+  // Trigger confetti on rank reveal (index 2) and community stats (index 8)
   useEffect(() => {
-    if (currentStory === 2 || currentStory === 7) {
+    if (currentStory === 2 || currentStory === 8) {
       confetti({
         particleCount: 100,
         spread: 70,
@@ -113,7 +147,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
           {!showGameDates ? (
             <>
               <motion.div
-                className="text-9xl font-bold mb-4"
+                className="text-8xl font-bold mb-2"
                 style={{ color: 'var(--color-accent-green)' }}
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
@@ -122,13 +156,41 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 {player.total2025}
               </motion.div>
               <motion.p
-                className="text-3xl mb-6"
+                className="text-2xl mb-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
                 {t('story.games')}
               </motion.p>
+
+              {/* Attendance rate & Perfect months */}
+              <motion.div
+                className="flex justify-center gap-4 mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+              >
+                <div className="text-center px-4 py-2 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+                  <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+                    {attendanceRate}%
+                  </div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                    {t('stats.ofAllGames')}
+                  </div>
+                </div>
+                {perfectMonths.length > 0 && (
+                  <div className="text-center px-4 py-2 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+                    <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
+                      {perfectMonths.length}
+                    </div>
+                    <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                      {t('stats.perfectMonths')}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+
               <motion.button
                 className="px-6 py-3 rounded-full text-lg font-semibold"
                 style={{
@@ -138,7 +200,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
+                transition={{ delay: 0.9 }}
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowGameDates(true);
@@ -387,7 +449,189 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 5: Football Buddies
+    // Story 5: Consistency + Clutch Player
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          {/* Consistency */}
+          <motion.div
+            className="text-5xl mb-3"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", duration: 0.8 }}
+          >
+            📊
+          </motion.div>
+          <motion.h2
+            className="text-xl font-bold mb-1"
+            style={{ color: 'var(--color-accent-green)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            {t('stats.consistency')}
+          </motion.h2>
+
+          <motion.div
+            className="flex justify-center gap-3 mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+                {consistency.score}%
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t(`stats.${consistency.rating}`)}
+              </div>
+            </div>
+            <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
+                {consistency.avgGap}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('stats.avgGapDays')}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Clutch Player */}
+          <motion.div
+            className="text-5xl mb-3"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.6, type: "spring", duration: 0.8 }}
+          >
+            🦸
+          </motion.div>
+          <motion.h2
+            className="text-xl font-bold mb-1"
+            style={{ color: 'var(--color-accent-gold)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
+            {t('stats.clutchPlayer')}
+          </motion.h2>
+
+          <motion.div
+            className="flex justify-center gap-3 mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+          >
+            <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
+                {clutchData.clutchGames}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('stats.clutchGames')}
+              </div>
+            </div>
+            {clutchData.gamesSaved > 0 && (
+              <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+                <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-red)' }}>
+                  {clutchData.gamesSaved}
+                </div>
+                <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('stats.gamesSaved')}
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          <motion.p
+            className="text-xs"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1 }}
+          >
+            {t('stats.clutchInfo')}
+          </motion.p>
+        </div>
+      )
+    },
+    // Story 6: Peak Performance (Consecutive Games)
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          <motion.div
+            className="text-6xl mb-4"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", duration: 0.8 }}
+          >
+            🔥
+          </motion.div>
+          <motion.h2
+            className="text-2xl font-bold mb-2"
+            style={{ color: 'var(--color-accent-green)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {t('stats.peakPerformance')}
+          </motion.h2>
+          <motion.p
+            className="text-sm mb-6"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            {t('stats.peakSubtitle')}
+          </motion.p>
+
+          <motion.div
+            className="text-7xl font-bold mb-2"
+            style={{ color: 'var(--color-accent-gold)' }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.6, type: "spring" }}
+          >
+            {peakPerformance.streakLength}
+          </motion.div>
+          <motion.p
+            className="text-lg mb-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            {t('stats.consecutiveGamesPlayed')}
+          </motion.p>
+
+          {peakPerformance.startDate && peakPerformance.endDate && (
+            <motion.div
+              className="px-4 py-3 rounded-xl mb-4"
+              style={{ backgroundColor: 'var(--color-bg-card)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+            >
+              <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('stats.peakPeriod')}
+              </div>
+              <div className="text-lg font-semibold" style={{ color: 'var(--color-accent-green)' }}>
+                {formatDateEU(peakPerformance.startDate)} → {formatDateEU(peakPerformance.endDate)}
+              </div>
+            </motion.div>
+          )}
+
+          <motion.p
+            className="text-xs"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+          >
+            {t('stats.peakInfo')}
+          </motion.p>
+        </div>
+      )
+    },
+    // Story 7: Football Buddies
     {
       content: (
         <div className="w-full max-w-md mx-auto">
@@ -473,7 +717,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 6: Community - Total Games 2025
+    // Story 8: Community - Total Games 2025
     {
       content: (
         <div>
@@ -533,7 +777,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 7: Community - Average Players & Success Rate
+    // Story 9: Community - Average Players & Success Rate
     {
       content: (
         <div>
@@ -572,7 +816,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 8: Community - Favorite Fields 2025
+    // Story 10: Community - Favorite Fields 2025
     {
       content: (
         <div>
@@ -604,6 +848,97 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               </motion.div>
             ))}
           </div>
+        </div>
+      )
+    },
+    // Story 11: Community - Dynamic Duos
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          <motion.div
+            className="text-6xl mb-4"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", duration: 0.8 }}
+          >
+            👯
+          </motion.div>
+          <motion.h2
+            className="text-2xl font-bold mb-2"
+            style={{ color: 'var(--color-accent-green)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {t('stats.dynamicDuos')}
+          </motion.h2>
+          <motion.p
+            className="text-sm mb-6"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            {t('stats.dynamicDuosSubtitle')}
+          </motion.p>
+
+          <motion.div
+            className="max-h-[45vh] overflow-y-auto rounded-xl"
+            style={{ backgroundColor: 'var(--color-bg-card)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            <div className="space-y-1 p-2">
+              {dynamicDuos.map((duo, index) => (
+                <motion.div
+                  key={`${duo.player1}-${duo.player2}`}
+                  className="px-3 py-2 rounded-lg"
+                  style={{
+                    backgroundColor: duo.mutualRate >= 80
+                      ? 'rgba(29, 185, 84, 0.2)'
+                      : duo.mutualRate >= 65
+                        ? 'rgba(255, 215, 0, 0.1)'
+                        : 'transparent'
+                  }}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.7 + index * 0.05 }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-sm">
+                      {duo.player1} & {duo.player2}
+                    </span>
+                    <span
+                      className="text-sm font-bold"
+                      style={{
+                        color: duo.mutualRate >= 80
+                          ? 'var(--color-accent-green)'
+                          : duo.mutualRate >= 65
+                            ? 'var(--color-accent-gold)'
+                            : 'var(--color-text-secondary)'
+                      }}
+                    >
+                      {duo.mutualRate}%
+                    </span>
+                  </div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                    {duo.gamesTogethers} {t('story.gamesTogether')}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.p
+            className="text-xs mt-4"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.4 }}
+          >
+            {t('stats.duoInfo')}
+          </motion.p>
         </div>
       )
     }

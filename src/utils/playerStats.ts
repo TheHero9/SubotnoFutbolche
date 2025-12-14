@@ -18,8 +18,8 @@ import type { ProcessedPlayer, GameRecord } from '../types';
 export interface ConsistencyData {
   score: number;           // 0-100, higher = more consistent
   rating: 'very_consistent' | 'consistent' | 'moderate' | 'irregular';
-  avgGap: number;          // Average days between games
-  maxGap: number;          // Longest gap without playing
+  avgGamesGap: number;     // Average community games between player's participations
+  maxGap: number;          // Longest gap without playing (in days)
 }
 
 export interface ClutchData {
@@ -106,27 +106,45 @@ export const calculateConsistency = (
   communityGames: GameRecord[]
 ): ConsistencyData => {
   if (playerDates.length < 3) {
-    return { score: 0, rating: 'irregular', avgGap: 0, maxGap: 0 };
+    return { score: 0, rating: 'irregular', avgGamesGap: 0, maxGap: 0 };
   }
 
-  // Sort player dates chronologically
+  const playerDatesSet = new Set(playerDates);
+  const playedGameDates = getPlayedGameDates(communityGames);
+
+  // Calculate games gap between player's participations
+  const gamesGaps: number[] = [];
+  let lastPlayedIndex = -1;
+
+  for (let i = 0; i < playedGameDates.length; i++) {
+    if (playerDatesSet.has(playedGameDates[i])) {
+      if (lastPlayedIndex !== -1) {
+        // Number of community games between this participation and last
+        const gamesSkipped = i - lastPlayedIndex - 1;
+        gamesGaps.push(gamesSkipped);
+      }
+      lastPlayedIndex = i;
+    }
+  }
+
+  const avgGamesGap = gamesGaps.length > 0
+    ? gamesGaps.reduce((a, b) => a + b, 0) / gamesGaps.length
+    : 0;
+
+  // Calculate max days gap for additional context
   const sortedDates = [...playerDates].sort((a, b) => {
     const dateA = parseDate(a);
     const dateB = parseDate(b);
     return dateA.getTime() - dateB.getTime();
   });
 
-  // Calculate gaps between consecutive games
-  const gaps: number[] = [];
+  let maxGap = 0;
   for (let i = 1; i < sortedDates.length; i++) {
     const prev = parseDate(sortedDates[i - 1]);
     const curr = parseDate(sortedDates[i]);
     const daysDiff = Math.round((curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24));
-    gaps.push(daysDiff);
+    if (daysDiff > maxGap) maxGap = daysDiff;
   }
-
-  const avgGap = gaps.length > 0 ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0;
-  const maxGap = gaps.length > 0 ? Math.max(...gaps) : 0;
 
   // Calculate monthly variance
   const playedGamesPerMonth = getGamesPerMonth(communityGames);
@@ -161,9 +179,9 @@ export const calculateConsistency = (
 
   // Score calculation (0-100)
   // Lower variance = higher score
-  // Lower avg gap = higher score
+  // Lower avgGamesGap = higher score (0 is perfect, meaning no skipped games)
   const varianceScore = Math.max(0, 100 - variance * 200);
-  const gapScore = Math.max(0, 100 - (avgGap - 7) * 5); // 7 days is ideal
+  const gapScore = Math.max(0, 100 - avgGamesGap * 20); // 0 skipped is 100, 5 skipped is 0
   const score = Math.round((varianceScore * 0.6 + gapScore * 0.4));
 
   let rating: ConsistencyData['rating'];
@@ -175,7 +193,7 @@ export const calculateConsistency = (
   return {
     score: Math.min(100, Math.max(0, score)),
     rating,
-    avgGap: Math.round(avgGap),
+    avgGamesGap: Math.round(avgGamesGap * 10) / 10,
     maxGap
   };
 };

@@ -12,7 +12,8 @@ import {
   calculatePeakPerformance,
   calculatePerfectMonths,
   calculateDynamicDuos,
-  calculateAttendanceRate
+  calculateAttendanceRate,
+  getPlayedGameDates
 } from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
 
@@ -23,6 +24,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const [currentStory, setCurrentStory] = useState<number>(0);
   const [showGameDates, setShowGameDates] = useState<boolean>(false);
   const [showRankingList, setShowRankingList] = useState<boolean>(false);
+  const [showStreakVisualization, setShowStreakVisualization] = useState<boolean>(false);
 
   // Sort players by rank for the ranking list
   const rankedPlayers = useMemo(() => {
@@ -59,6 +61,24 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const dynamicDuos = useMemo(
     () => calculateDynamicDuos(allPlayers),
     [allPlayers]
+  );
+
+  // Get all community game dates for streak visualization
+  const allCommunityGameDates = useMemo(
+    () => getPlayedGameDates(rawStats.games2025),
+    []
+  );
+
+  // Create a set of streak dates for quick lookup
+  const streakDatesSet = useMemo(
+    () => new Set(peakPerformance.dates),
+    [peakPerformance.dates]
+  );
+
+  // Create a set of player's dates for quick lookup
+  const playerDatesSet = useMemo(
+    () => new Set(player.dates2025 || []),
+    [player.dates2025]
   );
 
   // Format dates to dd.mm format (EU style)
@@ -185,11 +205,24 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                       {perfectMonths.length}
                     </div>
                     <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                      {t('stats.perfectMonths')}
+                      {t('stats.perfectMonths')}*
                     </div>
                   </div>
                 )}
               </motion.div>
+
+              {/* Perfect months info */}
+              {perfectMonths.length > 0 && (
+                <motion.p
+                  className="text-xs mb-4"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  {t('stats.perfectMonthsInfo')}
+                </motion.p>
+              )}
 
               <motion.button
                 className="px-6 py-3 rounded-full text-lg font-semibold"
@@ -488,10 +521,10 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
             </div>
             <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
-                {consistency.avgGap}
+                {consistency.avgGamesGap}
               </div>
               <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                {t('stats.avgGapDays')}
+                {t('stats.gamesBetweenParticipation')}
               </div>
             </div>
           </motion.div>
@@ -535,21 +568,22 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                   {clutchData.gamesSaved}
                 </div>
                 <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                  {t('stats.gamesSaved')}
+                  {t('stats.gamesSaved')}**
                 </div>
               </div>
             )}
           </motion.div>
 
-          <motion.p
-            className="text-xs"
+          <motion.div
+            className="text-xs space-y-1"
             style={{ color: 'var(--color-text-secondary)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.1 }}
           >
-            {t('stats.clutchInfo')}
-          </motion.p>
+            <p>{t('stats.clutchInfo')}</p>
+            {clutchData.gamesSaved > 0 && <p>{t('stats.gamesSavedInfo')}</p>}
+          </motion.div>
         </div>
       )
     },
@@ -557,77 +591,195 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
     {
       content: (
         <div className="w-full max-w-md mx-auto">
-          <motion.div
-            className="text-6xl mb-4"
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", duration: 0.8 }}
-          >
-            🔥
-          </motion.div>
-          <motion.h2
-            className="text-2xl font-bold mb-2"
-            style={{ color: 'var(--color-accent-green)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            {t('stats.peakPerformance')}
-          </motion.h2>
-          <motion.p
-            className="text-sm mb-6"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {t('stats.peakSubtitle')}
-          </motion.p>
+          {!showStreakVisualization ? (
+            <>
+              <motion.div
+                className="text-6xl mb-4"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", duration: 0.8 }}
+              >
+                🔥
+              </motion.div>
+              <motion.h2
+                className="text-2xl font-bold mb-2"
+                style={{ color: 'var(--color-accent-green)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                {t('stats.peakPerformance')}
+              </motion.h2>
+              <motion.p
+                className="text-sm mb-6"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {t('stats.peakSubtitle')}
+              </motion.p>
 
-          <motion.div
-            className="text-7xl font-bold mb-2"
-            style={{ color: 'var(--color-accent-gold)' }}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6, type: "spring" }}
-          >
-            {peakPerformance.streakLength}
-          </motion.div>
-          <motion.p
-            className="text-lg mb-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            {t('stats.consecutiveGamesPlayed')}
-          </motion.p>
+              <motion.div
+                className="text-7xl font-bold mb-2"
+                style={{ color: 'var(--color-accent-gold)' }}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.6, type: "spring" }}
+              >
+                {peakPerformance.streakLength}
+              </motion.div>
+              <motion.p
+                className="text-lg mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                {t('stats.consecutiveGamesPlayed')}
+              </motion.p>
 
-          {peakPerformance.startDate && peakPerformance.endDate && (
+              {peakPerformance.startDate && peakPerformance.endDate && (
+                <motion.div
+                  className="px-4 py-3 rounded-xl mb-4"
+                  style={{ backgroundColor: 'var(--color-bg-card)' }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                >
+                  <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                    {t('stats.peakPeriod')}
+                  </div>
+                  <div className="text-lg font-semibold" style={{ color: 'var(--color-accent-green)' }}>
+                    {formatDateEU(peakPerformance.startDate)} → {formatDateEU(peakPerformance.endDate)}
+                  </div>
+                </motion.div>
+              )}
+
+              {peakPerformance.streakLength > 0 && (
+                <motion.button
+                  className="px-6 py-3 rounded-full text-lg font-semibold mb-4"
+                  style={{
+                    backgroundColor: 'var(--color-bg-card)',
+                    color: 'var(--color-accent-green)',
+                    border: '2px solid var(--color-accent-green)'
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.1 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowStreakVisualization(true);
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  📅 {t('scroll.showStreakDates')}
+                </motion.button>
+              )}
+
+              <motion.p
+                className="text-xs"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+              >
+                {t('stats.peakInfo')}
+              </motion.p>
+            </>
+          ) : (
             <motion.div
-              className="px-4 py-3 rounded-xl mb-4"
-              style={{ backgroundColor: 'var(--color-bg-card)' }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full"
             >
-              <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                {t('stats.peakPeriod')}
+              <h3 className="text-xl font-bold mb-4" style={{ color: 'var(--color-accent-green)' }}>
+                🔥 {t('stats.peakPerformance')}
+              </h3>
+
+              <div
+                className="max-h-52 overflow-y-auto px-4 py-3 rounded-xl mb-4"
+                style={{ backgroundColor: 'var(--color-bg-card)' }}
+              >
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {allCommunityGameDates.map((date, index) => {
+                    const isInStreak = streakDatesSet.has(date);
+                    const playerPlayed = playerDatesSet.has(date);
+                    const season = getSeasonFromDate(date);
+
+                    // Determine colors
+                    let bgColor = 'rgba(75, 75, 75, 0.5)'; // Missed games (muted)
+                    let textColor = 'var(--color-text-secondary)';
+
+                    if (isInStreak) {
+                      bgColor = 'var(--color-accent-green)';
+                      textColor = '#000';
+                    } else if (playerPlayed) {
+                      bgColor = seasonColors[season].bg;
+                      textColor = seasonColors[season].text;
+                    }
+
+                    return (
+                      <motion.span
+                        key={date}
+                        className="px-2 py-1 rounded-full text-xs font-medium"
+                        style={{
+                          backgroundColor: bgColor,
+                          color: textColor,
+                          opacity: isInStreak ? 1 : playerPlayed ? 0.8 : 0.4
+                        }}
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{
+                          opacity: isInStreak ? 1 : playerPlayed ? 0.8 : 0.4,
+                          scale: isInStreak ? 1.1 : 1
+                        }}
+                        transition={{ delay: index * 0.02 }}
+                      >
+                        {formatDateEU(date)}
+                      </motion.span>
+                    );
+                  })}
+                </div>
               </div>
-              <div className="text-lg font-semibold" style={{ color: 'var(--color-accent-green)' }}>
-                {formatDateEU(peakPerformance.startDate)} → {formatDateEU(peakPerformance.endDate)}
-              </div>
+
+              {/* Legend */}
+              <motion.div
+                className="flex flex-wrap justify-center gap-3 mb-4 px-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: 'var(--color-accent-green)' }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🔥 {t('stats.streakLegendStreak')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full opacity-60" style={{ backgroundColor: seasonColors.winter.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✓ {t('stats.streakLegendPlayed')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full opacity-40" style={{ backgroundColor: '#4b4b4b' }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✗ {t('stats.streakLegendMissed')}</span>
+                </div>
+              </motion.div>
+
+              <motion.button
+                className="px-6 py-2 rounded-full text-sm font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  color: 'var(--color-text-secondary)'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowStreakVisualization(false);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ← {t('scroll.hideDates')}
+              </motion.button>
             </motion.div>
           )}
-
-          <motion.p
-            className="text-xs"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-          >
-            {t('stats.peakInfo')}
-          </motion.p>
         </div>
       )
     },
@@ -771,9 +923,18 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
                 {communityStats.totalGamesAllTime}
               </div>
-              <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{t('community.allTime')}</div>
+              <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{t('community.allTime')}*</div>
             </div>
           </motion.div>
+          <motion.p
+            className="text-xs mt-4"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            {t('stats.allTimeInfo')}
+          </motion.p>
         </div>
       )
     },
@@ -816,37 +977,67 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 10: Community - Favorite Fields 2025
+    // Story 10: Community - Favorite Fields Comparison
     {
       content: (
-        <div>
+        <div className="w-full max-w-md mx-auto">
           <motion.h3
-            className="text-3xl font-bold mb-8"
+            className="text-2xl font-bold mb-6"
             style={{ color: 'var(--color-accent-green)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            {t('community.favoriteFields')} 2025
+            {t('community.favoriteFields')}
           </motion.h3>
-          <div className="space-y-4">
-            {Object.entries(communityStats.fields2025)
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 3)
-              .map(([field, count], index) => (
-              <motion.div
-                key={field}
-                className="flex justify-between items-center px-6 py-4 rounded-xl"
-                style={{ backgroundColor: 'var(--color-bg-card)' }}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.2 }}
-              >
-                <span className="text-2xl font-semibold">{field}</span>
-                <span className="text-3xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
-                  {count}
-                </span>
-              </motion.div>
-            ))}
+
+          {/* Combined fields from both years */}
+          <div className="space-y-3">
+            {(() => {
+              // Get all unique fields from both years
+              const allFields = new Set([
+                ...Object.keys(communityStats.fields2024 || {}),
+                ...Object.keys(communityStats.fields2025 || {})
+              ]);
+
+              // Sort by 2025 count (descending)
+              const sortedFields = Array.from(allFields).sort((a, b) => {
+                const count2025A = communityStats.fields2025[a] || 0;
+                const count2025B = communityStats.fields2025[b] || 0;
+                return count2025B - count2025A;
+              });
+
+              return sortedFields.slice(0, 5).map((field, index) => {
+                const count2024 = communityStats.fields2024?.[field] || 0;
+                const count2025 = communityStats.fields2025?.[field] || 0;
+                const change = count2025 - count2024;
+
+                return (
+                  <motion.div
+                    key={field}
+                    className="px-4 py-3 rounded-xl"
+                    style={{ backgroundColor: 'var(--color-bg-card)' }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.15 }}
+                  >
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-semibold text-lg">{field}</span>
+                      <span className="text-xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+                        {count2025}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                      <span>2024: {count2024}</span>
+                      {change !== 0 && (
+                        <span style={{ color: change > 0 ? 'var(--color-accent-green)' : 'var(--color-accent-red)' }}>
+                          {change > 0 ? '↑' : '↓'} {Math.abs(change)}
+                        </span>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              });
+            })()}
           </div>
         </div>
       )

@@ -145,6 +145,10 @@
     "rareDuosInfo": "Both play frequently but somehow never on the same day",
     "combinedGames": "combined games",
     "togetherOnly": "together only",
-    "times": "times"
+    "times": "times",
+    "clickToCompare": "Click on a duo to compare their games",
+    "duoCalendarSubtitle": "Compare when each player participated",
+    "bothPlayers": "Both",
+    "neitherPlayer": "Neither"
   }
 }

@@ -145,6 +145,10 @@
     "rareDuosInfo": "И двамата играят често, но някак никога в един ден",
     "combinedGames": "общо мачове",
     "togetherOnly": "заедно само",
-    "times": "пъти"
+    "times": "пъти",
+    "clickToCompare": "Кликни на дует за да сравниш мачовете им",
+    "duoCalendarSubtitle": "Сравни кога всеки играч е участвал",
+    "bothPlayers": "И двамата",
+    "neitherPlayer": "Никой"
   }
 }

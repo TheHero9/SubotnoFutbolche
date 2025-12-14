@@ -27,6 +27,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const [showGameDates, setShowGameDates] = useState<boolean>(false);
   const [showRankingList, setShowRankingList] = useState<boolean>(false);
   const [showStreakVisualization, setShowStreakVisualization] = useState<boolean>(false);
+  const [selectedRareDuo, setSelectedRareDuo] = useState<{ player1: string; player2: string } | null>(null);
 
   // Sort players by rank for the ranking list
   const rankedPlayers = useMemo(() => {
@@ -1100,96 +1101,236 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
     {
       content: (
         <div className="w-full max-w-md mx-auto">
-          <motion.div
-            className="text-6xl mb-4"
-            initial={{ scale: 0, rotate: 180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", duration: 0.8 }}
-          >
-            ⛵
-          </motion.div>
-          <motion.div
-            className="flex items-center justify-center gap-2 mb-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <h2
-              className="text-2xl font-bold"
-              style={{ color: 'var(--color-accent-gold)' }}
-            >
-              {t('stats.rareDuos')}
-            </h2>
-            <InfoTooltip text={t('stats.rareDuosInfo')} size="md" />
-          </motion.div>
-          <motion.p
-            className="text-sm mb-6"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {t('stats.rareDuosSubtitle')}
-          </motion.p>
+          {!selectedRareDuo ? (
+            <>
+              <motion.div
+                className="text-6xl mb-4"
+                initial={{ scale: 0, rotate: 180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", duration: 0.8 }}
+              >
+                ⛵
+              </motion.div>
+              <motion.div
+                className="flex items-center justify-center gap-2 mb-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <h2
+                  className="text-2xl font-bold"
+                  style={{ color: 'var(--color-accent-gold)' }}
+                >
+                  {t('stats.rareDuos')}
+                </h2>
+                <InfoTooltip text={t('stats.rareDuosInfo')} size="md" />
+              </motion.div>
+              <motion.p
+                className="text-sm mb-6"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {t('stats.rareDuosSubtitle')}
+              </motion.p>
 
-          {rareDuos.length > 0 ? (
-            <motion.div
-              className="max-h-[45vh] overflow-y-auto rounded-xl"
-              style={{ backgroundColor: 'var(--color-bg-card)' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              <div className="space-y-1 p-2">
-                {rareDuos.map((duo, index) => (
-                  <motion.div
-                    key={`${duo.player1}-${duo.player2}`}
-                    className="px-3 py-2 rounded-lg"
-                    style={{
-                      backgroundColor: duo.gamesTogethers === 0
-                        ? 'rgba(231, 76, 60, 0.2)'
-                        : duo.gamesTogethers <= 2
-                          ? 'rgba(255, 215, 0, 0.1)'
-                          : 'transparent'
-                    }}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.7 + index * 0.05 }}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-sm">
-                        {duo.player1} & {duo.player2}
-                      </span>
-                      <span
-                        className="text-sm font-bold"
+              {rareDuos.length > 0 ? (
+                <motion.div
+                  className="max-h-[45vh] overflow-y-auto rounded-xl"
+                  style={{ backgroundColor: 'var(--color-bg-card)' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <div className="space-y-1 p-2">
+                    {rareDuos.map((duo, index) => (
+                      <motion.button
+                        key={`${duo.player1}-${duo.player2}`}
+                        className="w-full px-3 py-2 rounded-lg text-left"
                         style={{
-                          color: duo.gamesTogethers === 0
-                            ? 'var(--color-accent-red)'
+                          backgroundColor: duo.gamesTogethers === 0
+                            ? 'rgba(231, 76, 60, 0.2)'
                             : duo.gamesTogethers <= 2
-                              ? 'var(--color-accent-gold)'
-                              : 'var(--color-text-secondary)'
+                              ? 'rgba(255, 215, 0, 0.1)'
+                              : 'transparent'
                         }}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.7 + index * 0.05 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedRareDuo({ player1: duo.player1, player2: duo.player2 });
+                        }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        {duo.gamesTogethers === 0 ? '🚫' : duo.gamesTogethers}× {t('stats.togetherOnly')}
-                      </span>
-                    </div>
-                    <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                      {duo.player1Games} + {duo.player2Games} = {duo.totalGames} {t('stats.combinedGames')}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-sm">
+                            {duo.player1} & {duo.player2}
+                          </span>
+                          <span
+                            className="text-sm font-bold"
+                            style={{
+                              color: duo.gamesTogethers === 0
+                                ? 'var(--color-accent-red)'
+                                : duo.gamesTogethers <= 2
+                                  ? 'var(--color-accent-gold)'
+                                  : 'var(--color-text-secondary)'
+                            }}
+                          >
+                            {duo.gamesTogethers === 0 ? '🚫' : duo.gamesTogethers}× {t('stats.togetherOnly')}
+                          </span>
+                        </div>
+                        <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                          {duo.player1Games} + {duo.player2Games} = {duo.totalGames} {t('stats.combinedGames')}
+                        </div>
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.p
+                  className="text-lg"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  No rare duos found
+                </motion.p>
+              )}
+
+              <motion.p
+                className="text-xs mt-4"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+              >
+                {t('stats.clickToCompare')}
+              </motion.p>
+            </>
           ) : (
-            <motion.p
-              className="text-lg"
-              style={{ color: 'var(--color-text-secondary)' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full"
             >
-              No rare duos found
-            </motion.p>
+              {(() => {
+                const p1 = allPlayers.find(p => p.name === selectedRareDuo.player1);
+                const p2 = allPlayers.find(p => p.name === selectedRareDuo.player2);
+                const p1Dates = new Set(p1?.dates2025 || []);
+                const p2Dates = new Set(p2?.dates2025 || []);
+
+                // Colors for duo comparison
+                const duoColors = {
+                  player1Only: '#3b82f6',  // Blue
+                  player2Only: '#ec4899',  // Pink
+                  both: '#22c55e',         // Green
+                  neither: '#4b4b4b'       // Gray
+                };
+
+                return (
+                  <>
+                    <h3 className="text-lg font-bold mb-1" style={{ color: 'var(--color-accent-gold)' }}>
+                      {selectedRareDuo.player1} & {selectedRareDuo.player2}
+                    </h3>
+                    <p className="text-xs mb-4" style={{ color: 'var(--color-text-secondary)' }}>
+                      {t('stats.duoCalendarSubtitle')}
+                    </p>
+
+                    <div
+                      className="max-h-[50vh] overflow-y-auto px-3 py-3 rounded-xl mb-4"
+                      style={{ backgroundColor: 'var(--color-bg-card)' }}
+                    >
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {allCommunityGameDates.map((date, index) => {
+                          const p1Played = p1Dates.has(date);
+                          const p2Played = p2Dates.has(date);
+
+                          let bgColor = duoColors.neither;
+                          let textColor = 'var(--color-text-secondary)';
+                          let opacity = 0.4;
+
+                          if (p1Played && p2Played) {
+                            bgColor = duoColors.both;
+                            textColor = '#fff';
+                            opacity = 1;
+                          } else if (p1Played) {
+                            bgColor = duoColors.player1Only;
+                            textColor = '#fff';
+                            opacity = 0.85;
+                          } else if (p2Played) {
+                            bgColor = duoColors.player2Only;
+                            textColor = '#fff';
+                            opacity = 0.85;
+                          }
+
+                          return (
+                            <motion.span
+                              key={date}
+                              className="px-2.5 py-1.5 rounded-full text-sm font-medium"
+                              style={{
+                                backgroundColor: bgColor,
+                                color: textColor,
+                                opacity
+                              }}
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity, scale: 1 }}
+                              transition={{ delay: index * 0.015 }}
+                            >
+                              {formatDateEU(date)}
+                            </motion.span>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Legend */}
+                    <motion.div
+                      className="flex flex-wrap justify-center gap-3 mb-4 px-2"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: duoColors.player1Only }}></span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{selectedRareDuo.player1}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: duoColors.player2Only }}></span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{selectedRareDuo.player2}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: duoColors.both }}></span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('stats.bothPlayers')}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="w-3 h-3 rounded-full opacity-40" style={{ backgroundColor: duoColors.neither }}></span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('stats.neitherPlayer')}</span>
+                      </div>
+                    </motion.div>
+
+                    <motion.button
+                      className="px-6 py-2 rounded-full text-sm font-semibold"
+                      style={{
+                        backgroundColor: 'var(--color-bg-card)',
+                        color: 'var(--color-text-secondary)'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRareDuo(null);
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      ← {t('scroll.hideDates')}
+                    </motion.button>
+                  </>
+                );
+              })()}
+            </motion.div>
           )}
         </div>
       )

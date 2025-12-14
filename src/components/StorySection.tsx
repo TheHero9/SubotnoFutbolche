@@ -13,6 +13,7 @@ import {
   calculatePeakPerformance,
   calculatePerfectMonths,
   calculateDynamicDuos,
+  calculateRareDuos,
   calculateAttendanceRate,
   getPlayedGameDates
 } from '../utils/playerStats';
@@ -61,6 +62,10 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   );
   const dynamicDuos = useMemo(
     () => calculateDynamicDuos(allPlayers),
+    [allPlayers]
+  );
+  const rareDuos = useMemo(
+    () => calculateRareDuos(allPlayers),
     [allPlayers]
   );
 
@@ -1088,6 +1093,104 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
           >
             {t('stats.duoInfo')}
           </motion.p>
+        </div>
+      )
+    },
+    // Story 12: Community - Rare Duos
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          <motion.div
+            className="text-6xl mb-4"
+            initial={{ scale: 0, rotate: 180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", duration: 0.8 }}
+          >
+            ⛵
+          </motion.div>
+          <motion.div
+            className="flex items-center justify-center gap-2 mb-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h2
+              className="text-2xl font-bold"
+              style={{ color: 'var(--color-accent-gold)' }}
+            >
+              {t('stats.rareDuos')}
+            </h2>
+            <InfoTooltip text={t('stats.rareDuosInfo')} size="md" />
+          </motion.div>
+          <motion.p
+            className="text-sm mb-6"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            {t('stats.rareDuosSubtitle')}
+          </motion.p>
+
+          {rareDuos.length > 0 ? (
+            <motion.div
+              className="max-h-[45vh] overflow-y-auto rounded-xl"
+              style={{ backgroundColor: 'var(--color-bg-card)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              <div className="space-y-1 p-2">
+                {rareDuos.map((duo, index) => (
+                  <motion.div
+                    key={`${duo.player1}-${duo.player2}`}
+                    className="px-3 py-2 rounded-lg"
+                    style={{
+                      backgroundColor: duo.gamesTogethers === 0
+                        ? 'rgba(231, 76, 60, 0.2)'
+                        : duo.gamesTogethers <= 2
+                          ? 'rgba(255, 215, 0, 0.1)'
+                          : 'transparent'
+                    }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7 + index * 0.05 }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-sm">
+                        {duo.player1} & {duo.player2}
+                      </span>
+                      <span
+                        className="text-sm font-bold"
+                        style={{
+                          color: duo.gamesTogethers === 0
+                            ? 'var(--color-accent-red)'
+                            : duo.gamesTogethers <= 2
+                              ? 'var(--color-accent-gold)'
+                              : 'var(--color-text-secondary)'
+                        }}
+                      >
+                        {duo.gamesTogethers === 0 ? '🚫' : duo.gamesTogethers}× {t('stats.togetherOnly')}
+                      </span>
+                    </div>
+                    <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                      {duo.player1Games} + {duo.player2Games} = {duo.totalGames} {t('stats.combinedGames')}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.p
+              className="text-lg"
+              style={{ color: 'var(--color-text-secondary)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              No rare duos found
+            </motion.p>
+          )}
         </div>
       )
     }

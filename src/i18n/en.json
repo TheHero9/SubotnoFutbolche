@@ -139,6 +139,12 @@
     "dynamicDuos": "Dynamic Duos",
     "dynamicDuosSubtitle": "Players who always come together",
     "mutualRate": "mutual rate",
-    "duoInfo": "* Both players attend each other's games frequently"
+    "duoInfo": "Both players attend each other's games frequently",
+    "rareDuos": "Rare Duos",
+    "rareDuosSubtitle": "Players who both play a lot but rarely together",
+    "rareDuosInfo": "Both play frequently but somehow never on the same day",
+    "combinedGames": "combined games",
+    "togetherOnly": "together only",
+    "times": "times"
   }
 }

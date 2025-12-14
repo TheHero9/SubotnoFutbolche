@@ -51,6 +51,17 @@ export interface DynamicDuo {
   player2Rate: number;     // % of player2's games with player1
 }
 
+export interface RareDuo {
+  player1: string;
+  player2: string;
+  player1Games: number;
+  player2Games: number;
+  totalGames: number;      // Combined games they could have played together
+  gamesTogethers: number;  // How many times they actually played together
+  rarityScore: number;     // Higher = more rare (both play a lot, rarely together)
+  overlapRate: number;     // % of possible overlap they actually have
+}
+
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
@@ -418,4 +429,66 @@ export const calculateAttendanceRate = (
   const playedGames = communityGames.filter(g => g.played);
   if (playedGames.length === 0) return 0;
   return Math.round((playerDates.length / playedGames.length) * 100);
+};
+
+// ============================================
+// RARE DUOS (COMMUNITY STAT)
+// ============================================
+
+/**
+ * Find pairs of players who both play frequently but rarely together
+ *
+ * Rarity score = (player1Games + player2Games) / (gamesTogethers + 1)
+ * Higher score = both play a lot but rarely overlap
+ */
+export const calculateRareDuos = (
+  allPlayers: ProcessedPlayer[],
+  minGames: number = 8,
+  maxOverlapRate: number = 30
+): RareDuo[] => {
+  const duos: RareDuo[] = [];
+
+  // Compare all pairs
+  for (let i = 0; i < allPlayers.length; i++) {
+    for (let j = i + 1; j < allPlayers.length; j++) {
+      const player1 = allPlayers[i];
+      const player2 = allPlayers[j];
+
+      const dates1 = new Set(player1.dates2025 || []);
+      const dates2 = new Set(player2.dates2025 || []);
+
+      // Both players need to have played enough games
+      if (dates1.size < minGames || dates2.size < minGames) continue;
+
+      // Calculate overlap
+      const overlap = [...dates1].filter(d => dates2.has(d)).length;
+
+      // Calculate the maximum possible overlap (smaller of the two)
+      const maxPossibleOverlap = Math.min(dates1.size, dates2.size);
+      const overlapRate = Math.round((overlap / maxPossibleOverlap) * 100);
+
+      // Skip if they play together too often
+      if (overlapRate > maxOverlapRate) continue;
+
+      // Rarity score: more combined games + less overlap = higher score
+      const totalGames = dates1.size + dates2.size;
+      const rarityScore = Math.round(totalGames / (overlap + 1));
+
+      duos.push({
+        player1: player1.name,
+        player2: player2.name,
+        player1Games: dates1.size,
+        player2Games: dates2.size,
+        totalGames,
+        gamesTogethers: overlap,
+        rarityScore,
+        overlapRate
+      });
+    }
+  }
+
+  // Sort by rarity score descending (most rare first)
+  duos.sort((a, b) => b.rarityScore - a.rarityScore);
+
+  return duos.slice(0, 10);
 };

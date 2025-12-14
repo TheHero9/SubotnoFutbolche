@@ -16,6 +16,7 @@ import {
   getFutureProjection,
   calculateCommunityStats
 } from '../utils/calculations';
+import { calculatePeakPerformance } from '../utils/playerStats';
 import { formatMonthName, formatSeasonName, getSeasonEmoji } from '../utils/helpers';
 import communityStatsRaw from '../data/communityStats.json';
 
@@ -29,25 +30,39 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
   // Calculate community stats
   const communityStats = useMemo(() => calculateCommunityStats(rawCommunityStats), []);
 
+  // Calculate peak performance (consecutive community games) - same as Stories
+  const peakPerformance = useMemo(
+    () => calculatePeakPerformance(player.dates2025 || [], rawCommunityStats.games2025),
+    [player.dates2025]
+  );
+
   // Format date to dd.mm EU format
   const formatDateEU = (dateStr: string): string => {
     const [day, month] = dateStr.split('/');
     return `${day.padStart(2, '0')}.${month.padStart(2, '0')}`;
   };
 
-  // Rank all players by longest streak
+  // Calculate streak for all players and rank them
   const streakRanking = useMemo(() => {
-    return [...allPlayers]
-      .filter(p => (p.longestStreak2025 || 0) > 0)
-      .sort((a, b) => (b.longestStreak2025 || 0) - (a.longestStreak2025 || 0))
+    const playersWithStreak = allPlayers.map(p => ({
+      ...p,
+      calculatedStreak: calculatePeakPerformance(p.dates2025 || [], rawCommunityStats.games2025).streakLength
+    }));
+    return playersWithStreak
+      .filter(p => p.calculatedStreak > 0)
+      .sort((a, b) => b.calculatedStreak - a.calculatedStreak)
       .slice(0, 10);
   }, [allPlayers]);
 
   // Find current player's rank in streak leaderboard
   const playerStreakRank = useMemo(() => {
-    const sorted = [...allPlayers]
-      .filter(p => (p.longestStreak2025 || 0) > 0)
-      .sort((a, b) => (b.longestStreak2025 || 0) - (a.longestStreak2025 || 0));
+    const playersWithStreak = allPlayers.map(p => ({
+      name: p.name,
+      streak: calculatePeakPerformance(p.dates2025 || [], rawCommunityStats.games2025).streakLength
+    }));
+    const sorted = playersWithStreak
+      .filter(p => p.streak > 0)
+      .sort((a, b) => b.streak - a.streak);
     return sorted.findIndex(p => p.name === player.name) + 1;
   }, [allPlayers, player.name]);
 
@@ -167,7 +182,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
             />
             <AchievementBadge
               icon="🔥"
-              text={t('achievements.longestStreak', { streak: player.longestStreak2025 || 0 })}
+              text={t('achievements.longestStreak', { streak: peakPerformance.streakLength })}
               delay={0.2}
             />
             <AchievementBadge
@@ -200,7 +215,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
         </StatCard>
 
         {/* Longest Streak Details */}
-        {(player.longestStreak2025 || 0) > 0 && (
+        {peakPerformance.streakLength > 0 && (
           <StatCard delay={0.6}>
             <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: 'var(--color-accent-green)' }}>
               🔥 {t('scroll.yourStreak')}
@@ -208,7 +223,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
 
             <div className="text-center mb-6">
               <div className="text-6xl font-bold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
-                {player.longestStreak2025}
+                {peakPerformance.streakLength}
               </div>
               <div style={{ color: 'var(--color-text-secondary)' }}>
                 {t('scroll.consecutiveGames')}
@@ -221,7 +236,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
             </div>
 
             {/* Show Dates Button */}
-            {player.longestStreakDates && player.longestStreakDates.length > 0 && (
+            {peakPerformance.dates && peakPerformance.dates.length > 0 && (
               <div className="text-center mb-4">
                 {!showStreakDates ? (
                   <motion.button
@@ -244,9 +259,9 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                     className="mb-4"
                   >
                     <div className="text-lg mb-3" style={{ color: 'var(--color-text-secondary)' }}>
-                      {player.longestStreakStart && player.longestStreakEnd && (
+                      {peakPerformance.startDate && peakPerformance.endDate && (
                         <span>
-                          {formatDateEU(player.longestStreakStart)} → {formatDateEU(player.longestStreakEnd)}
+                          {formatDateEU(peakPerformance.startDate)} → {formatDateEU(peakPerformance.endDate)}
                         </span>
                       )}
                     </div>
@@ -255,7 +270,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                       style={{ backgroundColor: 'var(--color-bg-card)' }}
                     >
                       <div className="flex flex-wrap gap-2 justify-center">
-                        {player.longestStreakDates.map((date, index) => (
+                        {peakPerformance.dates.map((date, index) => (
                           <motion.span
                             key={date}
                             className="px-3 py-1 rounded-full text-sm font-medium"
@@ -334,7 +349,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                           {index + 1}. {p.name}
                         </span>
                         <span className="font-bold">
-                          🔥 {p.longestStreak2025}
+                          🔥 {p.calculatedStreak}
                         </span>
                       </motion.div>
                     ))}

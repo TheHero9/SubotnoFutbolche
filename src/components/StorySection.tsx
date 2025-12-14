@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
 import type { StorySectionProps, CommunityStatsRaw } from '../types';
 import StoryCard from './StoryCard';
+import InfoTooltip from './InfoTooltip';
 import { getRankTitle, getRankChange, calculateCommunityStats } from '../utils/calculations';
 import { getFootballBuddies } from '../utils/footballBuddies';
 import {
@@ -204,25 +205,12 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                     <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
                       {perfectMonths.length}
                     </div>
-                    <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                      {t('stats.perfectMonths')}*
+                    <div className="text-xs flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
+                      {t('stats.perfectMonths')} <InfoTooltip text={t('stats.perfectMonthsInfo')} />
                     </div>
                   </div>
                 )}
               </motion.div>
-
-              {/* Perfect months info */}
-              {perfectMonths.length > 0 && (
-                <motion.p
-                  className="text-xs mb-4"
-                  style={{ color: 'var(--color-text-secondary)' }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                >
-                  {t('stats.perfectMonthsInfo')}
-                </motion.p>
-              )}
 
               <motion.button
                 className="px-6 py-3 rounded-full text-lg font-semibold"
@@ -515,8 +503,8 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
                 {consistency.score}%
               </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                {t(`stats.${consistency.rating}`)}
+              <div className="text-xs flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
+                {t(`stats.${consistency.rating}`)} <InfoTooltip text={t('stats.consistencyInfo')} />
               </div>
             </div>
           </motion.div>
@@ -550,8 +538,8 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
                 {clutchData.clutchGames}
               </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                {t('stats.clutchGames')}*
+              <div className="text-xs flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('stats.clutchGames')} <InfoTooltip text={t('stats.clutchInfo')} />
               </div>
             </div>
             {clutchData.gamesSaved > 0 && (
@@ -559,22 +547,11 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-red)' }}>
                   {clutchData.gamesSaved}
                 </div>
-                <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                  {t('stats.gamesSaved')}**
+                <div className="text-xs flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('stats.gamesSaved')} <InfoTooltip text={t('stats.gamesSavedInfo')} />
                 </div>
               </div>
             )}
-          </motion.div>
-
-          <motion.div
-            className="text-xs space-y-1"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1 }}
-          >
-            <p>{t('stats.clutchInfo')}</p>
-            {clutchData.gamesSaved > 0 && <p>{t('stats.gamesSavedInfo')}</p>}
           </motion.div>
         </div>
       )
@@ -787,15 +764,20 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
           >
             🤝
           </motion.div>
-          <motion.h2
-            className="text-2xl md:text-3xl font-bold mb-2"
-            style={{ color: 'var(--color-accent-green)' }}
+          <motion.div
+            className="flex items-center justify-center gap-2 mb-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            {t('story.footballBuddies')}
-          </motion.h2>
+            <h2
+              className="text-2xl md:text-3xl font-bold"
+              style={{ color: 'var(--color-accent-green)' }}
+            >
+              {t('story.footballBuddies')}
+            </h2>
+            <InfoTooltip text={t('story.footballBuddiesInfo')} size="md" />
+          </motion.div>
           <motion.p
             className="text-sm mb-6"
             style={{ color: 'var(--color-text-secondary)' }}
@@ -837,15 +819,6 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                   </motion.div>
                 ))}
               </div>
-              <motion.p
-                className="text-xs mt-4 px-2"
-                style={{ color: 'var(--color-text-secondary)' }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.4 }}
-              >
-                {t('story.footballBuddiesInfo')}
-              </motion.p>
             </>
           ) : (
             <motion.p
@@ -915,18 +888,11 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
                 {communityStats.totalGamesAllTime}
               </div>
-              <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{t('community.allTime')}*</div>
+              <div className="text-sm flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('community.allTime')} <InfoTooltip text={t('stats.allTimeInfo')} />
+              </div>
             </div>
           </motion.div>
-          <motion.p
-            className="text-xs mt-4"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-          >
-            {t('stats.allTimeInfo')}
-          </motion.p>
         </div>
       )
     },

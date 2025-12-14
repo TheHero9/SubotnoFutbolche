@@ -5,6 +5,7 @@ import PlayerSelect from './components/PlayerSelect';
 import LoadingAnimation from './components/LoadingAnimation';
 import StorySection from './components/StorySection';
 import ScrollSection from './components/ScrollSection';
+import AnimatedBackground from './components/AnimatedBackground';
 import playersDataRaw from './data/players.json';
 import { processPlayerData } from './utils/calculations';
 
@@ -52,8 +53,10 @@ function App(): JSX.Element {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
-      <Header onReset={handleReset} />
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
+      <div className="relative" style={{ zIndex: 1 }}>
+        <Header onReset={handleReset} />
 
       {!selectedPlayer && !isLoading && (
         <PlayerSelect
@@ -80,6 +83,7 @@ function App(): JSX.Element {
           allPlayers={processedPlayers}
         />
       )}
+      </div>
     </div>
   );
 }

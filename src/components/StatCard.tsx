@@ -15,14 +15,15 @@ const StatCard: React.FC<StatCardProps> = ({ children, delay = 0, asGift = false
       transition={{ duration: 0.6, delay }}
       className="rounded-2xl p-8 mb-6 border transition-colors"
       style={{
-        backgroundColor: 'var(--color-bg-card)',
-        borderColor: 'var(--color-bg-secondary)'
+        backgroundColor: 'rgba(26, 26, 26, 0.7)',
+        backdropFilter: 'blur(12px)',
+        borderColor: 'rgba(255, 255, 255, 0.1)'
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = 'var(--color-accent-green)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'var(--color-bg-secondary)';
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
       }}
     >
       {children}
@@ -37,14 +38,15 @@ const StatCard: React.FC<StatCardProps> = ({ children, delay = 0, asGift = false
             <div
               className="rounded-2xl p-8 border transition-colors"
               style={{
-                backgroundColor: 'var(--color-bg-card)',
-                borderColor: 'var(--color-bg-secondary)'
+                backgroundColor: 'rgba(26, 26, 26, 0.7)',
+                backdropFilter: 'blur(12px)',
+                borderColor: 'rgba(255, 255, 255, 0.1)'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = 'var(--color-accent-green)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--color-bg-secondary)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
               }}
             >
               {children}

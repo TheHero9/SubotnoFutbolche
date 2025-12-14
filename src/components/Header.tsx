@@ -8,10 +8,11 @@ const Header: React.FC<HeaderProps> = ({ onReset }) => {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b"
+      className="fixed top-0 left-0 right-0 z-50 border-b"
       style={{
-        backgroundColor: 'rgba(24, 24, 24, 0.8)',
-        borderColor: 'var(--color-bg-card)'
+        backgroundColor: 'rgba(10, 10, 10, 0.7)',
+        backdropFilter: 'blur(16px)',
+        borderColor: 'rgba(255, 255, 255, 0.1)'
       }}
     >
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">

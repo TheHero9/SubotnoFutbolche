@@ -51,7 +51,8 @@ const StoryCard: React.FC<StoryCardProps> = ({ children, onNext, onPrev, canGoBa
     <motion.div
       className="fixed inset-0 flex items-center justify-center z-40"
       style={{
-        background: 'linear-gradient(135deg, var(--color-bg-secondary), var(--color-bg-primary), var(--color-bg-secondary))'
+        background: 'rgba(10, 10, 10, 0.85)',
+        backdropFilter: 'blur(20px)'
       }}
       onClick={handleBackgroundClick}
       initial={{ opacity: 0 }}

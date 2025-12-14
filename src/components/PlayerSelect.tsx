@@ -27,7 +27,8 @@ const PlayerSelect: React.FC<PlayerSelectProps> = ({ players, onSelect }) => {
   const customStyles: StylesConfig<OptionType, false> = {
     control: (provided) => ({
       ...provided,
-      backgroundColor: '#282828',
+      backgroundColor: 'rgba(26, 26, 26, 0.7)',
+      backdropFilter: 'blur(12px)',
       borderColor: '#1db954',
       color: '#ffffff',
       padding: '8px',
@@ -39,12 +40,13 @@ const PlayerSelect: React.FC<PlayerSelectProps> = ({ players, onSelect }) => {
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: '#282828',
+      backgroundColor: 'rgba(26, 26, 26, 0.9)',
+      backdropFilter: 'blur(12px)',
       border: '1px solid #1db954'
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isFocused ? '#1db954' : '#282828',
+      backgroundColor: state.isFocused ? '#1db954' : 'transparent',
       color: '#ffffff',
       cursor: 'pointer',
       '&:active': {
@@ -67,32 +69,6 @@ const PlayerSelect: React.FC<PlayerSelectProps> = ({ players, onSelect }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 pt-20">
-      {/* Floating footballs background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-6xl opacity-10"
-            animate={{
-              y: [-20, 20, -20],
-              x: [0, 10, 0],
-              rotate: [0, 10, -10, 0]
-            }}
-            transition={{
-              duration: 5 + i,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${10 + i * 15}%`
-            }}
-          >
-            ⚽
-          </motion.div>
-        ))}
-      </div>
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

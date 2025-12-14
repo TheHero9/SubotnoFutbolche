@@ -891,15 +891,16 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               / {socialButterfly.totalPlayersCount}
             </span>
           </motion.div>
-          <motion.p
-            className="text-sm mb-6"
+          <motion.div
+            className="text-sm mb-6 flex items-center justify-center gap-1"
             style={{ color: 'var(--color-text-secondary)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
           >
             {t('stats.uniquePlayers')} ({socialButterfly.percentage}%)
-          </motion.p>
+            <InfoTooltip text={t('stats.socialButterflyInfo')} />
+          </motion.div>
 
           {/* Player grid */}
           <motion.div

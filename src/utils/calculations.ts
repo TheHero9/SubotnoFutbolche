@@ -57,8 +57,18 @@ export const getRankTitle = (rank: number, language: Language = 'bg'): RankTitle
 
 /**
  * Calculate rank change from 2024 to 2025
+ * rank2024 = 0 means the player is new (didn't play in 2024)
  */
-export const getRankChange = (rank2024: number, rank2025: number): RankChange => {
+export const getRankChange = (rank2024: number, rank2025: number, total2024: number = 0): RankChange => {
+  // Player didn't play in 2024
+  if (rank2024 === 0 || total2024 === 0) {
+    return {
+      value: 0,
+      direction: 'new',
+      emoji: '🔙'
+    };
+  }
+
   const diff = rank2024 - rank2025;
   return {
     value: Math.abs(diff),
@@ -158,10 +168,25 @@ export const calculateRanks = (players: Player[]): Partial<ProcessedPlayer>[] =>
     total2024: calculateTotal(player.dates2024)
   }));
 
+  // Calculate 2024 ranks (only for players who played in 2024)
+  const players2024 = playersWithTotals.filter(p => p.total2024 > 0);
+  const sorted2024 = [...players2024].sort((a, b) => b.total2024 - a.total2024);
+  const rank2024Map = new Map<string, number>();
+
+  let rank2024 = 1;
+  let prevTotal2024: number | null = null;
+  sorted2024.forEach((player, index) => {
+    if (prevTotal2024 !== null && player.total2024 < prevTotal2024) {
+      rank2024 = index + 1;
+    }
+    prevTotal2024 = player.total2024;
+    rank2024Map.set(player.name, rank2024);
+  });
+
   // Sort by 2025 total (descending)
   const sorted = [...playersWithTotals].sort((a, b) => b.total2025 - a.total2025);
 
-  // Assign ranks
+  // Assign 2025 ranks
   let currentRank = 1;
   let previousTotal: number | null = null;
 
@@ -172,10 +197,13 @@ export const calculateRanks = (players: Player[]): Partial<ProcessedPlayer>[] =>
     }
     previousTotal = player.total2025;
 
+    // Get 2024 rank - 0 means player didn't play in 2024 (new player)
+    const playerRank2024 = rank2024Map.get(player.name) || 0;
+
     return {
       ...player,
       rank2025: currentRank,
-      rank2024: currentRank // Will be calculated separately if needed
+      rank2024: playerRank2024
     };
   });
 };

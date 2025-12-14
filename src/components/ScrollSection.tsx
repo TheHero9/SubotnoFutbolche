@@ -9,6 +9,8 @@ import ComparisonChart from './ComparisonChart';
 import CommunityChart from './CommunityChart';
 import SummaryCard from './SummaryCard';
 import ScrollToTop from './ScrollToTop';
+import YearHeatmap from './YearHeatmap';
+import CumulativeChart from './CumulativeChart';
 import {
   getBestWorstMonths,
   getBestSeason,
@@ -16,7 +18,7 @@ import {
   getFutureProjection,
   calculateCommunityStats
 } from '../utils/calculations';
-import { calculatePeakPerformance } from '../utils/playerStats';
+import { calculatePeakPerformance, calculateCommunityStreak } from '../utils/playerStats';
 import { formatMonthName, formatSeasonName, getSeasonEmoji } from '../utils/helpers';
 import communityStatsRaw from '../data/communityStats.json';
 
@@ -29,6 +31,12 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
 
   // Calculate community stats
   const communityStats = useMemo(() => calculateCommunityStats(rawCommunityStats), []);
+
+  // Calculate community streak (2024-2025)
+  const communityStreak = useMemo(
+    () => calculateCommunityStreak(rawCommunityStats.games2024, rawCommunityStats.games2025),
+    []
+  );
 
   // Calculate peak performance (consecutive community games) - same as Stories
   const peakPerformance = useMemo(
@@ -98,6 +106,42 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
             data2024={player.games2024}
             data2025={player.games2025}
           />
+        </StatCard>
+
+        {/* Cumulative Growth Chart */}
+        <StatCard delay={0.15}>
+          <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-accent-green)' }}>
+            {t('scroll.cumulativeGrowth')}
+          </h2>
+          <p className="text-lg mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+            📈 {t('scroll.cumulativeSubtitle')}
+          </p>
+          <CumulativeChart
+            data2024={player.games2024}
+            data2025={player.games2025}
+          />
+        </StatCard>
+
+        {/* Year Heatmaps */}
+        <StatCard delay={0.18}>
+          <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
+            {t('scroll.yearCalendar')}
+          </h2>
+          <p className="text-lg mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+            📅 {t('scroll.yearCalendarSubtitle')}
+          </p>
+          <div className="space-y-8">
+            <YearHeatmap
+              year={2025}
+              playerDates={player.dates2025 || []}
+              communityGames={rawCommunityStats.games2025}
+            />
+            <YearHeatmap
+              year={2024}
+              playerDates={player.dates2024 || []}
+              communityGames={rawCommunityStats.games2024}
+            />
+          </div>
         </StatCard>
 
         {/* Best and worst months */}
@@ -386,7 +430,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
           />
 
           {/* Community stats summary */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
             <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
               <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
                 {communityStats.gamesPlayed2025}
@@ -419,7 +463,20 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                 {t('scroll.changeVs2024')}
               </div>
             </div>
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
+                🔥 {communityStreak.streakLength}{communityStreak.spansYears ? '*' : ''}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('scroll.longestStreak')}
+              </div>
+            </div>
           </div>
+          {communityStreak.spansYears && (
+            <div className="text-xs mt-2 text-center" style={{ color: 'var(--color-text-secondary)' }}>
+              * {t('scroll.streakSpansYears')}
+            </div>
+          )}
         </StatCard>
 
         {/* Summary Card */}

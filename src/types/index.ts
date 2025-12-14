@@ -31,7 +31,7 @@ export interface RankTitle {
 
 export interface RankChange {
   value: number;
-  direction: 'up' | 'down' | 'same';
+  direction: 'up' | 'down' | 'same' | 'new';
   emoji: string;
 }
 

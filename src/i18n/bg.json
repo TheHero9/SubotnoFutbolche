@@ -24,6 +24,7 @@
     "rankUp": "Изкачи се с",
     "rankDown": "Спадна с",
     "rankSame": "Запази позицията си",
+    "rankNew": "Не игра през 2024",
     "positions": "позиции",
     "position": "позиция",
     "tapToContinue": "Докосни за продължаване",
@@ -50,11 +51,18 @@
     "avgPlayersPerGame": "средно играчи на мач",
     "successRate": "успеваемост",
     "gamesCancelled": "отменени мача",
-    "favoriteFields": "Любими терени"
+    "favoriteFields": "Любими терени",
+    "consecutiveGames": "поредни мача",
+    "longestStreak": "Най-дълга серия",
+    "cancelled": "Отменен"
   },
   "scroll": {
     "monthlyBreakdown": "Разпределение по месеци - 2025",
     "comparison2024": "Сравнение с 2024",
+    "cumulativeGrowth": "Твоят растеж",
+    "cumulativeSubtitle": "Натрупани мачове през времето",
+    "yearCalendar": "Годината накратко",
+    "yearCalendarSubtitle": "Всеки мач от годината",
     "bestMonths": "Твоите най-добри месеци",
     "worstMonths": "Твоите най-слаби месеци",
     "bestSeason": "Твоят най-добър сезон",
@@ -74,7 +82,9 @@
     "games2025": "Мача 2025",
     "games2024": "Мача 2024",
     "avgPlayers2025": "Средно играчи",
-    "changeVs2024": "Промяна"
+    "changeVs2024": "Промяна",
+    "longestStreak": "Най-дълга серия",
+    "streakSpansYears": "Серията продължава от 2024"
   },
   "achievements": {
     "moreGames": "Ти игра повече от {{percent}}% от всички играчи",

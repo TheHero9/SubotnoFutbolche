@@ -69,6 +69,16 @@ export interface SocialButterflyData {
   playedWith: Set<string>;  // Names of players played with
 }
 
+export interface CommunityStreakData {
+  streakLength: number;
+  startDate: string | null;
+  endDate: string | null;
+  startYear: number;
+  endYear: number;
+  dates: { date: string; year: number }[];
+  spansYears: boolean;  // True if streak crosses 2024-2025
+}
+
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
@@ -547,5 +557,72 @@ export const calculateSocialButterfly = (
     totalPlayersCount,
     percentage,
     playedWith
+  };
+};
+
+// ============================================
+// COMMUNITY STREAK (2024-2025)
+// ============================================
+
+/**
+ * Calculate longest consecutive streak of community games spanning 2024-2025
+ *
+ * Combines games from both years and finds the longest streak
+ * A streak is broken when a scheduled game is cancelled (played: false)
+ */
+export const calculateCommunityStreak = (
+  games2024: GameRecord[],
+  games2025: GameRecord[]
+): CommunityStreakData => {
+  // Combine games from both years with year info
+  const allGames: { game: GameRecord; year: number }[] = [
+    ...games2024.map(g => ({ game: g, year: 2024 })),
+    ...games2025.map(g => ({ game: g, year: 2025 }))
+  ];
+
+  // Sort by date (month first, then day)
+  // Since games are already in chronological order within each year,
+  // and 2024 comes before 2025, they should already be sorted
+  // But let's make sure by sorting properly
+  allGames.sort((a, b) => {
+    if (a.year !== b.year) return a.year - b.year;
+    const [dayA, monthA] = a.game.date.split('/').map(Number);
+    const [dayB, monthB] = b.game.date.split('/').map(Number);
+    if (monthA !== monthB) return monthA - monthB;
+    return dayA - dayB;
+  });
+
+  let maxStreak = 0;
+  let maxStreakDates: { date: string; year: number }[] = [];
+  let currentStreak = 0;
+  let currentStreakDates: { date: string; year: number }[] = [];
+
+  for (const { game, year } of allGames) {
+    if (game.played) {
+      currentStreak++;
+      currentStreakDates.push({ date: game.date, year });
+
+      if (currentStreak > maxStreak) {
+        maxStreak = currentStreak;
+        maxStreakDates = [...currentStreakDates];
+      }
+    } else {
+      // Game was cancelled - streak breaks
+      currentStreak = 0;
+      currentStreakDates = [];
+    }
+  }
+
+  const spansYears = maxStreakDates.length > 0 &&
+    maxStreakDates[0].year !== maxStreakDates[maxStreakDates.length - 1].year;
+
+  return {
+    streakLength: maxStreak,
+    startDate: maxStreakDates.length > 0 ? maxStreakDates[0].date : null,
+    endDate: maxStreakDates.length > 0 ? maxStreakDates[maxStreakDates.length - 1].date : null,
+    startYear: maxStreakDates.length > 0 ? maxStreakDates[0].year : 0,
+    endYear: maxStreakDates.length > 0 ? maxStreakDates[maxStreakDates.length - 1].year : 0,
+    dates: maxStreakDates,
+    spansYears
   };
 };

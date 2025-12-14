@@ -24,6 +24,7 @@
     "rankUp": "Moved up by",
     "rankDown": "Moved down by",
     "rankSame": "Kept your position",
+    "rankNew": "Didn't play in 2024",
     "positions": "positions",
     "position": "position",
     "tapToContinue": "Tap to continue",
@@ -50,11 +51,18 @@
     "avgPlayersPerGame": "avg players per game",
     "successRate": "success rate",
     "gamesCancelled": "games cancelled",
-    "favoriteFields": "Favorite Fields"
+    "favoriteFields": "Favorite Fields",
+    "consecutiveGames": "consecutive games",
+    "longestStreak": "Longest streak",
+    "cancelled": "Cancelled"
   },
   "scroll": {
     "monthlyBreakdown": "Monthly Breakdown - 2025",
     "comparison2024": "Comparison with 2024",
+    "cumulativeGrowth": "Your Growth Journey",
+    "cumulativeSubtitle": "Cumulative games over time",
+    "yearCalendar": "Year at a Glance",
+    "yearCalendarSubtitle": "Every game of the year",
     "bestMonths": "Your Best Months",
     "worstMonths": "Your Worst Months",
     "bestSeason": "Your Best Season",
@@ -74,7 +82,9 @@
     "games2025": "Games 2025",
     "games2024": "Games 2024",
     "avgPlayers2025": "Avg Players",
-    "changeVs2024": "Change"
+    "changeVs2024": "Change",
+    "longestStreak": "Longest Streak",
+    "streakSpansYears": "Streak continues from 2024"
   },
   "achievements": {
     "moreGames": "You played more than {{percent}}% of all players",

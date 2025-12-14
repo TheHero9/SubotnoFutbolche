@@ -16,6 +16,7 @@ import {
   calculateRareDuos,
   calculateAttendanceRate,
   calculateSocialButterfly,
+  calculateCommunityStreak,
   getPlayedGameDates
 } from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
@@ -30,6 +31,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const [showStreakVisualization, setShowStreakVisualization] = useState<boolean>(false);
   const [selectedRareDuo, setSelectedRareDuo] = useState<{ player1: string; player2: string } | null>(null);
   const [selectedDynamicDuo, setSelectedDynamicDuo] = useState<{ player1: string; player2: string } | null>(null);
+  const [showCommunityStreakCalendar, setShowCommunityStreakCalendar] = useState<boolean>(false);
 
   // Sort players by rank for the ranking list
   const rankedPlayers = useMemo(() => {
@@ -75,6 +77,22 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
     () => calculateSocialButterfly(player.name, player.dates2025 || [], allPlayers),
     [player.name, player.dates2025, allPlayers]
   );
+  const communityStreak = useMemo(
+    () => calculateCommunityStreak(rawStats.games2024, rawStats.games2025),
+    []
+  );
+
+  // Create set of community streak dates for quick lookup
+  const communityStreakDatesSet = useMemo(() => {
+    return new Set(communityStreak.dates.map(d => `${d.date}-${d.year}`));
+  }, [communityStreak.dates]);
+
+  // Combine all games from 2024 and 2025 for community streak calendar
+  const allCommunityGames = useMemo(() => {
+    const games2024 = rawStats.games2024.map(g => ({ ...g, year: 2024 }));
+    const games2025 = rawStats.games2025.map(g => ({ ...g, year: 2025 }));
+    return [...games2024, ...games2025];
+  }, []);
 
   // Get all community game dates for streak visualization
   const allCommunityGameDates = useMemo(
@@ -124,7 +142,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
     return dayA - dayB;
   });
 
-  const rankChange = getRankChange(player.rank2024, player.rank2025);
+  const rankChange = getRankChange(player.rank2024, player.rank2025, player.total2024);
   const rankTitle = getRankTitle(player.rank2025, i18n.language as 'bg' | 'en');
 
   // Trigger confetti on rank reveal (index 2) and community stats (index 8)
@@ -473,6 +491,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               {rankChange.direction === 'up' && `${t('story.rankUp')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
               {rankChange.direction === 'down' && `${t('story.rankDown')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
               {rankChange.direction === 'same' && t('story.rankSame')}
+              {rankChange.direction === 'new' && t('story.rankNew')}
             </motion.p>
 
             {/* Games comparison */}
@@ -994,62 +1013,260 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
     // Story 9: Community - Total Games 2025
     {
       content: (
-        <div>
-          <motion.h2
-            className="text-3xl font-bold mb-2"
-            style={{ color: 'var(--color-accent-green)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {t('community.title')}
-          </motion.h2>
-          <motion.p
-            className="text-xl mb-6"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            {t('community.subtitle')}
-          </motion.p>
-          <motion.div
-            className="text-8xl font-bold mb-2"
-            style={{ color: 'var(--color-accent-gold)' }}
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", duration: 1 }}
-          >
-            {communityStats.gamesPlayed2025}
-          </motion.div>
-          <motion.p
-            className="text-2xl mb-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {t('community.gamesIn2025')}
-          </motion.p>
-          <motion.div
-            className="flex justify-center gap-6 mt-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-          >
-            <div className="text-center">
-              <div className="text-3xl font-bold" style={{ color: communityStats.gamesChange >= 0 ? 'var(--color-accent-green)' : 'var(--color-accent-red)' }}>
-                {communityStats.gamesChange >= 0 ? '+' : ''}{communityStats.gamesChange}
+        <div className="w-full max-w-md mx-auto">
+          {!showCommunityStreakCalendar ? (
+            <>
+              <motion.h2
+                className="text-3xl font-bold mb-2"
+                style={{ color: 'var(--color-accent-green)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                {t('community.title')}
+              </motion.h2>
+              <motion.p
+                className="text-xl mb-4"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                {t('community.subtitle')}
+              </motion.p>
+              <motion.div
+                className="text-7xl font-bold mb-2"
+                style={{ color: 'var(--color-accent-gold)' }}
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", duration: 1 }}
+              >
+                {communityStats.gamesPlayed2025}
+              </motion.div>
+              <motion.p
+                className="text-xl mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {t('community.gamesIn2025')}
+              </motion.p>
+              <motion.div
+                className="flex justify-center gap-4 mt-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+              >
+                <div className="text-center px-3 py-2 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+                  <div className="text-2xl font-bold" style={{ color: communityStats.gamesChange >= 0 ? 'var(--color-accent-green)' : 'var(--color-accent-red)' }}>
+                    {communityStats.gamesChange >= 0 ? '+' : ''}{communityStats.gamesChange}
+                  </div>
+                  <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('community.vs2024')}</div>
+                </div>
+                <div className="text-center px-3 py-2 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+                  <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
+                    {communityStats.totalGamesAllTime}
+                  </div>
+                  <div className="text-xs flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
+                    {t('community.allTime')} <InfoTooltip text={t('stats.allTimeInfo')} />
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Community Streak */}
+              <motion.div
+                className="mt-6 px-4 py-3 rounded-xl"
+                style={{ backgroundColor: 'var(--color-bg-card)' }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 }}
+              >
+                <div className="flex items-center justify-center gap-2 mb-1">
+                  <span className="text-2xl">🔥</span>
+                  <span className="text-3xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
+                    {communityStreak.streakLength}
+                  </span>
+                  <span className="text-lg">{t('community.consecutiveGames')}</span>
+                </div>
+                <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('community.longestStreak')} {communityStreak.spansYears ? '2024-2025' : '2025'}
+                </div>
+                {communityStreak.startDate && communityStreak.endDate && (
+                  <div className="text-xs mt-1" style={{ color: 'var(--color-accent-gold)' }}>
+                    {communityStreak.startDate.replace('/', '.')}.{communityStreak.startYear} → {communityStreak.endDate.replace('/', '.')}.{communityStreak.endYear}
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Show Calendar Button */}
+              <motion.button
+                className="mt-4 px-6 py-3 rounded-full text-lg font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  color: 'var(--color-accent-green)',
+                  border: '2px solid var(--color-accent-green)'
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowCommunityStreakCalendar(true);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                📅 {t('scroll.showStreakDates')}
+              </motion.button>
+            </>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full"
+            >
+              <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--color-accent-green)' }}>
+                🔥 {communityStreak.streakLength} {t('community.consecutiveGames')}
+              </h3>
+              <p className="text-sm mb-4" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('community.longestStreak')} {communityStreak.spansYears ? '2024-2025' : '2025'}
+              </p>
+
+              {/* Calendar for 2024 and 2025 */}
+              <div
+                className="max-h-[55vh] overflow-y-auto px-3 py-3 rounded-xl mb-4"
+                style={{ backgroundColor: 'var(--color-bg-card)' }}
+              >
+                {/* 2024 Section */}
+                <div className="mb-4">
+                  <div className="text-sm font-semibold mb-2 text-left" style={{ color: 'var(--color-accent-gold)' }}>
+                    2024
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 justify-center">
+                    {allCommunityGames
+                      .filter(g => g.year === 2024)
+                      .map((game, index) => {
+                        const isInStreak = communityStreakDatesSet.has(`${game.date}-${game.year}`);
+                        const isPlayed = game.played;
+
+                        let bgColor = 'rgba(75, 75, 75, 0.5)'; // Cancelled (gray)
+                        let textColor = 'var(--color-text-secondary)';
+                        let opacity = 0.4;
+
+                        if (isInStreak) {
+                          bgColor = 'var(--color-accent-green)';
+                          textColor = '#000';
+                          opacity = 1;
+                        } else if (isPlayed) {
+                          bgColor = '#3b82f6'; // Blue for played (non-streak)
+                          textColor = '#fff';
+                          opacity = 0.7;
+                        }
+
+                        return (
+                          <motion.span
+                            key={`2024-${game.date}`}
+                            className="px-2 py-1 rounded-full text-xs font-medium"
+                            style={{
+                              backgroundColor: bgColor,
+                              color: textColor,
+                              opacity
+                            }}
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity, scale: isInStreak ? 1.05 : 1 }}
+                            transition={{ delay: index * 0.01 }}
+                          >
+                            {formatDateEU(game.date)}
+                          </motion.span>
+                        );
+                      })}
+                  </div>
+                </div>
+
+                {/* 2025 Section */}
+                <div>
+                  <div className="text-sm font-semibold mb-2 text-left" style={{ color: 'var(--color-accent-gold)' }}>
+                    2025
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 justify-center">
+                    {allCommunityGames
+                      .filter(g => g.year === 2025)
+                      .map((game, index) => {
+                        const isInStreak = communityStreakDatesSet.has(`${game.date}-${game.year}`);
+                        const isPlayed = game.played;
+
+                        let bgColor = 'rgba(75, 75, 75, 0.5)'; // Cancelled (gray)
+                        let textColor = 'var(--color-text-secondary)';
+                        let opacity = 0.4;
+
+                        if (isInStreak) {
+                          bgColor = 'var(--color-accent-green)';
+                          textColor = '#000';
+                          opacity = 1;
+                        } else if (isPlayed) {
+                          bgColor = '#3b82f6'; // Blue for played (non-streak)
+                          textColor = '#fff';
+                          opacity = 0.7;
+                        }
+
+                        return (
+                          <motion.span
+                            key={`2025-${game.date}`}
+                            className="px-2 py-1 rounded-full text-xs font-medium"
+                            style={{
+                              backgroundColor: bgColor,
+                              color: textColor,
+                              opacity
+                            }}
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity, scale: isInStreak ? 1.05 : 1 }}
+                            transition={{ delay: 0.5 + index * 0.01 }}
+                          >
+                            {formatDateEU(game.date)}
+                          </motion.span>
+                        );
+                      })}
+                  </div>
+                </div>
               </div>
-              <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{t('community.vs2024')}</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
-                {communityStats.totalGamesAllTime}
-              </div>
-              <div className="text-sm flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
-                {t('community.allTime')} <InfoTooltip text={t('stats.allTimeInfo')} />
-              </div>
-            </div>
-          </motion.div>
+
+              {/* Legend */}
+              <motion.div
+                className="flex flex-wrap justify-center gap-3 mb-4 px-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: 'var(--color-accent-green)' }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🔥 {t('stats.streakLegendStreak')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full opacity-70" style={{ backgroundColor: '#3b82f6' }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✓ {t('stats.streakLegendPlayed')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full opacity-40" style={{ backgroundColor: '#4b4b4b' }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✗ {t('community.cancelled')}</span>
+                </div>
+              </motion.div>
+
+              <motion.button
+                className="px-6 py-2 rounded-full text-sm font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  color: 'var(--color-text-secondary)'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowCommunityStreakCalendar(false);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ← {t('scroll.hideDates')}
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       )
     },
@@ -1085,8 +1302,11 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
             <div className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
               {t('community.successRate')}
             </div>
-            <div className="text-sm mt-2" style={{ color: 'var(--color-text-secondary)' }}>
-              {communityStats.gamesCancelled2025} {t('community.gamesCancelled')}
+            <div className="text-xl mt-2" style={{ color: communityStats.successRateChange >= 0 ? 'var(--color-accent-green)' : 'var(--color-accent-red)' }}>
+              {communityStats.successRateChange >= 0 ? '↑' : '↓'} {Math.abs(communityStats.successRateChange)}% {t('community.vs2024')}
+            </div>
+            <div className="text-sm mt-1" style={{ color: 'var(--color-text-secondary)' }}>
+              {communityStats.gamesCancelled2025} vs {communityStats.gamesCancelled2024} {t('community.gamesCancelled')}
             </div>
           </motion.div>
         </div>
@@ -1651,23 +1871,33 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
 
   return (
     <div className="fixed inset-0 z-40">
-      {/* Progress indicators */}
+      {/* Progress indicators - colored by section */}
       <div className="fixed top-20 left-0 right-0 z-50 flex gap-1 px-4">
-        {stories.map((_, index) => (
-          <div
-            key={index}
-            className="flex-1 h-1 rounded-full overflow-hidden"
-            style={{ backgroundColor: 'var(--color-bg-card)' }}
-          >
-            <motion.div
-              className="h-full"
-              style={{ backgroundColor: 'var(--color-accent-green)' }}
-              initial={{ width: 0 }}
-              animate={{ width: index <= currentStory ? "100%" : "0%" }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-        ))}
+        {stories.map((_, index) => {
+          // Color by section: 0-3 personal (green), 4-7 advanced (gold), 8+ community (blue)
+          let sectionColor = 'var(--color-accent-green)';
+          if (index >= 4 && index <= 7) {
+            sectionColor = 'var(--color-accent-gold)';
+          } else if (index >= 8) {
+            sectionColor = 'var(--color-accent-blue)';
+          }
+
+          return (
+            <div
+              key={index}
+              className="flex-1 h-1 rounded-full overflow-hidden"
+              style={{ backgroundColor: 'var(--color-bg-card)' }}
+            >
+              <motion.div
+                className="h-full"
+                style={{ backgroundColor: sectionColor }}
+                initial={{ width: 0 }}
+                animate={{ width: index <= currentStory ? "100%" : "0%" }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+          );
+        })}
       </div>
 
       {/* Story cards */}

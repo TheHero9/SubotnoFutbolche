@@ -518,10 +518,13 @@ export const calculateSocialButterfly = (
   const playerDatesSet = new Set(playerDates);
   const playedWith = new Set<string>();
 
-  // For each other player, check if they share any dates
-  allPlayers.forEach(otherPlayer => {
-    if (otherPlayer.name === playerName) return;
+  // Only count players who have played at least one game in 2025
+  const activePlayers = allPlayers.filter(p =>
+    p.name !== playerName && (p.dates2025?.length || 0) > 0
+  );
 
+  // For each other active player, check if they share any dates
+  activePlayers.forEach(otherPlayer => {
     const otherDates = otherPlayer.dates2025 || [];
 
     // Check if any dates overlap
@@ -533,7 +536,7 @@ export const calculateSocialButterfly = (
     }
   });
 
-  const totalPlayersCount = allPlayers.length - 1; // Exclude self
+  const totalPlayersCount = activePlayers.length;
   const uniquePlayersCount = playedWith.size;
   const percentage = totalPlayersCount > 0
     ? Math.round((uniquePlayersCount / totalPlayersCount) * 100)

@@ -911,7 +911,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
           >
             <div className="flex flex-wrap gap-2 justify-center">
               {allPlayers
-                .filter(p => p.name !== player.name)
+                .filter(p => p.name !== player.name && (p.dates2025?.length || 0) > 0)
                 .sort((a, b) => {
                   // Sort: played with first, then alphabetically
                   const aPlayed = socialButterfly.playedWith.has(a.name);

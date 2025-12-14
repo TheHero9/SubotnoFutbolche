@@ -255,19 +255,20 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 style={{ backgroundColor: 'var(--color-bg-card)' }}
               >
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {sortedDates2025.map((date, index) => {
-                    const season = getSeasonFromDate(date);
+                  {allCommunityGameDates.map((date, index) => {
+                    const played = playerDatesSet.has(date);
                     return (
                       <motion.span
                         key={date}
                         className="px-3 py-1 rounded-full text-sm font-medium"
                         style={{
-                          backgroundColor: seasonColors[season].bg,
-                          color: seasonColors[season].text
+                          backgroundColor: played ? 'var(--color-accent-green)' : 'rgba(75, 75, 75, 0.5)',
+                          color: played ? '#000' : 'var(--color-text-secondary)',
+                          opacity: played ? 1 : 0.5
                         }}
                         initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.03 }}
+                        animate={{ opacity: played ? 1 : 0.5, scale: 1 }}
+                        transition={{ delay: index * 0.02 }}
                       >
                         {formatDateEU(date)}
                       </motion.span>
@@ -276,28 +277,20 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 </div>
               </div>
 
-              {/* Season Legend */}
+              {/* Legend */}
               <motion.div
-                className="flex flex-wrap justify-center gap-3 mb-4 px-2"
+                className="flex justify-center gap-4 mb-4 px-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
                 <div className="flex items-center gap-1">
-                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.winter.bg }}></span>
-                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>❄️ {t('seasons.winter')}</span>
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: 'var(--color-accent-green)' }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✓ {t('stats.streakLegendPlayed')}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.spring.bg }}></span>
-                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🌸 {t('seasons.spring')}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.summer.bg }}></span>
-                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>☀️ {t('seasons.summer')}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.autumn.bg }}></span>
-                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🍂 {t('seasons.autumn')}</span>
+                  <span className="w-3 h-3 rounded-full opacity-50" style={{ backgroundColor: '#4b4b4b' }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✗ {t('stats.streakLegendMissed')}</span>
                 </div>
               </motion.div>
 
@@ -446,41 +439,78 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
     },
     // Story 4: Rank change
     {
-      content: (
-        <div>
-          <motion.p
-            className="text-2xl mb-8"
-            style={{ color: 'var(--color-text-secondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {t('story.rankChange')}
-          </motion.p>
-          <motion.div
-            className="text-9xl mb-4"
-            initial={{ scale: 0, rotate: rankChange.direction === 'up' ? -180 : 180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", duration: 1 }}
-          >
-            {rankChange.emoji}
-          </motion.div>
-          <motion.p
-            className="text-4xl font-bold"
-            style={{
-              color: rankChange.direction === 'up' ? 'var(--color-accent-green)' :
-                     rankChange.direction === 'down' ? 'var(--color-accent-red)' :
-                     'var(--color-accent-blue)'
-            }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            {rankChange.direction === 'up' && `${t('story.rankUp')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
-            {rankChange.direction === 'down' && `${t('story.rankDown')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
-            {rankChange.direction === 'same' && t('story.rankSame')}
-          </motion.p>
-        </div>
-      )
+      content: (() => {
+        const gamesDiff = player.total2025 - player.total2024;
+        return (
+          <div>
+            <motion.p
+              className="text-2xl mb-6"
+              style={{ color: 'var(--color-text-secondary)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {t('story.rankChange')}
+            </motion.p>
+            <motion.div
+              className="text-8xl mb-4"
+              initial={{ scale: 0, rotate: rankChange.direction === 'up' ? -180 : 180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", duration: 1 }}
+            >
+              {rankChange.emoji}
+            </motion.div>
+            <motion.p
+              className="text-3xl font-bold mb-6"
+              style={{
+                color: rankChange.direction === 'up' ? 'var(--color-accent-green)' :
+                       rankChange.direction === 'down' ? 'var(--color-accent-red)' :
+                       'var(--color-accent-blue)'
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              {rankChange.direction === 'up' && `${t('story.rankUp')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
+              {rankChange.direction === 'down' && `${t('story.rankDown')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
+              {rankChange.direction === 'same' && t('story.rankSame')}
+            </motion.p>
+
+            {/* Games comparison */}
+            <motion.div
+              className="flex justify-center gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+            >
+              <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+                <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>2024</div>
+                <div className="text-2xl font-bold">{player.total2024} {t('story.games')}</div>
+              </div>
+              <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+                <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>2025</div>
+                <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-green)' }}>{player.total2025} {t('story.games')}</div>
+              </div>
+            </motion.div>
+
+            {/* Difference */}
+            <motion.div
+              className="mt-4 text-xl font-semibold"
+              style={{
+                color: gamesDiff > 0 ? 'var(--color-accent-green)' :
+                       gamesDiff < 0 ? 'var(--color-accent-red)' :
+                       'var(--color-text-secondary)'
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+            >
+              {gamesDiff > 0 && `↑ +${gamesDiff} ${t('story.games')}`}
+              {gamesDiff < 0 && `↓ ${gamesDiff} ${t('story.games')}`}
+              {gamesDiff === 0 && `= ${t('story.games')}`}
+            </motion.div>
+          </div>
+        );
+      })()
     },
     // Story 5: Consistency + Clutch Player
     {
@@ -686,18 +716,17 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                   {allCommunityGameDates.map((date, index) => {
                     const isInStreak = streakDatesSet.has(date);
                     const playerPlayed = playerDatesSet.has(date);
-                    const season = getSeasonFromDate(date);
 
-                    // Determine colors
-                    let bgColor = 'rgba(75, 75, 75, 0.5)'; // Missed games (muted)
+                    // Determine colors: streak (green), played (blue), missed (gray)
+                    let bgColor = 'rgba(75, 75, 75, 0.5)'; // Missed games (gray)
                     let textColor = 'var(--color-text-secondary)';
 
                     if (isInStreak) {
                       bgColor = 'var(--color-accent-green)';
                       textColor = '#000';
                     } else if (playerPlayed) {
-                      bgColor = seasonColors[season].bg;
-                      textColor = seasonColors[season].text;
+                      bgColor = '#3b82f6'; // Blue for played (non-streak)
+                      textColor = '#fff';
                     }
 
                     return (
@@ -707,11 +736,11 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                         style={{
                           backgroundColor: bgColor,
                           color: textColor,
-                          opacity: isInStreak ? 1 : playerPlayed ? 0.8 : 0.4
+                          opacity: isInStreak ? 1 : playerPlayed ? 0.85 : 0.4
                         }}
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{
-                          opacity: isInStreak ? 1 : playerPlayed ? 0.8 : 0.4,
+                          opacity: isInStreak ? 1 : playerPlayed ? 0.85 : 0.4,
                           scale: isInStreak ? 1.1 : 1
                         }}
                         transition={{ delay: index * 0.02 }}
@@ -735,7 +764,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                   <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🔥 {t('stats.streakLegendStreak')}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="w-3 h-3 rounded-full opacity-60" style={{ backgroundColor: seasonColors.winter.bg }}></span>
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: '#3b82f6' }}></span>
                   <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✓ {t('stats.streakLegendPlayed')}</span>
                 </div>
                 <div className="flex items-center gap-1">

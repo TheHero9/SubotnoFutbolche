@@ -59,21 +59,6 @@ const StoryCard: React.FC<StoryCardProps> = ({ children, onNext, onPrev, canGoBa
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Left zone indicator (visible when can go back) */}
-      {canGoBack && (
-        <div
-          className="absolute left-0 top-0 bottom-0 w-[30%] flex items-center justify-start pl-4 pointer-events-none"
-        >
-          <motion.div
-            className="text-2xl opacity-30"
-            animate={{ x: [-5, 0, -5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            ←
-          </motion.div>
-        </div>
-      )}
-
       <div className="text-center px-4 max-w-2xl" onClick={handleContentClick}>
         {children}
       </div>

@@ -102,27 +102,28 @@ export const getFootballBuddies = (
     const percentageOfYourGames = Math.round((overlap / playerDates.size) * 100);
     const influenceOnThem = Math.round((overlap / otherDates.size) * 100);
 
+    // Impact score weights both percentage AND number of games
+    // This prevents 100% of 2 games ranking above 91% of 10 games
+    const impactScore = Math.round(influenceOnThem * Math.sqrt(overlap));
+
     buddies.push({
       name: other.name,
       gamesWithYou: overlap,
       theirTotalGames: otherDates.size,
       percentageOfYourGames,
       influenceOnThem,
-      affinity
+      affinity,
+      impactScore
     });
   }
 
-  // Sort by affinity descending, then by influence as tiebreaker
+  // Sort by impact score (weighted influence × games)
   buddies.sort((a, b) => {
-    // If affinity difference is significant (>10%), use affinity
-    if (Math.abs(a.affinity - b.affinity) > 0.1) {
-      return b.affinity - a.affinity;
+    // Primary: impact score (balances percentage with volume)
+    if (a.impactScore !== b.impactScore) {
+      return b.impactScore - a.impactScore;
     }
-    // Use influence as secondary sort
-    if (a.influenceOnThem !== b.influenceOnThem) {
-      return b.influenceOnThem - a.influenceOnThem;
-    }
-    // Finally, use games together
+    // Tiebreaker: games together
     return b.gamesWithYou - a.gamesWithYou;
   });
 
@@ -172,6 +173,7 @@ export const getPlayersYouInfluence = (
       otherDates.size,
       totalGameDays
     );
+    const impactScore = Math.round(influenceOnThem * Math.sqrt(overlap));
 
     influenced.push({
       name: other.name,
@@ -179,12 +181,13 @@ export const getPlayersYouInfluence = (
       theirTotalGames: otherDates.size,
       percentageOfYourGames,
       influenceOnThem,
-      affinity
+      affinity,
+      impactScore
     });
   }
 
-  // Sort by influence descending
-  influenced.sort((a, b) => b.influenceOnThem - a.influenceOnThem);
+  // Sort by impact score (weighted influence × games)
+  influenced.sort((a, b) => b.impactScore - a.impactScore);
 
   return influenced.slice(0, topN);
 };

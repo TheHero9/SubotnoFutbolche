@@ -59,6 +59,7 @@ export interface FootballBuddy {
   percentageOfYourGames: number;   // What % of YOUR games were with them
   influenceOnThem: number;         // What % of THEIR games you were part of (your influence!)
   affinity: number;                // Lift metric: actual overlap / expected overlap
+  impactScore: number;             // Weighted score: influence% × √gamesWithYou (prioritizes more games)
 }
 
 export type Language = 'bg' | 'en';

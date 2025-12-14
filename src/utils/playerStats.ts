@@ -62,6 +62,13 @@ export interface RareDuo {
   overlapRate: number;     // % of possible overlap they actually have
 }
 
+export interface SocialButterflyData {
+  uniquePlayersCount: number;
+  totalPlayersCount: number;
+  percentage: number;
+  playedWith: Set<string>;  // Names of players played with
+}
+
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
@@ -491,4 +498,51 @@ export const calculateRareDuos = (
   duos.sort((a, b) => b.rarityScore - a.rarityScore);
 
   return duos.slice(0, 10);
+};
+
+// ============================================
+// SOCIAL BUTTERFLY
+// ============================================
+
+/**
+ * Calculate how many unique players someone has played with
+ *
+ * For each game the player attended, find all other players
+ * who also attended that game
+ */
+export const calculateSocialButterfly = (
+  playerName: string,
+  playerDates: string[],
+  allPlayers: ProcessedPlayer[]
+): SocialButterflyData => {
+  const playerDatesSet = new Set(playerDates);
+  const playedWith = new Set<string>();
+
+  // For each other player, check if they share any dates
+  allPlayers.forEach(otherPlayer => {
+    if (otherPlayer.name === playerName) return;
+
+    const otherDates = otherPlayer.dates2025 || [];
+
+    // Check if any dates overlap
+    for (const date of otherDates) {
+      if (playerDatesSet.has(date)) {
+        playedWith.add(otherPlayer.name);
+        break; // Found at least one shared game, move to next player
+      }
+    }
+  });
+
+  const totalPlayersCount = allPlayers.length - 1; // Exclude self
+  const uniquePlayersCount = playedWith.size;
+  const percentage = totalPlayersCount > 0
+    ? Math.round((uniquePlayersCount / totalPlayersCount) * 100)
+    : 0;
+
+  return {
+    uniquePlayersCount,
+    totalPlayersCount,
+    percentage,
+    playedWith
+  };
 };

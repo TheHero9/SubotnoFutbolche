@@ -149,6 +149,11 @@
     "clickToCompare": "Click on a duo to compare their games",
     "duoCalendarSubtitle": "Compare when each player participated",
     "bothPlayers": "Both",
-    "neitherPlayer": "Neither"
+    "neitherPlayer": "Neither",
+    "socialButterfly": "Social Butterfly",
+    "socialButterflySubtitle": "How many unique players have you shared a game with?",
+    "uniquePlayers": "unique players",
+    "playedWith": "Played with",
+    "notPlayedWith": "Not yet"
   }
 }

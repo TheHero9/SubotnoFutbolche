@@ -149,6 +149,11 @@
     "clickToCompare": "Кликни на дует за да сравниш мачовете им",
     "duoCalendarSubtitle": "Сравни кога всеки играч е участвал",
     "bothPlayers": "И двамата",
-    "neitherPlayer": "Никой"
+    "neitherPlayer": "Никой",
+    "socialButterfly": "Социална пеперуда",
+    "socialButterflySubtitle": "С колко различни играчи си играл заедно?",
+    "uniquePlayers": "уникални играчи",
+    "playedWith": "Играл с",
+    "notPlayedWith": "Все още не"
   }
 }

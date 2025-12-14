@@ -15,6 +15,7 @@ import {
   calculateDynamicDuos,
   calculateRareDuos,
   calculateAttendanceRate,
+  calculateSocialButterfly,
   getPlayedGameDates
 } from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
@@ -69,6 +70,10 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const rareDuos = useMemo(
     () => calculateRareDuos(allPlayers),
     [allPlayers]
+  );
+  const socialButterfly = useMemo(
+    () => calculateSocialButterfly(player.name, player.dates2025 || [], allPlayers),
+    [player.name, player.dates2025, allPlayers]
   );
 
   // Get all community game dates for streak visualization
@@ -841,7 +846,122 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 8: Community - Total Games 2025
+    // Story 8: Social Butterfly
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          <motion.div
+            className="text-6xl mb-4"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", duration: 0.8 }}
+          >
+            🦋
+          </motion.div>
+          <motion.h2
+            className="text-2xl font-bold mb-2"
+            style={{ color: 'var(--color-accent-gold)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {t('stats.socialButterfly')}
+          </motion.h2>
+          <motion.p
+            className="text-sm mb-4"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            {t('stats.socialButterflySubtitle')}
+          </motion.p>
+
+          {/* Big number */}
+          <motion.div
+            className="flex items-center justify-center gap-2 mb-2"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.6, type: "spring" }}
+          >
+            <span className="text-6xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
+              {socialButterfly.uniquePlayersCount}
+            </span>
+            <span className="text-2xl" style={{ color: 'var(--color-text-secondary)' }}>
+              / {socialButterfly.totalPlayersCount}
+            </span>
+          </motion.div>
+          <motion.p
+            className="text-sm mb-6"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            {t('stats.uniquePlayers')} ({socialButterfly.percentage}%)
+          </motion.p>
+
+          {/* Player grid */}
+          <motion.div
+            className="max-h-[40vh] overflow-y-auto px-3 py-3 rounded-xl"
+            style={{ backgroundColor: 'var(--color-bg-card)' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+          >
+            <div className="flex flex-wrap gap-2 justify-center">
+              {allPlayers
+                .filter(p => p.name !== player.name)
+                .sort((a, b) => {
+                  // Sort: played with first, then alphabetically
+                  const aPlayed = socialButterfly.playedWith.has(a.name);
+                  const bPlayed = socialButterfly.playedWith.has(b.name);
+                  if (aPlayed && !bPlayed) return -1;
+                  if (!aPlayed && bPlayed) return 1;
+                  return a.name.localeCompare(b.name);
+                })
+                .map((p, index) => {
+                  const hasPlayed = socialButterfly.playedWith.has(p.name);
+                  return (
+                    <motion.span
+                      key={p.name}
+                      className="px-3 py-1.5 rounded-full text-sm font-medium"
+                      style={{
+                        backgroundColor: hasPlayed ? 'var(--color-accent-green)' : 'rgba(75, 75, 75, 0.5)',
+                        color: hasPlayed ? '#000' : 'var(--color-text-secondary)',
+                        opacity: hasPlayed ? 1 : 0.5
+                      }}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: hasPlayed ? 1 : 0.5, scale: 1 }}
+                      transition={{ delay: 1 + index * 0.02 }}
+                    >
+                      {p.name}
+                    </motion.span>
+                  );
+                })}
+            </div>
+          </motion.div>
+
+          {/* Legend */}
+          <motion.div
+            className="flex justify-center gap-4 mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+          >
+            <div className="flex items-center gap-1">
+              <span className="w-3 h-3 rounded-full" style={{ backgroundColor: 'var(--color-accent-green)' }}></span>
+              <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('stats.playedWith')}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-3 h-3 rounded-full opacity-50" style={{ backgroundColor: '#4b4b4b' }}></span>
+              <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('stats.notPlayedWith')}</span>
+            </div>
+          </motion.div>
+        </div>
+      )
+    },
+    // Story 9: Community - Total Games 2025
     {
       content: (
         <div>

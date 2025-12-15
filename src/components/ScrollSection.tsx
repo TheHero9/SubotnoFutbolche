@@ -21,8 +21,30 @@ import {
 import { calculatePeakPerformance, calculateCommunityStreak } from '../utils/playerStats';
 import { formatMonthName, formatSeasonName, getSeasonEmoji } from '../utils/helpers';
 import communityStatsRaw from '../data/communityStats.json';
+import stats2023Raw from '../data/2023stats.json';
 
 const rawCommunityStats = communityStatsRaw as CommunityStatsRaw;
+
+// 2023 stats type
+interface Stats2023 {
+  [month: string]: {
+    success: number;
+    fails: number;
+  };
+}
+
+// Convert 2023 stats to gamesPerMonth format
+const convert2023ToGamesPerMonth = (stats: Stats2023): Record<string, number> => {
+  const result: Record<string, number> = {};
+  Object.entries(stats).forEach(([month, data]) => {
+    result[month] = data.success;
+  });
+  return result;
+};
+
+const gamesPerMonth2023 = convert2023ToGamesPerMonth(stats2023Raw as Stats2023);
+const totalGames2023 = Object.values(stats2023Raw as Stats2023).reduce((sum, m) => sum + m.success, 0);
+const totalFails2023 = Object.values(stats2023Raw as Stats2023).reduce((sum, m) => sum + m.fails, 0);
 
 const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, allPlayers }) => {
   const { t, i18n } = useTranslation();
@@ -425,12 +447,13 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
             {t('scroll.communityGamesComparison')}
           </p>
           <CommunityChart
+            gamesPerMonth2023={gamesPerMonth2023}
             gamesPerMonth2024={communityStats.gamesPerMonth2024}
             gamesPerMonth2025={communityStats.gamesPerMonth2025}
           />
 
           {/* Community stats summary */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
             <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
               <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
                 {communityStats.gamesPlayed2025}
@@ -445,6 +468,14 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
               </div>
               <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('scroll.games2024')}
+              </div>
+            </div>
+            <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-2xl font-bold" style={{ color: '#9b59b6' }}>
+                {totalGames2023}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('scroll.games2023')}
               </div>
             </div>
             <div className="text-center p-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>

@@ -24,6 +24,7 @@ ChartJS.register(
 );
 
 interface CommunityChartProps {
+  gamesPerMonth2023: Record<string, number>;
   gamesPerMonth2024: Record<string, number>;
   gamesPerMonth2025: Record<string, number>;
 }
@@ -40,7 +41,7 @@ const MONTH_KEY_MAP: Record<string, MonthKey> = {
   'October': 'october', 'November': 'november', 'December': 'december'
 };
 
-const CommunityChart: React.FC<CommunityChartProps> = ({ gamesPerMonth2024, gamesPerMonth2025 }) => {
+const CommunityChart: React.FC<CommunityChartProps> = ({ gamesPerMonth2023, gamesPerMonth2024, gamesPerMonth2025 }) => {
   const { i18n } = useTranslation();
 
   const labels = MONTHS_ORDER.map(m =>
@@ -50,6 +51,14 @@ const CommunityChart: React.FC<CommunityChartProps> = ({ gamesPerMonth2024, game
   const chartData = {
     labels,
     datasets: [
+      {
+        label: '2023',
+        data: MONTHS_ORDER.map(m => gamesPerMonth2023[m] || 0),
+        backgroundColor: 'rgba(155, 89, 182, 0.7)',
+        borderColor: '#9b59b6',
+        borderWidth: 2,
+        borderRadius: 4,
+      },
       {
         label: '2024',
         data: MONTHS_ORDER.map(m => gamesPerMonth2024[m] || 0),

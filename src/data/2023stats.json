@@ -1,0 +1,50 @@
+{
+  "January": {
+    "success": 4,
+    "fails": 0
+  },
+  "February": {
+    "success": 4,
+    "fails": 0
+  },
+  "March": {
+    "success": 3,
+    "fails": 1
+  },
+  "April": {
+    "success": 4,
+    "fails": 2
+  },
+  "May": {
+    "success": 6,
+    "fails": 1
+  },
+  "June": {
+    "success": 3,
+    "fails": 2
+  },
+  "July": {
+    "success": 1,
+    "fails": 3
+  },
+  "August": {
+    "success": 2,
+    "fails": 1
+  },
+  "September": {
+    "success": 4,
+    "fails": 1
+  },
+  "October": {
+    "success": 4,
+    "fails": 0
+  },
+  "November": {
+    "success": 4,
+    "fails": 1
+  },
+  "December": {
+    "success": 5,
+    "fails": 0
+  }
+}

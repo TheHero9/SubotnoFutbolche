@@ -58,13 +58,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ player, totalPlayers }) => {
       {/* Screenshot Card */}
       <div
         ref={cardRef}
-        className="rounded-3xl p-1 max-w-2xl mx-auto"
+        className="rounded-3xl p-1 max-w-md md:max-w-2xl mx-auto"
         style={{
           background: 'linear-gradient(135deg, #1db954, #ffd700, #1db954)'
         }}
       >
         <div
-          className="rounded-3xl p-8 relative overflow-hidden"
+          className="rounded-3xl p-4 md:p-8 relative overflow-hidden"
           style={{
             background: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)'
           }}
@@ -80,23 +80,23 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ player, totalPlayers }) => {
           />
 
           {/* Header with year */}
-          <div className="text-center mb-6 relative">
-            <div className="inline-block px-4 py-1 rounded-full mb-3" style={{ backgroundColor: 'rgba(29, 185, 84, 0.2)' }}>
-              <span className="text-sm font-bold" style={{ color: 'var(--color-accent-green)' }}>⚽ 2025</span>
+          <div className="text-center mb-4 md:mb-6 relative">
+            <div className="inline-block px-3 py-1 rounded-full mb-2 md:mb-3" style={{ backgroundColor: 'rgba(29, 185, 84, 0.2)' }}>
+              <span className="text-xs md:text-sm font-bold" style={{ color: 'var(--color-accent-green)' }}>⚽ 2025</span>
             </div>
-            <h3 className="text-4xl md:text-5xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
+            <h3 className="text-3xl md:text-5xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
               {player.name}
             </h3>
           </div>
 
           {/* Main stats - Big numbers */}
-          <div className="flex justify-center gap-8 mb-6">
+          <div className="flex justify-center gap-6 md:gap-8 mb-4 md:mb-6">
             {/* Total games */}
             <div className="text-center">
-              <div className="text-6xl font-black" style={{ color: 'var(--color-accent-green)' }}>
+              <div className="text-5xl md:text-6xl font-black" style={{ color: 'var(--color-accent-green)' }}>
                 {player.total2025}
               </div>
-              <div className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+              <div className="text-xs md:text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('summary.totalGames')}
               </div>
             </div>
@@ -106,46 +106,46 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ player, totalPlayers }) => {
 
             {/* Rank */}
             <div className="text-center">
-              <div className="text-6xl font-black" style={{ color: 'var(--color-accent-gold)' }}>
+              <div className="text-5xl md:text-6xl font-black" style={{ color: 'var(--color-accent-gold)' }}>
                 #{player.rank2025}
               </div>
-              <div className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+              <div className="text-xs md:text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('summary.rank')}
               </div>
             </div>
           </div>
 
-          {/* Secondary stats grid */}
-          <div className="grid grid-cols-4 gap-3 mb-6">
+          {/* Secondary stats grid - 2 cols mobile, 4 cols desktop */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-4 md:mb-6">
             {/* Streak */}
             <div
-              className="rounded-xl p-3 text-center"
+              className="rounded-xl p-2 md:p-3 text-center"
               style={{ backgroundColor: 'rgba(29, 185, 84, 0.15)' }}
             >
-              <div className="text-2xl font-bold mb-1" style={{ color: 'var(--color-accent-green)' }}>
+              <div className="text-lg md:text-2xl font-bold mb-0.5 md:mb-1" style={{ color: 'var(--color-accent-green)' }}>
                 🔥 {peakPerformance.streakLength}
               </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+              <div className="text-[10px] md:text-xs leading-tight" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('scroll.consecutiveGames')}
               </div>
             </div>
 
             {/* Attendance */}
             <div
-              className="rounded-xl p-3 text-center"
+              className="rounded-xl p-2 md:p-3 text-center"
               style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)' }}
             >
-              <div className="text-2xl font-bold mb-1" style={{ color: '#3b82f6' }}>
+              <div className="text-lg md:text-2xl font-bold mb-0.5 md:mb-1" style={{ color: '#3b82f6' }}>
                 {attendanceRate}%
               </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+              <div className="text-[10px] md:text-xs leading-tight" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('stats.attendanceRate')}
               </div>
             </div>
 
             {/* Rank change */}
             <div
-              className="rounded-xl p-3 text-center"
+              className="rounded-xl p-2 md:p-3 text-center"
               style={{
                 backgroundColor: rankChange.direction === 'up' ? 'rgba(29, 185, 84, 0.15)' :
                                  rankChange.direction === 'down' ? 'rgba(239, 68, 68, 0.15)' :
@@ -154,7 +154,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ player, totalPlayers }) => {
               }}
             >
               <div
-                className="text-2xl font-bold mb-1"
+                className="text-lg md:text-2xl font-bold mb-0.5 md:mb-1"
                 style={{
                   color: rankChange.direction === 'up' ? 'var(--color-accent-green)' :
                          rankChange.direction === 'down' ? '#ef4444' :
@@ -164,38 +164,38 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ player, totalPlayers }) => {
               >
                 {rankChange.emoji} {rankChange.direction !== 'new' && rankChange.value}
               </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+              <div className="text-[10px] md:text-xs leading-tight" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('summary.rankChange')}
               </div>
             </div>
 
             {/* Games vs 2024 */}
             <div
-              className="rounded-xl p-3 text-center"
+              className="rounded-xl p-2 md:p-3 text-center"
               style={{
                 backgroundColor: gamesDiff >= 0 ? 'rgba(29, 185, 84, 0.15)' : 'rgba(239, 68, 68, 0.15)'
               }}
             >
               <div
-                className="text-2xl font-bold mb-1"
+                className="text-lg md:text-2xl font-bold mb-0.5 md:mb-1"
                 style={{ color: gamesDiff >= 0 ? 'var(--color-accent-green)' : '#ef4444' }}
               >
                 {gamesDiff > 0 ? '↑' : gamesDiff < 0 ? '↓' : '='}{Math.abs(gamesDiff)}
               </div>
-              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+              <div className="text-[10px] md:text-xs leading-tight" style={{ color: 'var(--color-text-secondary)' }}>
                 vs 2024
               </div>
             </div>
           </div>
 
           {/* Footer with branding */}
-          <div className="text-center pt-4 border-t border-opacity-10" style={{ borderColor: 'var(--color-text-primary)' }}>
+          <div className="text-center pt-3 md:pt-4 border-t border-opacity-10" style={{ borderColor: 'var(--color-text-primary)' }}>
             <div className="flex items-center justify-center gap-2">
-              <span className="text-lg">⚽</span>
-              <span className="font-bold" style={{ color: 'var(--color-accent-green)' }}>
+              <span className="text-base md:text-lg">⚽</span>
+              <span className="text-sm md:text-base font-bold" style={{ color: 'var(--color-accent-green)' }}>
                 {t('summary.footer')}
               </span>
-              <span className="text-lg">⚽</span>
+              <span className="text-base md:text-lg">⚽</span>
             </div>
           </div>
         </div>

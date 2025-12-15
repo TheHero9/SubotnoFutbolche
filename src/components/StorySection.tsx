@@ -20,8 +20,18 @@ import {
   getPlayedGameDates
 } from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
+import stats2023Raw from '../data/2023stats.json';
 
 const rawStats = communityStatsRaw as CommunityStatsRaw;
+
+// 2023 stats type
+interface Stats2023 {
+  [month: string]: {
+    success: number;
+    fails: number;
+  };
+}
+const totalGames2023 = Object.values(stats2023Raw as Stats2023).reduce((sum, m) => sum + m.success, 0);
 
 const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPlayers, onComplete }) => {
   const { t, i18n } = useTranslation();
@@ -266,27 +276,55 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full"
+              className="w-full flex flex-col h-full"
             >
+              {/* Legend - Seasons (at top) */}
+              <motion.div
+                className="flex flex-wrap justify-center gap-2 mb-3 px-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.winter.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('seasons.winter')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.spring.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('seasons.spring')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.summer.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('seasons.summer')}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.autumn.bg }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('seasons.autumn')}</span>
+                </div>
+              </motion.div>
+
+              {/* Game dates - full screen */}
               <div
-                className="max-h-48 overflow-y-auto px-4 py-3 rounded-xl mb-4"
+                className="flex-1 px-3 py-3 rounded-xl mb-3"
                 style={{ backgroundColor: 'var(--color-bg-card)' }}
               >
-                <div className="flex flex-wrap gap-2 justify-center">
+                <div className="flex flex-wrap gap-1.5 md:gap-2 justify-center content-start">
                   {allCommunityGameDates.map((date, index) => {
                     const played = playerDatesSet.has(date);
+                    const season = getSeasonFromDate(date);
+                    const colors = seasonColors[season];
                     return (
                       <motion.span
                         key={date}
-                        className="px-3 py-1 rounded-full text-sm font-medium"
+                        className="px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium"
                         style={{
-                          backgroundColor: played ? 'var(--color-accent-green)' : 'rgba(75, 75, 75, 0.5)',
-                          color: played ? '#000' : 'var(--color-text-secondary)',
-                          opacity: played ? 1 : 0.5
+                          backgroundColor: played ? colors.bg : '#4b5563',
+                          color: played ? colors.text : '#9ca3af',
+                          opacity: played ? 1 : 0.6
                         }}
                         initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: played ? 1 : 0.5, scale: 1 }}
-                        transition={{ delay: index * 0.02 }}
+                        animate={{ opacity: played ? 1 : 0.6, scale: 1 }}
+                        transition={{ delay: index * 0.015 }}
                       >
                         {formatDateEU(date)}
                       </motion.span>
@@ -295,38 +333,34 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 </div>
               </div>
 
-              {/* Legend */}
+              {/* Legend - Status + Back button */}
               <motion.div
-                className="flex justify-center gap-4 mb-4 px-2"
+                className="flex items-center justify-center gap-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
+                <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🎨 = {t('stats.streakLegendPlayed')}</span>
                 <div className="flex items-center gap-1">
-                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: 'var(--color-accent-green)' }}></span>
-                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✓ {t('stats.streakLegendPlayed')}</span>
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: '#4b5563' }}></span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}> = {t('stats.streakLegendMissed')}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <span className="w-3 h-3 rounded-full opacity-50" style={{ backgroundColor: '#4b4b4b' }}></span>
-                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✗ {t('stats.streakLegendMissed')}</span>
-                </div>
+                <motion.button
+                  className="px-4 py-1.5 rounded-full text-xs font-semibold"
+                  style={{
+                    backgroundColor: 'var(--color-bg-card)',
+                    color: 'var(--color-text-secondary)'
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowGameDates(false);
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  ← {t('story.hideDates')}
+                </motion.button>
               </motion.div>
-
-              <motion.button
-                className="px-6 py-2 rounded-full text-sm font-semibold"
-                style={{
-                  backgroundColor: 'var(--color-bg-card)',
-                  color: 'var(--color-text-secondary)'
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowGameDates(false);
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                ← {t('story.hideDates')}
-              </motion.button>
             </motion.div>
           )}
         </div>
@@ -478,7 +512,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               {rankChange.emoji}
             </motion.div>
             <motion.p
-              className="text-3xl font-bold mb-6"
+              className="text-3xl font-bold mb-2"
               style={{
                 color: rankChange.direction === 'up' ? 'var(--color-accent-green)' :
                        rankChange.direction === 'down' ? 'var(--color-accent-red)' :
@@ -492,6 +526,15 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               {rankChange.direction === 'down' && `${t('story.rankDown')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
               {rankChange.direction === 'same' && t('story.rankSame')}
               {rankChange.direction === 'new' && t('story.rankNew')}
+            </motion.p>
+            <motion.p
+              className="text-sm mb-6"
+              style={{ color: 'var(--color-text-secondary)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              {t('story.inRankingVs2024')}
             </motion.p>
 
             {/* Games comparison */}
@@ -913,7 +956,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            {t('stats.socialButterfly')}
+            {t('stats.socialButterfly')} 2025
           </motion.h2>
           <motion.p
             className="text-sm mb-4"
@@ -1064,7 +1107,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 </div>
                 <div className="text-center px-3 py-2 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
                   <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>
-                    {communityStats.totalGamesAllTime}
+                    {communityStats.totalGamesAllTime + totalGames2023}
                   </div>
                   <div className="text-xs flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
                     {t('community.allTime')} <InfoTooltip text={t('stats.allTimeInfo')} />
@@ -1242,7 +1285,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="w-3 h-3 rounded-full opacity-70" style={{ backgroundColor: '#3b82f6' }}></span>
-                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✓ {t('stats.streakLegendPlayed')}</span>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>✓ {t('stats.communityPlayed')}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="w-3 h-3 rounded-full opacity-40" style={{ backgroundColor: '#4b4b4b' }}></span>
@@ -1421,20 +1464,19 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                   {dynamicDuos.map((duo, index) => (
                     <motion.button
                       key={`${duo.player1}-${duo.player2}`}
-                      className="w-full px-3 py-2 rounded-lg text-left"
+                      className="w-full px-3 py-2 rounded-lg text-left cursor-pointer"
                       style={{
                         backgroundColor: duo.mutualRate >= 80
                           ? 'rgba(29, 185, 84, 0.2)'
                           : duo.mutualRate >= 65
                             ? 'rgba(255, 215, 0, 0.1)'
-                            : 'transparent',
-                        border: '1px dashed var(--color-text-secondary)',
+                            : 'rgba(75, 85, 99, 0.2)',
+                        border: '1px solid',
                         borderColor: duo.mutualRate >= 80
                           ? 'var(--color-accent-green)'
                           : duo.mutualRate >= 65
                             ? 'var(--color-accent-gold)'
-                            : 'var(--color-text-secondary)',
-                        borderOpacity: 0.5
+                            : 'rgba(107, 114, 128, 0.5)'
                       }}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -1443,25 +1485,28 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                         e.stopPropagation();
                         setSelectedDynamicDuo({ player1: duo.player1, player2: duo.player2 });
                       }}
-                      whileHover={{ scale: 1.02 }}
+                      whileHover={{ scale: 1.02, backgroundColor: duo.mutualRate >= 80 ? 'rgba(29, 185, 84, 0.3)' : duo.mutualRate >= 65 ? 'rgba(255, 215, 0, 0.2)' : 'rgba(75, 85, 99, 0.3)' }}
                       whileTap={{ scale: 0.98 }}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-sm">
                           {duo.player1} & {duo.player2}
                         </span>
-                        <span
-                          className="text-sm font-bold"
-                          style={{
-                            color: duo.mutualRate >= 80
-                              ? 'var(--color-accent-green)'
-                              : duo.mutualRate >= 65
-                                ? 'var(--color-accent-gold)'
-                                : 'var(--color-text-secondary)'
-                          }}
-                        >
-                          {duo.mutualRate}%
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="text-sm font-bold"
+                            style={{
+                              color: duo.mutualRate >= 80
+                                ? 'var(--color-accent-green)'
+                                : duo.mutualRate >= 65
+                                  ? 'var(--color-accent-gold)'
+                                  : 'var(--color-text-secondary)'
+                            }}
+                          >
+                            {duo.mutualRate}%
+                          </span>
+                          <span style={{ color: 'var(--color-text-secondary)' }}>→</span>
+                        </div>
                       </div>
                       <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
                         {duo.gamesTogethers} {t('story.gamesTogether')}
@@ -1472,13 +1517,13 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               </motion.div>
 
               <motion.p
-                className="text-xs mt-4"
-                style={{ color: 'var(--color-text-secondary)' }}
+                className="text-xs mt-4 flex items-center justify-center gap-1"
+                style={{ color: 'var(--color-accent-green)' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.4 }}
               >
-                {t('stats.clickToCompare')}
+                👆 {t('stats.clickToCompare')}
               </motion.p>
             </>
           ) : (
@@ -1655,19 +1700,19 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                     {rareDuos.map((duo, index) => (
                       <motion.button
                         key={`${duo.player1}-${duo.player2}`}
-                        className="w-full px-3 py-2 rounded-lg text-left"
+                        className="w-full px-3 py-2 rounded-lg text-left cursor-pointer"
                         style={{
                           backgroundColor: duo.gamesTogethers === 0
                             ? 'rgba(231, 76, 60, 0.2)'
                             : duo.gamesTogethers <= 2
                               ? 'rgba(255, 215, 0, 0.1)'
-                              : 'transparent',
-                          border: '1px dashed var(--color-text-secondary)',
+                              : 'rgba(75, 85, 99, 0.2)',
+                          border: '1px solid',
                           borderColor: duo.gamesTogethers === 0
                             ? 'var(--color-accent-red)'
                             : duo.gamesTogethers <= 2
                               ? 'var(--color-accent-gold)'
-                              : 'var(--color-text-secondary)'
+                              : 'rgba(107, 114, 128, 0.5)'
                         }}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -1683,18 +1728,21 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                           <span className="font-semibold text-sm">
                             {duo.player1} & {duo.player2}
                           </span>
-                          <span
-                            className="text-sm font-bold"
-                            style={{
-                              color: duo.gamesTogethers === 0
-                                ? 'var(--color-accent-red)'
-                                : duo.gamesTogethers <= 2
-                                  ? 'var(--color-accent-gold)'
-                                  : 'var(--color-text-secondary)'
-                            }}
-                          >
-                            {duo.gamesTogethers === 0 ? '🚫' : duo.gamesTogethers}× {t('stats.togetherOnly')}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="text-sm font-bold"
+                              style={{
+                                color: duo.gamesTogethers === 0
+                                  ? 'var(--color-accent-red)'
+                                  : duo.gamesTogethers <= 2
+                                    ? 'var(--color-accent-gold)'
+                                    : 'var(--color-text-secondary)'
+                              }}
+                            >
+                              {duo.gamesTogethers === 0 ? '🚫' : duo.gamesTogethers}× {t('stats.togetherOnly')}
+                            </span>
+                            <span style={{ color: 'var(--color-text-secondary)' }}>→</span>
+                          </div>
                         </div>
                         <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
                           {duo.player1Games} + {duo.player2Games} = {duo.totalGames} {t('stats.combinedGames')}
@@ -1716,13 +1764,13 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               )}
 
               <motion.p
-                className="text-xs mt-4"
-                style={{ color: 'var(--color-text-secondary)' }}
+                className="text-xs mt-4 flex items-center justify-center gap-1"
+                style={{ color: 'var(--color-accent-green)' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2 }}
               >
-                {t('stats.clickToCompare')}
+                👆 {t('stats.clickToCompare')}
               </motion.p>
             </>
           ) : (

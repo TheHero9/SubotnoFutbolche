@@ -110,19 +110,19 @@ const YearHeatmap: React.FC<YearHeatmapProps> = ({ year, playerDates, communityG
         </span>
       </div>
 
-      {/* Heatmap grid */}
-      <div className="flex flex-wrap justify-center gap-1">
+      {/* Heatmap grid - 6 cols on mobile, 12 on desktop */}
+      <div className="grid grid-cols-6 md:grid-cols-12 gap-0.5 justify-items-center">
         {saturdaysByMonth.map((monthSaturdays, monthIndex) => (
-          <div key={monthIndex} className="flex flex-col items-center">
+          <div key={monthIndex} className="flex flex-col items-center w-full">
             {/* Month label */}
             <div
-              className="text-xs mb-1 font-medium"
+              className="text-[10px] md:text-xs mb-1 font-medium"
               style={{ color: 'var(--color-text-secondary)' }}
             >
               {isLangBg ? monthNamesBg[monthIndex] : monthNames[monthIndex]}
             </div>
             {/* Saturday boxes */}
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-0.5 md:gap-1">
               {monthSaturdays.map((saturday, satIndex) => {
                 const status = getSaturdayStatus(saturday);
                 const color = getColor(status);
@@ -131,7 +131,7 @@ const YearHeatmap: React.FC<YearHeatmapProps> = ({ year, playerDates, communityG
                 return (
                   <motion.div
                     key={satIndex}
-                    className="w-6 h-6 rounded-sm flex items-center justify-center text-xs font-medium cursor-default"
+                    className="w-5 h-5 md:w-6 md:h-6 rounded-sm flex items-center justify-center text-[10px] md:text-xs font-medium cursor-default"
                     style={{
                       backgroundColor: color,
                       color: status === 'played' ? '#000' : status === 'missed' ? '#fff' : 'var(--color-text-secondary)',
@@ -152,22 +152,22 @@ const YearHeatmap: React.FC<YearHeatmapProps> = ({ year, playerDates, communityG
       </div>
 
       {/* Legend */}
-      <div className="flex justify-center gap-4 mt-4">
+      <div className="flex flex-wrap justify-center gap-3 md:gap-4 mt-4">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'var(--color-accent-green)' }}></div>
-          <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+          <span className="text-[10px] md:text-xs" style={{ color: 'var(--color-text-secondary)' }}>
             {t('stats.streakLegendPlayed')}
           </span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#ef4444' }}></div>
-          <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+          <span className="text-[10px] md:text-xs" style={{ color: 'var(--color-text-secondary)' }}>
             {t('stats.streakLegendMissed')}
           </span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: '#6b7280' }}></div>
-          <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+          <span className="text-[10px] md:text-xs" style={{ color: 'var(--color-text-secondary)' }}>
             {t('community.cancelled')}
           </span>
         </div>

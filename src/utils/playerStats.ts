@@ -79,6 +79,23 @@ export interface CommunityStreakData {
   spansYears: boolean;  // True if streak crosses 2024-2025
 }
 
+export interface SquadMatch {
+  players: string[];           // The player names
+  occurrences: number;         // How many times this exact squad played together
+  dates: string[];             // Dates when they played together
+}
+
+export interface SquadSizeResult {
+  squadSize: number;
+  squads: SquadMatch[];        // All squads of this size with 2+ occurrences (sorted by occurrences desc)
+  bestOccurrences: number;     // Highest occurrence count for this size
+}
+
+export interface RepeatSquadData {
+  bestMatch: { squadSize: number; squad: SquadMatch } | null;  // The largest squad with 2+ occurrences
+  allResults: SquadSizeResult[]; // Results for all searched sizes
+}
+
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
@@ -626,3 +643,129 @@ export const calculateCommunityStreak = (
     spansYears
   };
 };
+
+// ============================================
+// REPEAT SQUADS
+// ============================================
+
+/**
+ * Find groups of players that played together multiple times
+ *
+ * Algorithm:
+ * 1. For each game date, get the set of players who played
+ * 2. For each squad size from maxSize down to minSize, find all possible
+ *    combinations of that size within each game's lineup
+ * 3. Track which combinations appear on multiple dates
+ * 4. Return ALL squads with 2+ occurrences per size (for interactive UI)
+ */
+export const calculateRepeatSquads = (
+  allPlayers: ProcessedPlayer[],
+  communityGames: GameRecord[],
+  minSize: number = 7,
+  maxSize: number = 14,
+  maxSquadsPerSize: number = 5
+): RepeatSquadData => {
+  const playedGameDates = getPlayedGameDates(communityGames);
+  const allResults: SquadSizeResult[] = [];
+  let bestMatch: { squadSize: number; squad: SquadMatch } | null = null;
+
+  // Build a map: date -> set of player names who played
+  const dateToPlayers: Map<string, Set<string>> = new Map();
+
+  for (const date of playedGameDates) {
+    const playersOnDate = new Set<string>();
+    for (const player of allPlayers) {
+      if ((player.dates2025 || []).includes(date)) {
+        playersOnDate.add(player.name);
+      }
+    }
+    if (playersOnDate.size > 0) {
+      dateToPlayers.set(date, playersOnDate);
+    }
+  }
+
+  // For each squad size from max down to min, look for repeat lineups
+  for (let squadSize = maxSize; squadSize >= minSize; squadSize--) {
+    // Map: sorted player names joined -> list of dates
+    const lineupToDate: Map<string, string[]> = new Map();
+
+    // First check exact matches
+    for (const [date, players] of dateToPlayers) {
+      if (players.size === squadSize) {
+        const signature = [...players].sort().join('|');
+        const dates = lineupToDate.get(signature) || [];
+        dates.push(date);
+        lineupToDate.set(signature, dates);
+      }
+    }
+
+    // Also check subset combinations (for games with more players)
+    for (const [date, players] of dateToPlayers) {
+      if (players.size > squadSize) {
+        const playerArr = [...players];
+        const combinations = getCombinations(playerArr, squadSize);
+
+        for (const combo of combinations) {
+          const signature = combo.sort().join('|');
+          const dates = lineupToDate.get(signature) || [];
+          if (!dates.includes(date)) {
+            dates.push(date);
+            lineupToDate.set(signature, dates);
+          }
+        }
+      }
+    }
+
+    // Collect ALL squads with 2+ occurrences
+    const squadsForSize: SquadMatch[] = [];
+
+    for (const [signature, dates] of lineupToDate) {
+      if (dates.length >= 2) {
+        squadsForSize.push({
+          players: signature.split('|'),
+          occurrences: dates.length,
+          dates
+        });
+      }
+    }
+
+    // Sort by occurrences (descending) and limit
+    squadsForSize.sort((a, b) => b.occurrences - a.occurrences);
+    const topSquads = squadsForSize.slice(0, maxSquadsPerSize);
+
+    const result: SquadSizeResult = {
+      squadSize,
+      squads: topSquads,
+      bestOccurrences: topSquads.length > 0 ? topSquads[0].occurrences : 0
+    };
+
+    allResults.push(result);
+
+    // Track best overall match (largest size with 2+ occurrences)
+    if (topSquads.length > 0 && bestMatch === null) {
+      bestMatch = { squadSize, squad: topSquads[0] };
+    }
+  }
+
+  return { bestMatch, allResults };
+};
+
+/**
+ * Generate all combinations of k elements from array
+ */
+function getCombinations<T>(arr: T[], k: number): T[][] {
+  if (k === 0) return [[]];
+  if (arr.length === 0) return [];
+  if (k > arr.length) return [];
+
+  // Limit iterations to prevent performance issues
+  if (arr.length > 16 && k > 10) {
+    // For large arrays, just return empty to skip
+    return [];
+  }
+
+  const [first, ...rest] = arr;
+  const withFirst = getCombinations(rest, k - 1).map(combo => [first, ...combo]);
+  const withoutFirst = getCombinations(rest, k);
+  return [...withFirst, ...withoutFirst];
+}

@@ -17,6 +17,7 @@ import {
   calculateAttendanceRate,
   calculateSocialButterfly,
   calculateCommunityStreak,
+  calculateRepeatSquads,
   getPlayedGameDates
 } from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
@@ -42,6 +43,8 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const [selectedRareDuo, setSelectedRareDuo] = useState<{ player1: string; player2: string } | null>(null);
   const [selectedDynamicDuo, setSelectedDynamicDuo] = useState<{ player1: string; player2: string } | null>(null);
   const [showCommunityStreakCalendar, setShowCommunityStreakCalendar] = useState<boolean>(false);
+  const [selectedSquadSize, setSelectedSquadSize] = useState<number | null>(null);
+  const [selectedSquadIndex, setSelectedSquadIndex] = useState<number | null>(null);
 
   // Sort players by rank for the ranking list
   const rankedPlayers = useMemo(() => {
@@ -90,6 +93,10 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const communityStreak = useMemo(
     () => calculateCommunityStreak(rawStats.games2024, rawStats.games2025),
     []
+  );
+  const repeatSquads = useMemo(
+    () => calculateRepeatSquads(allPlayers, rawStats.games2025, 12, 14),
+    [allPlayers]
   );
 
   // Create set of community streak dates for quick lookup
@@ -1896,6 +1903,363 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
           )}
         </div>
       )
+    },
+    // Story 13: Repeat Squads - Interactive 3-level navigation
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          {selectedSquadSize === null ? (
+            // LEVEL 1: List of squad sizes
+            <>
+              <motion.div
+                className="text-6xl mb-4"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", duration: 0.8 }}
+              >
+                🔍
+              </motion.div>
+              <motion.div
+                className="flex items-center justify-center gap-2 mb-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <h2
+                  className="text-2xl font-bold"
+                  style={{ color: 'var(--color-accent-green)' }}
+                >
+                  {t('stats.repeatSquads')}
+                </h2>
+                <InfoTooltip text={t('stats.repeatSquadsInfo')} size="md" />
+              </motion.div>
+              <motion.p
+                className="text-sm mb-6"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {t('stats.repeatSquadsSubtitle')}
+              </motion.p>
+
+              {/* Interactive list of squad sizes */}
+              <div className="space-y-2">
+                {repeatSquads.allResults.map((result, index) => {
+                  const hasRepeats = result.squads.length > 0;
+                  const isBestMatch = repeatSquads.bestMatch?.squadSize === result.squadSize;
+                  // Calculate total occurrences (sum of all squads)
+                  const totalOccurrences = result.squads.reduce((sum, squad) => sum + squad.occurrences, 0);
+
+                  return (
+                    <motion.button
+                      key={result.squadSize}
+                      className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl cursor-pointer"
+                      style={{
+                        backgroundColor: isBestMatch
+                          ? 'rgba(29, 185, 84, 0.2)'
+                          : 'var(--color-bg-card)',
+                        border: isBestMatch ? '2px solid var(--color-accent-green)' : '2px solid transparent'
+                      }}
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.6 + index * 0.08 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedSquadSize(result.squadSize);
+                        // If only 1 squad, go directly to details
+                        if (result.squads.length === 1) {
+                          setSelectedSquadIndex(0);
+                        }
+                      }}
+                      whileHover={{ scale: 1.02, backgroundColor: hasRepeats ? 'rgba(29, 185, 84, 0.3)' : 'rgba(75, 85, 99, 0.3)' }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl font-bold" style={{
+                          color: hasRepeats
+                            ? 'var(--color-accent-green)'
+                            : 'var(--color-text-secondary)'
+                        }}>
+                          {result.squadSize}
+                        </span>
+                        <span style={{ color: 'var(--color-text-secondary)' }}>
+                          {t('story.players')}
+                        </span>
+                        <span className="text-xl">
+                          {hasRepeats ? '✅' : '❌'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {hasRepeats && (
+                          <>
+                            {result.squads.length > 1 && (
+                              <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--color-accent-blue)', color: '#fff' }}>
+                                {result.squads.length} {t('stats.differentSquads')}
+                              </span>
+                            )}
+                            <span className="text-sm font-semibold" style={{ color: 'var(--color-accent-gold)' }}>
+                              {totalOccurrences}×
+                            </span>
+                          </>
+                        )}
+                        <span style={{ color: 'var(--color-text-secondary)' }}>→</span>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+
+              <motion.p
+                className="text-xs mt-4"
+                style={{ color: 'var(--color-accent-green)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+              >
+                👆 {t('stats.clickToSeeRepeats')}
+              </motion.p>
+            </>
+          ) : selectedSquadIndex === null ? (
+            // LEVEL 2: List of squads for selected size
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full"
+            >
+              {(() => {
+                const selectedResult = repeatSquads.allResults.find(r => r.squadSize === selectedSquadSize);
+                if (!selectedResult) return null;
+
+                const hasRepeats = selectedResult.squads.length > 0;
+
+                return (
+                  <>
+                    <motion.div
+                      className="text-5xl mb-3"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", duration: 0.6 }}
+                    >
+                      {hasRepeats ? '👥' : '🔎'}
+                    </motion.div>
+
+                    <motion.div
+                      className="text-center mb-4"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <div className="text-3xl font-bold mb-1" style={{
+                        color: hasRepeats ? 'var(--color-accent-green)' : 'var(--color-text-secondary)'
+                      }}>
+                        {selectedResult.squadSize} {t('story.players')}
+                      </div>
+                      {hasRepeats ? (
+                        <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                          {selectedResult.squads.length} {t('stats.differentSquads')} {t('stats.found')}
+                        </div>
+                      ) : (
+                        <div className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+                          {t('stats.noRepeat')}
+                        </div>
+                      )}
+                    </motion.div>
+
+                    {/* List of squads */}
+                    {hasRepeats && (
+                      <div className="space-y-2 mb-4">
+                        {selectedResult.squads.map((squad, index) => (
+                          <motion.button
+                            key={index}
+                            className="w-full px-4 py-3 rounded-xl text-left"
+                            style={{
+                              backgroundColor: index === 0 ? 'rgba(29, 185, 84, 0.15)' : 'var(--color-bg-card)',
+                              border: index === 0 ? '1px solid var(--color-accent-green)' : '1px solid transparent'
+                            }}
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 + index * 0.1 }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedSquadIndex(index);
+                            }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-sm font-semibold" style={{ color: 'var(--color-accent-gold)' }}>
+                                {t('stats.squad')} #{index + 1}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-lg font-bold" style={{ color: 'var(--color-accent-green)' }}>
+                                  {squad.occurrences}×
+                                </span>
+                                <span style={{ color: 'var(--color-text-secondary)' }}>→</span>
+                              </div>
+                            </div>
+                            <div className="text-xs truncate" style={{ color: 'var(--color-text-secondary)' }}>
+                              {squad.players.slice(0, 4).join(', ')}{squad.players.length > 4 ? ` +${squad.players.length - 4}` : ''}
+                            </div>
+                          </motion.button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Back button */}
+                    <motion.button
+                      className="px-6 py-2 rounded-full text-sm font-semibold"
+                      style={{
+                        backgroundColor: 'var(--color-bg-card)',
+                        color: 'var(--color-text-secondary)'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedSquadSize(null);
+                      }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      ← {t('scroll.hideDates')}
+                    </motion.button>
+                  </>
+                );
+              })()}
+            </motion.div>
+          ) : (
+            // LEVEL 3: Squad details
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full"
+            >
+              {(() => {
+                const selectedResult = repeatSquads.allResults.find(r => r.squadSize === selectedSquadSize);
+                const selectedSquad = selectedResult?.squads[selectedSquadIndex];
+                if (!selectedSquad) return null;
+
+                return (
+                  <>
+                    {/* Header with result */}
+                    <motion.div
+                      className="text-5xl mb-3"
+                      initial={{ scale: 0, rotate: 180 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ type: "spring", duration: 0.8 }}
+                    >
+                      🎯
+                    </motion.div>
+
+                    <motion.div
+                      className="text-center mb-4"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <div className="text-4xl font-bold mb-1" style={{ color: 'var(--color-accent-green)' }}>
+                        {selectedSquadSize} {t('story.players')}
+                      </div>
+                      <div className="text-xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+                        {selectedSquad.occurrences}× {t('stats.times')}
+                      </div>
+                    </motion.div>
+
+                    {/* The Squad */}
+                    <motion.div
+                      className="mb-4"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      <h3 className="text-sm font-semibold mb-2" style={{ color: 'var(--color-accent-green)' }}>
+                        🏆 {t('stats.theSquad')}
+                      </h3>
+                      <div
+                        className="max-h-[20vh] overflow-y-auto px-3 py-3 rounded-xl"
+                        style={{ backgroundColor: 'var(--color-bg-card)' }}
+                      >
+                        <div className="flex flex-wrap gap-2 justify-center">
+                          {selectedSquad.players.map((name, index) => (
+                            <motion.span
+                              key={name}
+                              className="px-3 py-1.5 rounded-full text-sm font-medium"
+                              style={{
+                                backgroundColor: 'var(--color-accent-green)',
+                                color: '#000'
+                              }}
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.6 + index * 0.03 }}
+                            >
+                              {name}
+                            </motion.span>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* The Dates */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.7 }}
+                    >
+                      <h3 className="text-sm font-semibold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
+                        📅 {t('stats.theDates')}
+                      </h3>
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {selectedSquad.dates.map((date, index) => (
+                          <motion.span
+                            key={date}
+                            className="px-4 py-2 rounded-xl text-lg font-semibold"
+                            style={{
+                              backgroundColor: 'var(--color-bg-card)',
+                              color: 'var(--color-accent-gold)'
+                            }}
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.8 + index * 0.1 }}
+                          >
+                            {formatDateEU(date)}
+                          </motion.span>
+                        ))}
+                      </div>
+                    </motion.div>
+
+                    {/* Back button */}
+                    <motion.button
+                      className="mt-6 px-6 py-2 rounded-full text-sm font-semibold"
+                      style={{
+                        backgroundColor: 'var(--color-bg-card)',
+                        color: 'var(--color-text-secondary)'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedSquadIndex(null);
+                        // If only 1 squad, go back to size list
+                        const selectedResult = repeatSquads.allResults.find(r => r.squadSize === selectedSquadSize);
+                        if (selectedResult?.squads.length === 1) {
+                          setSelectedSquadSize(null);
+                        }
+                      }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      ← {t('scroll.hideDates')}
+                    </motion.button>
+                  </>
+                );
+              })()}
+            </motion.div>
+          )}
+        </div>
+      )
     }
   ];
 
@@ -1914,6 +2278,9 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
       if (currentStory === 1) {
         setShowGameDates(false);
       }
+      // Reset selected squad when leaving that story
+      setSelectedSquadSize(null);
+      setSelectedSquadIndex(null);
     }
   };
 

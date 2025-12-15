@@ -168,6 +168,19 @@
     "uniquePlayers": "уникални играчи",
     "socialButterflyInfo": "От всички играчи с поне 1 мач през 2025",
     "playedWith": "Играл с",
-    "notPlayedWith": "Все още не"
+    "notPlayedWith": "Все още не",
+    "repeatSquads": "Дежурни отбори",
+    "repeatSquadsSubtitle": "Кой най-голям състав е играл заедно повече от веднъж?",
+    "searchingSize": "Търсим {{size}} играчи...",
+    "noRepeat": "Не",
+    "found": "Открито!",
+    "playersPlayedTogether": "играчи играха заедно",
+    "times": "пъти",
+    "theSquad": "Съставът",
+    "theDates": "Датите",
+    "repeatSquadsInfo": "Търсим най-големия състав, който се е събрал поне 2 пъти с едни и същи хора",
+    "differentSquads": "състава",
+    "squad": "Състав",
+    "clickToSeeRepeats": "Кликни на формация, за да видиш повторенията"
   }
 }

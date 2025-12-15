@@ -2287,7 +2287,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   return (
     <div className="fixed inset-0 z-40">
       {/* Progress indicators - colored by section */}
-      <div className="fixed top-12 left-0 right-0 z-50 flex gap-1 px-4">
+      <div className="fixed top-14 left-0 right-0 z-40 flex gap-1 px-4">
         {stories.map((_, index) => {
           // Color by section: 0-7 player stories (green), 8+ community (blue)
           const sectionColor = index <= 7

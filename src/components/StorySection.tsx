@@ -329,9 +329,9 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                           color: played ? colors.text : '#9ca3af',
                           opacity: played ? 1 : 0.6
                         }}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: played ? 1 : 0.6, scale: 1 }}
-                        transition={{ delay: index * 0.015 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: played ? 1 : 0.6 }}
+                        transition={{ delay: Math.min(index * 0.008, 0.3) }}
                       >
                         {formatDateEU(date)}
                       </motion.span>
@@ -1030,9 +1030,9 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                         color: hasPlayed ? '#000' : 'var(--color-text-secondary)',
                         opacity: hasPlayed ? 1 : 0.5
                       }}
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ opacity: hasPlayed ? 1 : 0.5, scale: 1 }}
-                      transition={{ delay: 1 + index * 0.02 }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: hasPlayed ? 1 : 0.5 }}
+                      transition={{ delay: Math.min(0.5 + index * 0.008, 0.8) }}
                     >
                       {p.name}
                     </motion.span>

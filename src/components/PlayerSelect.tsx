@@ -27,8 +27,7 @@ const PlayerSelect: React.FC<PlayerSelectProps> = ({ players, onSelect }) => {
   const customStyles: StylesConfig<OptionType, false> = {
     control: (provided) => ({
       ...provided,
-      backgroundColor: 'rgba(26, 26, 26, 0.7)',
-      backdropFilter: 'blur(12px)',
+      backgroundColor: 'rgba(26, 26, 26, 0.95)',
       borderColor: '#1db954',
       color: '#ffffff',
       padding: '8px',
@@ -40,8 +39,7 @@ const PlayerSelect: React.FC<PlayerSelectProps> = ({ players, onSelect }) => {
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: 'rgba(26, 26, 26, 0.9)',
-      backdropFilter: 'blur(12px)',
+      backgroundColor: 'rgba(26, 26, 26, 0.98)',
       border: '1px solid #1db954'
     }),
     option: (provided, state) => ({

@@ -129,7 +129,7 @@ const YearHeatmap: React.FC<YearHeatmapProps> = ({ year, playerDates, communityG
                 const day = saturday.getDate();
 
                 return (
-                  <motion.div
+                  <div
                     key={satIndex}
                     className="w-5 h-5 md:w-6 md:h-6 rounded-sm flex items-center justify-center text-[10px] md:text-xs font-medium cursor-default"
                     style={{
@@ -137,13 +137,10 @@ const YearHeatmap: React.FC<YearHeatmapProps> = ({ year, playerDates, communityG
                       color: status === 'played' ? '#000' : status === 'missed' ? '#fff' : 'var(--color-text-secondary)',
                       opacity: status === 'no-game' ? 0.3 : 1
                     }}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: (monthIndex * 5 + satIndex) * 0.01 }}
                     title={`${day}/${monthIndex + 1}/${year}`}
                   >
                     {status !== 'no-game' && day}
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>

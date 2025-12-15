@@ -10,8 +10,7 @@ const Header: React.FC<HeaderProps> = ({ onReset }) => {
     <header
       className="fixed top-0 left-0 right-0 z-50 border-b"
       style={{
-        backgroundColor: 'rgba(10, 10, 10, 0.7)',
-        backdropFilter: 'blur(16px)',
+        backgroundColor: 'rgba(10, 10, 10, 0.95)',
         borderColor: 'rgba(255, 255, 255, 0.1)'
       }}
     >

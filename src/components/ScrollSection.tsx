@@ -8,7 +8,6 @@ import MonthlyChart from './MonthlyChart';
 import ComparisonChart from './ComparisonChart';
 import CommunityChart from './CommunityChart';
 import SummaryCard from './SummaryCard';
-import ScrollToTop from './ScrollToTop';
 import YearHeatmap from './YearHeatmap';
 import CumulativeChart from './CumulativeChart';
 import {
@@ -513,9 +512,6 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
         {/* Summary Card */}
         <SummaryCard player={player} totalPlayers={totalPlayers} />
       </div>
-
-      {/* Scroll to top button */}
-      <ScrollToTop />
     </div>
   );
 };

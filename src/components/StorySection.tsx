@@ -1002,7 +1002,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
 
           {/* Player grid */}
           <motion.div
-            className="max-h-[40vh] overflow-y-auto px-3 py-3 rounded-xl"
+            className="max-h-[28vh] overflow-y-auto px-3 py-3 rounded-xl"
             style={{ backgroundColor: 'var(--color-bg-card)' }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1461,7 +1461,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               </motion.p>
 
               <motion.div
-                className="max-h-[45vh] overflow-y-auto rounded-xl"
+                className="max-h-[32vh] overflow-y-auto rounded-xl"
                 style={{ backgroundColor: 'var(--color-bg-card)' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -1697,7 +1697,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
 
               {rareDuos.length > 0 ? (
                 <motion.div
-                  className="max-h-[45vh] overflow-y-auto rounded-xl"
+                  className="max-h-[32vh] overflow-y-auto rounded-xl"
                   style={{ backgroundColor: 'var(--color-bg-card)' }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -2287,15 +2287,12 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   return (
     <div className="fixed inset-0 z-40">
       {/* Progress indicators - colored by section */}
-      <div className="fixed top-20 left-0 right-0 z-50 flex gap-1 px-4">
+      <div className="fixed top-12 left-0 right-0 z-50 flex gap-1 px-4">
         {stories.map((_, index) => {
-          // Color by section: 0-3 personal (green), 4-7 advanced (gold), 8+ community (blue)
-          let sectionColor = 'var(--color-accent-green)';
-          if (index >= 4 && index <= 7) {
-            sectionColor = 'var(--color-accent-gold)';
-          } else if (index >= 8) {
-            sectionColor = 'var(--color-accent-blue)';
-          }
+          // Color by section: 0-7 player stories (green), 8+ community (blue)
+          const sectionColor = index <= 7
+            ? 'var(--color-accent-green)'
+            : 'var(--color-accent-blue)';
 
           return (
             <div

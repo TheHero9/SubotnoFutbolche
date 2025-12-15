@@ -46,30 +46,28 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ text, size = 'sm' }) => {
               exit={{ opacity: 0 }}
               onClick={handleClose}
             />
-            {/* Tooltip */}
+            {/* Tooltip - fixed position for mobile safety */}
             <motion.div
-              className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-lg text-xs max-w-[250px] text-center whitespace-normal"
+              className="fixed z-50 left-4 right-4 top-1/3 mx-auto px-4 py-3 rounded-xl text-sm max-w-sm text-center"
               style={{
-                backgroundColor: 'var(--color-bg-card)',
+                backgroundColor: 'rgba(26, 26, 26, 0.98)',
                 color: 'var(--color-text-primary)',
-                border: '1px solid var(--color-accent-green)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
+                border: '2px solid var(--color-accent-green)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.6)'
               }}
-              initial={{ opacity: 0, y: 5, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 5, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.15 }}
             >
               {text}
-              {/* Arrow */}
+              {/* Close hint */}
               <div
-                className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0"
-                style={{
-                  borderLeft: '6px solid transparent',
-                  borderRight: '6px solid transparent',
-                  borderTop: '6px solid var(--color-accent-green)'
-                }}
-              />
+                className="mt-2 text-xs opacity-50"
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
+                tap anywhere to close
+              </div>
             </motion.div>
           </>
         )}

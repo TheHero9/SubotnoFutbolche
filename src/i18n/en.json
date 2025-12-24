@@ -76,7 +76,7 @@
     "showStreakDates": "Show dates",
     "hideDates": "Hide",
     "showStreakRanking": "View ranking",
-    "streakLeaderboard": "Top 10 Streaks 2025",
+    "streakLeaderboard": "Streak Ranking 2025",
     "hideRanking": "Hide ranking",
     "communityStats": "Community",
     "communityGamesComparison": "Games per month: 2023 vs 2024 vs 2025",
@@ -86,7 +86,13 @@
     "avgPlayers2025": "Avg Players",
     "changeVs2024": "Change",
     "longestStreak": "Longest Streak",
-    "streakSpansYears": "Streak continues from 2024"
+    "streakSpansYears": "Streak continues from 2024",
+    "yourGames": "Your Games",
+    "gamesPlayed": "games played",
+    "outOfPlayers": "out of {{total}} players",
+    "showGameDates": "Show dates",
+    "showGamesRanking": "View ranking",
+    "gamesLeaderboard": "Full Ranking 2025"
   },
   "achievements": {
     "moreGames": "You played more than {{percent}}% of all players",
@@ -120,6 +126,8 @@
     "consistent": "Consistent",
     "moderate": "Moderate",
     "irregular": "Irregular",
+    "activeMonths": "active months",
+    "gamesInSeason": "games",
     "gamesBetweenParticipation": "games between participations",
     "maxGapDays": "longest break",
     "days": "days",
@@ -182,5 +190,67 @@
     "differentSquads": "squads",
     "squad": "Squad",
     "clickToSeeRepeats": "Click on a formation to see repeats"
+  },
+  "quizPrompt": {
+    "greeting": "Hey, {{name}}!",
+    "description": "Before you see your stats, want to test how well you know the year?",
+    "info": {
+      "questions": "7 questions",
+      "time": "~2 min",
+      "points": "Max 7 points"
+    },
+    "buttons": {
+      "takeQuiz": "Take the Quiz",
+      "skip": "Skip and see stats"
+    }
+  },
+  "quiz": {
+    "slides": {
+      "organization": "Community",
+      "personalGames": "Your Games",
+      "achievements": "Your Achievements"
+    },
+    "questions": {
+      "totalGames2025": "How many games did the community play in 2025?",
+      "total_games": "Total games 2025",
+      "communityStreak": "What was the longest streak without a cancelled game?",
+      "longest_streak": "Streak without cancellation",
+      "yourTotalGames": "How many games did you play in 2025?",
+      "total_games_personal": "Your games 2025",
+      "yourRank": "What is your rank in 2025?",
+      "rank": "Your rank",
+      "perfectMonths": "How many perfect months do you have? (100% attendance)",
+      "perfect_months": "Perfect months",
+      "yourStreak": "What is your longest personal streak?",
+      "streak": "Your streak",
+      "uniqueTeammates": "How many unique players have you played with?",
+      "teammates": "Unique teammates"
+    },
+    "anchor": {
+      "2024": "2024"
+    },
+    "buttons": {
+      "prev": "Back",
+      "next": "Next",
+      "submit": "Submit",
+      "continue": "Continue to Stats"
+    },
+    "teaser": {
+      "submitted": "Answers saved!",
+      "description": "Continue through the stories to see your results at the end.",
+      "hint": "View quiz results on the final stats page"
+    },
+    "results": {
+      "title": "Results!",
+      "points": "points",
+      "yourAnswer": "Your answer",
+      "correct": "Correct",
+      "showResults": "View Quiz Results",
+      "close": "Close",
+      "perfect": "Perfect! You know everything!",
+      "great": "Great! You know the game well!",
+      "good": "Good! There's more to learn!",
+      "tryAgain": "Well, at least you tried! 😅"
+    }
   }
 }

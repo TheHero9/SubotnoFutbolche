@@ -120,6 +120,7 @@ export interface ScrollSectionProps {
   player: ProcessedPlayer;
   totalPlayers: number;
   allPlayers: ProcessedPlayer[];
+  quizResults?: import('../utils/quizCalculations').QuizResult | null;
 }
 
 export interface StorySectionProps {

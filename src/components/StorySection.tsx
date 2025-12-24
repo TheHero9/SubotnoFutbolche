@@ -8,7 +8,6 @@ import InfoTooltip from './InfoTooltip';
 import { getRankTitle, getRankChange, calculateCommunityStats } from '../utils/calculations';
 import { getFootballBuddies } from '../utils/footballBuddies';
 import {
-  calculateConsistency,
   calculateClutchAppearances,
   calculatePeakPerformance,
   calculatePerfectMonths,
@@ -18,6 +17,8 @@ import {
   calculateSocialButterfly,
   calculateCommunityStreak,
   calculateRepeatSquads,
+  calculateActiveMonths,
+  calculateBestSeason,
   getPlayedGameDates
 } from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
@@ -58,8 +59,12 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const footballBuddies = useMemo(() => getFootballBuddies(player, allPlayers), [player, allPlayers]);
 
   // Calculate new player stats
-  const consistency = useMemo(
-    () => calculateConsistency(player.dates2025 || [], rawStats.games2025),
+  const activeMonths = useMemo(
+    () => calculateActiveMonths(player.dates2025 || [], rawStats.games2025),
+    [player.dates2025]
+  );
+  const bestSeason = useMemo(
+    () => calculateBestSeason(player.dates2025 || []),
     [player.dates2025]
   );
   const clutchData = useMemo(
@@ -581,41 +586,36 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         );
       })()
     },
-    // Story 5: Consistency + Clutch Player
+    // Story 5: Active Months + Best Season + Clutch Player
     {
       content: (
         <div className="w-full max-w-md mx-auto">
-          {/* Consistency */}
+          {/* Active Months & Best Season Row */}
           <motion.div
-            className="text-5xl mb-3"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", duration: 0.8 }}
-          >
-            📊
-          </motion.div>
-          <motion.h2
-            className="text-xl font-bold mb-1"
-            style={{ color: 'var(--color-accent-green)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            {t('stats.consistency')}
-          </motion.h2>
-
-          <motion.div
-            className="flex justify-center gap-3 mb-6"
+            className="flex justify-center gap-4 mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ duration: 0.5 }}
           >
-            <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
-              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
-                {consistency.score}%
+            {/* Active Months */}
+            <div className="text-center px-4 py-3 rounded-xl flex-1" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-3xl mb-1">📆</div>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-green)' }}>
+                {activeMonths.activeCount}/{activeMonths.totalMonths}
               </div>
-              <div className="text-xs flex items-center justify-center gap-1" style={{ color: 'var(--color-text-secondary)' }}>
-                {t(`stats.${consistency.rating}`)} <InfoTooltip text={t('stats.consistencyInfo')} />
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('stats.activeMonths')}
+              </div>
+            </div>
+
+            {/* Best Season */}
+            <div className="text-center px-4 py-3 rounded-xl flex-1" style={{ backgroundColor: 'var(--color-bg-card)' }}>
+              <div className="text-3xl mb-1">{bestSeason.emoji}</div>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+                {t(`seasons.${bestSeason.season}`)}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {bestSeason.games} {t('stats.gamesInSeason')}
               </div>
             </div>
           </motion.div>
@@ -625,7 +625,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
             className="text-5xl mb-3"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.6, type: "spring", duration: 0.8 }}
+            transition={{ delay: 0.4, type: "spring", duration: 0.8 }}
           >
             🦸
           </motion.div>
@@ -634,7 +634,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
             style={{ color: 'var(--color-accent-gold)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
+            transition={{ delay: 0.5 }}
           >
             {t('stats.clutchPlayer')}
           </motion.h2>
@@ -643,7 +643,7 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
             className="flex justify-center gap-3 mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
+            transition={{ delay: 0.7 }}
           >
             <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
               <div className="text-3xl font-bold" style={{ color: 'var(--color-accent-green)' }}>

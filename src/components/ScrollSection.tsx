@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import type { ScrollSectionProps, MonthKey, SeasonKey, CommunityStatsRaw } from '../types';
 import StatCard from './StatCard';
@@ -10,6 +10,7 @@ import CommunityChart from './CommunityChart';
 import SummaryCard from './SummaryCard';
 import YearHeatmap from './YearHeatmap';
 import CumulativeChart from './CumulativeChart';
+import QuizResultsModal from './QuizResultsModal';
 import {
   getBestWorstMonths,
   getBestSeason,
@@ -45,10 +46,13 @@ const gamesPerMonth2023 = convert2023ToGamesPerMonth(stats2023Raw as Stats2023);
 const totalGames2023 = Object.values(stats2023Raw as Stats2023).reduce((sum, m) => sum + m.success, 0);
 const totalFails2023 = Object.values(stats2023Raw as Stats2023).reduce((sum, m) => sum + m.fails, 0);
 
-const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, allPlayers }) => {
+const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, allPlayers, quizResults }) => {
   const { t, i18n } = useTranslation();
   const [showStreakDates, setShowStreakDates] = useState<boolean>(false);
   const [showStreakRanking, setShowStreakRanking] = useState<boolean>(false);
+  const [showQuizResults, setShowQuizResults] = useState<boolean>(false);
+  const [showGameDates, setShowGameDates] = useState<boolean>(false);
+  const [showGamesRanking, setShowGamesRanking] = useState<boolean>(false);
 
   // Calculate community stats
   const communityStats = useMemo(() => calculateCommunityStats(rawCommunityStats), []);
@@ -71,7 +75,39 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
     return `${day.padStart(2, '0')}.${month.padStart(2, '0')}`;
   };
 
-  // Calculate streak for all players and rank them
+  // Season colors
+  const seasonColors = {
+    winter: { bg: '#3b82f6', text: '#ffffff' },   // Blue
+    spring: { bg: '#ec4899', text: '#ffffff' },   // Pink
+    summer: { bg: '#eab308', text: '#000000' },   // Yellow
+    autumn: { bg: '#f97316', text: '#ffffff' }    // Orange
+  };
+
+  // Get season from date string (DD/MM format)
+  const getSeasonFromDate = (dateStr: string): 'winter' | 'spring' | 'summer' | 'autumn' => {
+    const [, month] = dateStr.split('/').map(Number);
+    if (month === 12 || month === 1 || month === 2) return 'winter';
+    if (month >= 3 && month <= 5) return 'spring';
+    if (month >= 6 && month <= 8) return 'summer';
+    return 'autumn';
+  };
+
+  // All community game dates (played games only) and player dates set
+  const allCommunityGameDates = useMemo(() => {
+    return rawCommunityStats.games2025
+      .filter(g => g.played)
+      .map(g => g.date)
+      .sort((a, b) => {
+        const [dayA, monthA] = a.split('/').map(Number);
+        const [dayB, monthB] = b.split('/').map(Number);
+        if (monthA !== monthB) return monthA - monthB;
+        return dayA - dayB;
+      });
+  }, []);
+
+  const playerDatesSet = useMemo(() => new Set(player.dates2025 || []), [player.dates2025]);
+
+  // Calculate streak for all players and rank them (ALL players)
   const streakRanking = useMemo(() => {
     const playersWithStreak = allPlayers.map(p => ({
       ...p,
@@ -79,8 +115,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
     }));
     return playersWithStreak
       .filter(p => p.calculatedStreak > 0)
-      .sort((a, b) => b.calculatedStreak - a.calculatedStreak)
-      .slice(0, 10);
+      .sort((a, b) => b.calculatedStreak - a.calculatedStreak);
   }, [allPlayers]);
 
   // Find current player's rank in streak leaderboard
@@ -95,6 +130,13 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
     return sorted.findIndex(p => p.name === player.name) + 1;
   }, [allPlayers, player.name]);
 
+  // Games ranking (ALL players by total games 2025)
+  const gamesRanking = useMemo(() => {
+    return [...allPlayers]
+      .filter(p => p.total2025 > 0)
+      .sort((a, b) => b.total2025 - a.total2025);
+  }, [allPlayers]);
+
   const bestWorst = getBestWorstMonths(player.games2025);
   const seasons = getBestSeason(player.games2025);
   const percentile = getPercentile(player.rank2025, totalPlayers);
@@ -104,6 +146,48 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
   return (
     <div className="min-h-screen pt-24 pb-16 px-4">
       <div className="max-w-4xl mx-auto">
+        {/* Quiz Results Button */}
+        {quizResults && (
+          <motion.div
+            className="mb-6"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.button
+              onClick={() => setShowQuizResults(true)}
+              className="w-full py-4 px-6 rounded-xl font-bold text-lg flex items-center justify-center gap-3"
+              style={{
+                backgroundColor: 'var(--color-bg-card)',
+                border: '2px solid var(--color-accent-green)',
+                color: 'var(--color-text-primary)'
+              }}
+              whileHover={{
+                scale: 1.02,
+                backgroundColor: 'var(--color-accent-green)',
+                color: 'var(--color-bg-primary)'
+              }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="text-2xl">📝</span>
+              <span>{t('quiz.results.showResults')}</span>
+              <span
+                className="px-3 py-1 rounded-full text-sm font-bold"
+                style={{
+                  backgroundColor: quizResults.totalCorrect >= 5
+                    ? 'var(--color-accent-green)'
+                    : quizResults.totalCorrect >= 3
+                    ? 'var(--color-accent-gold)'
+                    : 'var(--color-accent-red)',
+                  color: 'var(--color-bg-primary)'
+                }}
+              >
+                {quizResults.totalCorrect}/{quizResults.totalQuestions}
+              </span>
+            </motion.button>
+          </motion.div>
+        )}
+
         {/* Monthly breakdown chart */}
         <StatCard>
           <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-accent-green)' }}>
@@ -279,6 +363,188 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
           </div>
         </StatCard>
 
+        {/* Your Games Card */}
+        <StatCard delay={0.5}>
+          <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: 'var(--color-accent-green)' }}>
+            ⚽ {t('scroll.yourGames')}
+          </h2>
+
+          <div className="text-center mb-6">
+            <div className="text-6xl font-bold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
+              {player.total2025}
+            </div>
+            <div style={{ color: 'var(--color-text-secondary)' }}>
+              {t('scroll.gamesPlayed')}
+            </div>
+            <div className="mt-2 text-lg" style={{ color: 'var(--color-accent-green)' }}>
+              #{player.rank2025} {t('scroll.outOfPlayers', { total: totalPlayers })}
+            </div>
+          </div>
+
+          {/* Show Dates Button */}
+          {player.dates2025 && player.dates2025.length > 0 && (
+            <div className="text-center mb-4">
+              {!showGameDates ? (
+                <motion.button
+                  className="px-6 py-3 rounded-full text-lg font-semibold"
+                  style={{
+                    backgroundColor: 'var(--color-bg-card)',
+                    color: 'var(--color-accent-green)',
+                    border: '2px solid var(--color-accent-green)'
+                  }}
+                  onClick={() => setShowGameDates(true)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  📅 {t('scroll.showGameDates')}
+                </motion.button>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="mb-4"
+                >
+                  {/* Season Legend */}
+                  <div className="flex flex-wrap justify-center gap-2 mb-3">
+                    <div className="flex items-center gap-1">
+                      <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.winter.bg }}></span>
+                      <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('seasons.winter')}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.spring.bg }}></span>
+                      <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('seasons.spring')}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.summer.bg }}></span>
+                      <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('seasons.summer')}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-3 h-3 rounded-full" style={{ backgroundColor: seasonColors.autumn.bg }}></span>
+                      <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{t('seasons.autumn')}</span>
+                    </div>
+                  </div>
+
+                  {/* Calendar View */}
+                  <div
+                    className="max-h-64 overflow-y-auto px-4 py-3 rounded-xl mb-3"
+                    style={{ backgroundColor: 'var(--color-bg-card)' }}
+                  >
+                    <div className="flex flex-wrap gap-1.5 justify-center">
+                      {allCommunityGameDates.map((date, index) => {
+                        const played = playerDatesSet.has(date);
+                        const season = getSeasonFromDate(date);
+                        const colors = seasonColors[season];
+                        return (
+                          <motion.span
+                            key={date}
+                            className="px-2 py-0.5 rounded-full text-xs font-medium"
+                            style={{
+                              backgroundColor: played ? colors.bg : '#4b5563',
+                              color: played ? colors.text : '#9ca3af',
+                              opacity: played ? 1 : 0.6
+                            }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: played ? 1 : 0.6 }}
+                            transition={{ delay: Math.min(index * 0.008, 0.3) }}
+                          >
+                            {formatDateEU(date)}
+                          </motion.span>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Status Legend + Back Button */}
+                  <div className="flex items-center justify-center gap-4">
+                    <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🎨 = {t('stats.streakLegendPlayed')}</span>
+                    <div className="flex items-center gap-1">
+                      <span className="w-3 h-3 rounded-full" style={{ backgroundColor: '#4b5563' }}></span>
+                      <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}> = {t('stats.streakLegendMissed')}</span>
+                    </div>
+                    <motion.button
+                      className="px-4 py-1.5 rounded-full text-xs font-semibold"
+                      style={{
+                        backgroundColor: 'var(--color-bg-card)',
+                        color: 'var(--color-text-secondary)'
+                      }}
+                      onClick={() => setShowGameDates(false)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      ← {t('scroll.hideDates')}
+                    </motion.button>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          )}
+
+          {/* Show Ranking Button */}
+          <div className="text-center">
+            {!showGamesRanking ? (
+              <motion.button
+                className="px-6 py-3 rounded-full text-lg font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  color: 'var(--color-accent-gold)',
+                  border: '2px solid var(--color-accent-gold)'
+                }}
+                onClick={() => setShowGamesRanking(true)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                🏆 {t('scroll.showGamesRanking')}
+              </motion.button>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <h3 className="text-xl font-bold mb-4" style={{ color: 'var(--color-accent-gold)' }}>
+                  🏆 {t('scroll.gamesLeaderboard')}
+                </h3>
+                <div className="max-h-80 overflow-y-auto space-y-2 mb-4 pr-2">
+                  {gamesRanking.map((p, index) => (
+                    <motion.div
+                      key={p.name}
+                      className="flex items-center justify-between px-4 py-2 rounded-lg"
+                      style={{
+                        backgroundColor: p.name === player.name
+                          ? 'var(--color-accent-green)'
+                          : 'var(--color-bg-card)',
+                        color: p.name === player.name
+                          ? 'var(--color-bg-primary)'
+                          : 'var(--color-text-primary)'
+                      }}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: Math.min(index * 0.02, 0.5) }}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="font-bold">#{index + 1}</span>
+                        <span>{p.name}</span>
+                      </span>
+                      <span className="font-bold">{p.total2025}</span>
+                    </motion.div>
+                  ))}
+                </div>
+                <motion.button
+                  className="px-4 py-2 rounded-full text-sm"
+                  style={{
+                    backgroundColor: 'var(--color-bg-card)',
+                    color: 'var(--color-text-secondary)'
+                  }}
+                  onClick={() => setShowGamesRanking(false)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  ← {t('scroll.hideRanking')}
+                </motion.button>
+              </motion.div>
+            )}
+          </div>
+        </StatCard>
+
         {/* Longest Streak Details */}
         {peakPerformance.streakLength > 0 && (
           <StatCard delay={0.6}>
@@ -393,7 +659,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                   <h3 className="text-xl font-bold mb-4" style={{ color: 'var(--color-accent-gold)' }}>
                     🏆 {t('scroll.streakLeaderboard')}
                   </h3>
-                  <div className="space-y-2">
+                  <div className="max-h-80 overflow-y-auto space-y-2 mb-4 pr-2">
                     {streakRanking.map((p, index) => (
                       <motion.div
                         key={p.name}
@@ -408,10 +674,10 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                         }}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: Math.min(index * 0.02, 0.5) }}
                       >
                         <span className="font-semibold">
-                          {index + 1}. {p.name}
+                          #{index + 1} {p.name}
                         </span>
                         <span className="font-bold">
                           🔥 {p.calculatedStreak}
@@ -420,7 +686,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                     ))}
                   </div>
                   <motion.button
-                    className="mt-4 px-4 py-2 rounded-full text-sm"
+                    className="px-4 py-2 rounded-full text-sm"
                     style={{
                       backgroundColor: 'var(--color-bg-card)',
                       color: 'var(--color-text-secondary)'
@@ -512,6 +778,15 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
         {/* Summary Card */}
         <SummaryCard player={player} totalPlayers={totalPlayers} />
       </div>
+
+      {/* Quiz Results Modal */}
+      {quizResults && (
+        <QuizResultsModal
+          results={quizResults}
+          isOpen={showQuizResults}
+          onClose={() => setShowQuizResults(false)}
+        />
+      )}
     </div>
   );
 };

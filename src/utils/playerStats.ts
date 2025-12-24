@@ -96,6 +96,18 @@ export interface RepeatSquadData {
   allResults: SquadSizeResult[]; // Results for all searched sizes
 }
 
+export interface ActiveMonthsData {
+  activeCount: number;       // Months with at least 1 game
+  totalMonths: number;       // Total months in year (12 or months passed)
+  monthsList: string[];      // List of active month names
+}
+
+export interface BestSeasonData {
+  season: 'winter' | 'spring' | 'summer' | 'autumn';
+  games: number;
+  emoji: string;
+}
+
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
@@ -769,3 +781,114 @@ function getCombinations<T>(arr: T[], k: number): T[][] {
   const withoutFirst = getCombinations(rest, k);
   return [...withFirst, ...withoutFirst];
 }
+
+// ============================================
+// ACTIVE MONTHS
+// ============================================
+
+/**
+ * Calculate how many months the player was active in 2025
+ */
+export const calculateActiveMonths = (
+  playerDates: string[],
+  communityGames: GameRecord[]
+): ActiveMonthsData => {
+  const monthNames = [
+    'january', 'february', 'march', 'april', 'may', 'june',
+    'july', 'august', 'september', 'october', 'november', 'december'
+  ];
+
+  // Get unique months player played in
+  const activeMonthsSet = new Set<number>();
+  playerDates.forEach(date => {
+    const [, month] = date.split('/').map(Number);
+    activeMonthsSet.add(month);
+  });
+
+  // Get months where community had games
+  const communityMonthsSet = new Set<number>();
+  communityGames.filter(g => g.played).forEach(g => {
+    const [, month] = g.date.split('/').map(Number);
+    communityMonthsSet.add(month);
+  });
+
+  const activeMonths = Array.from(activeMonthsSet).sort((a, b) => a - b);
+  const monthsList = activeMonths.map(m => monthNames[m - 1]);
+
+  return {
+    activeCount: activeMonths.length,
+    totalMonths: communityMonthsSet.size,
+    monthsList
+  };
+};
+
+// ============================================
+// BEST SEASON
+// ============================================
+
+/**
+ * Calculate player's best season based on games played
+ *
+ * Seasons:
+ * - Winter: December, January, February
+ * - Spring: March, April, May
+ * - Summer: June, July, August
+ * - Autumn: September, October, November
+ */
+export const calculateBestSeason = (
+  playerDates: string[]
+): BestSeasonData => {
+  const seasonMap: Record<string, { season: 'winter' | 'spring' | 'summer' | 'autumn'; emoji: string }> = {
+    '12': { season: 'winter', emoji: '❄️' },
+    '1': { season: 'winter', emoji: '❄️' },
+    '2': { season: 'winter', emoji: '❄️' },
+    '3': { season: 'spring', emoji: '🌸' },
+    '4': { season: 'spring', emoji: '🌸' },
+    '5': { season: 'spring', emoji: '🌸' },
+    '6': { season: 'summer', emoji: '☀️' },
+    '7': { season: 'summer', emoji: '☀️' },
+    '8': { season: 'summer', emoji: '☀️' },
+    '9': { season: 'autumn', emoji: '🍂' },
+    '10': { season: 'autumn', emoji: '🍂' },
+    '11': { season: 'autumn', emoji: '🍂' }
+  };
+
+  const seasonCounts: Record<string, number> = {
+    winter: 0,
+    spring: 0,
+    summer: 0,
+    autumn: 0
+  };
+
+  playerDates.forEach(date => {
+    const [, month] = date.split('/').map(Number);
+    const seasonInfo = seasonMap[month.toString()];
+    if (seasonInfo) {
+      seasonCounts[seasonInfo.season]++;
+    }
+  });
+
+  // Find best season
+  let bestSeason: 'winter' | 'spring' | 'summer' | 'autumn' = 'winter';
+  let maxGames = 0;
+
+  (Object.keys(seasonCounts) as Array<'winter' | 'spring' | 'summer' | 'autumn'>).forEach(season => {
+    if (seasonCounts[season] > maxGames) {
+      maxGames = seasonCounts[season];
+      bestSeason = season;
+    }
+  });
+
+  const emojiMap: Record<string, string> = {
+    winter: '❄️',
+    spring: '🌸',
+    summer: '☀️',
+    autumn: '🍂'
+  };
+
+  return {
+    season: bestSeason,
+    games: maxGames,
+    emoji: emojiMap[bestSeason]
+  };
+};

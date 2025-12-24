@@ -16,6 +16,7 @@ export interface QuizQuestion {
   correctAnswer: number;
   min: number;
   max: number;
+  margin: number; // Allowed margin of error (±X)
   anchor?: {
     value: number;
     labelKey: string; // i18n key for anchor label
@@ -31,7 +32,9 @@ export interface QuizAnswer {
   questionId: string;
   userAnswer: number;
   correctAnswer: number;
+  margin: number;
   isCorrect: boolean;
+  isExact: boolean; // True if exact match, false if within margin
 }
 
 export interface QuizResult {
@@ -78,6 +81,7 @@ export const generateQuizQuestions = (
           correctAnswer: totalGames2025,
           min: 30,
           max: 55,
+          margin: 4,
           anchor: {
             value: totalGames2024,
             labelKey: 'quiz.anchor.2024'
@@ -88,8 +92,9 @@ export const generateQuizQuestions = (
           category: 'organization',
           questionKey: 'quiz.questions.communityStreak',
           correctAnswer: communityStreak.streakLength,
-          min: 5,
-          max: 30
+          min: 10,
+          max: 60,
+          margin: 3
         }
       ]
     },
@@ -104,6 +109,7 @@ export const generateQuizQuestions = (
           correctAnswer: player.total2025,
           min: 0,
           max: 50,
+          margin: 3,
           anchor: {
             value: player.total2024,
             labelKey: 'quiz.anchor.2024'
@@ -115,7 +121,8 @@ export const generateQuizQuestions = (
           questionKey: 'quiz.questions.yourRank',
           correctAnswer: player.rank2025,
           min: 1,
-          max: allPlayers.length
+          max: allPlayers.length,
+          margin: 2
         }
       ]
     },
@@ -129,7 +136,8 @@ export const generateQuizQuestions = (
           questionKey: 'quiz.questions.perfectMonths',
           correctAnswer: perfectMonths.length,
           min: 0,
-          max: 12
+          max: 12,
+          margin: 1
         },
         {
           id: 'personal_streak',
@@ -137,7 +145,8 @@ export const generateQuizQuestions = (
           questionKey: 'quiz.questions.yourStreak',
           correctAnswer: player.longestStreak2025,
           min: 0,
-          max: 25
+          max: 25,
+          margin: 2
         },
         {
           id: 'personal_teammates',
@@ -145,7 +154,8 @@ export const generateQuizQuestions = (
           questionKey: 'quiz.questions.uniqueTeammates',
           correctAnswer: socialButterfly.uniquePlayersCount,
           min: 0,
-          max: socialButterfly.totalPlayersCount + 5
+          max: socialButterfly.totalPlayersCount + 5,
+          margin: 3
         }
       ]
     }
@@ -157,10 +167,15 @@ export const generateQuizQuestions = (
 // ============================================
 
 /**
- * Check if user answer is correct (exact match)
+ * Check if user answer is correct (within margin)
  */
-export const checkAnswer = (userAnswer: number, correctAnswer: number): boolean => {
-  return userAnswer === correctAnswer;
+export const checkAnswer = (userAnswer: number, correctAnswer: number, margin: number): { isCorrect: boolean; isExact: boolean } => {
+  const isExact = userAnswer === correctAnswer;
+  const isWithinMargin = Math.abs(userAnswer - correctAnswer) <= margin;
+  return {
+    isCorrect: isExact || isWithinMargin,
+    isExact
+  };
 };
 
 /**
@@ -176,7 +191,7 @@ export const calculateQuizResults = (
   slides.forEach(slide => {
     slide.questions.forEach(question => {
       const userAnswer = userAnswers[question.id] ?? 0;
-      const isCorrect = checkAnswer(userAnswer, question.correctAnswer);
+      const { isCorrect, isExact } = checkAnswer(userAnswer, question.correctAnswer, question.margin);
 
       if (isCorrect) {
         totalCorrect++;
@@ -186,7 +201,9 @@ export const calculateQuizResults = (
         questionId: question.id,
         userAnswer,
         correctAnswer: question.correctAnswer,
-        isCorrect
+        margin: question.margin,
+        isCorrect,
+        isExact
       });
     });
   });

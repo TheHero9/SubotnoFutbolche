@@ -7,6 +7,7 @@ interface QuizSliderProps {
   min: number;
   max: number;
   label: string;
+  margin: number;
   anchor?: {
     value: number;
     label: string;
@@ -19,6 +20,7 @@ const QuizSlider: React.FC<QuizSliderProps> = ({
   min,
   max,
   label,
+  margin,
   anchor
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,22 +31,33 @@ const QuizSlider: React.FC<QuizSliderProps> = ({
   const anchorPercentage = anchor ? ((anchor.value - min) / (max - min)) * 100 : null;
 
   return (
-    <div className="mb-6">
-      <label className="block text-lg mb-3" style={{ color: 'var(--color-text-primary)' }}>
-        {label}
-      </label>
+    <div className="mb-4">
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <label className="block text-base leading-tight" style={{ color: 'var(--color-text-primary)' }}>
+          {label}
+        </label>
+        <span
+          className="text-xs px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
+          style={{
+            backgroundColor: 'rgba(29, 185, 84, 0.2)',
+            color: 'var(--color-accent-green)'
+          }}
+        >
+          ±{margin}
+        </span>
+      </div>
 
       <div className="relative">
         {/* Current value display */}
         <motion.div
-          className="text-center mb-2"
+          className="text-center mb-1"
           key={value}
           initial={{ scale: 1.2 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.15 }}
         >
           <span
-            className="text-4xl font-bold"
+            className="text-3xl font-bold"
             style={{ color: 'var(--color-accent-green)' }}
           >
             {value}
@@ -52,7 +65,7 @@ const QuizSlider: React.FC<QuizSliderProps> = ({
         </motion.div>
 
         {/* Slider track with anchor marker */}
-        <div className="relative h-12 flex items-center">
+        <div className="relative h-10 flex items-center">
           {/* Background track */}
           <div
             className="absolute w-full h-2 rounded-full"

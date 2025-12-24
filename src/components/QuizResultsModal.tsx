@@ -148,7 +148,9 @@ const QuizResultsModal: React.FC<QuizResultsModalProps> = ({
                     className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
                     style={{
                       backgroundColor: answer.isCorrect
-                        ? 'rgba(29, 185, 84, 0.2)'
+                        ? answer.isExact
+                          ? 'rgba(29, 185, 84, 0.2)'
+                          : 'rgba(255, 215, 0, 0.2)'
                         : 'rgba(231, 76, 60, 0.2)'
                     }}
                     initial={{ scale: 0 }}
@@ -156,18 +158,29 @@ const QuizResultsModal: React.FC<QuizResultsModalProps> = ({
                     transition={{ delay: 0.6 + index * 0.08, type: 'spring' }}
                   >
                     <span className="text-xl">
-                      {answer.isCorrect ? '✓' : '✗'}
+                      {answer.isCorrect ? (answer.isExact ? '✓' : '≈') : '✗'}
                     </span>
                   </motion.div>
 
                   {/* Question info */}
                   <div className="flex-1 min-w-0">
-                    <p
-                      className="text-sm truncate"
-                      style={{ color: 'var(--color-text-primary)' }}
-                    >
-                      {t(`quiz.questions.${answer.questionId.replace('org_', '').replace('personal_', '')}`)}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p
+                        className="text-sm truncate"
+                        style={{ color: 'var(--color-text-primary)' }}
+                      >
+                        {t(`quiz.questions.${answer.questionId.replace('org_', '').replace('personal_', '')}`)}
+                      </p>
+                      <span
+                        className="text-xs px-1.5 py-0.5 rounded flex-shrink-0"
+                        style={{
+                          backgroundColor: 'rgba(255,255,255,0.1)',
+                          color: 'var(--color-text-secondary)'
+                        }}
+                      >
+                        ±{answer.margin}
+                      </span>
+                    </div>
                     <div className="flex items-center gap-2 text-xs mt-1">
                       <span style={{ color: 'var(--color-text-secondary)' }}>
                         {answer.userAnswer}
@@ -182,6 +195,11 @@ const QuizResultsModal: React.FC<QuizResultsModalProps> = ({
                       >
                         {answer.correctAnswer}
                       </span>
+                      {answer.isCorrect && !answer.isExact && (
+                        <span style={{ color: 'var(--color-accent-gold)', fontSize: '10px' }}>
+                          ({answer.userAnswer > answer.correctAnswer ? '+' : ''}{answer.userAnswer - answer.correctAnswer})
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -190,10 +208,14 @@ const QuizResultsModal: React.FC<QuizResultsModalProps> = ({
                     className="text-sm font-bold px-2 py-1 rounded"
                     style={{
                       backgroundColor: answer.isCorrect
-                        ? 'rgba(29, 185, 84, 0.2)'
+                        ? answer.isExact
+                          ? 'rgba(29, 185, 84, 0.2)'
+                          : 'rgba(255, 215, 0, 0.2)'
                         : 'transparent',
                       color: answer.isCorrect
-                        ? 'var(--color-accent-green)'
+                        ? answer.isExact
+                          ? 'var(--color-accent-green)'
+                          : 'var(--color-accent-gold)'
                         : 'var(--color-text-secondary)'
                     }}
                   >

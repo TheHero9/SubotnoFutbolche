@@ -192,7 +192,7 @@ const QuizSlideComponent: React.FC<QuizSlideComponentProps> = ({
       </h2>
 
       {/* Questions */}
-      <div className="space-y-6 mb-8">
+      <div className="space-y-4 mb-6">
         {slide.questions.map(question => (
           <QuizSlider
             key={question.id}
@@ -201,6 +201,7 @@ const QuizSlideComponent: React.FC<QuizSlideComponentProps> = ({
             min={question.min}
             max={question.max}
             label={t(question.questionKey)}
+            margin={question.margin}
             anchor={question.anchor ? {
               value: question.anchor.value,
               label: t(question.anchor.labelKey)

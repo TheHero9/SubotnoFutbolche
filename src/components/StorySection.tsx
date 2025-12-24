@@ -501,60 +501,45 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 4: Rank change
+    // Story 4: Games difference (top) + Rank change (bottom)
     {
       content: (() => {
         const gamesDiff = player.total2025 - player.total2024;
         return (
           <div>
+            {/* Games difference - EMPHASIZED at top */}
+            <motion.div
+              className="text-6xl font-black mb-2"
+              style={{
+                color: gamesDiff > 0 ? 'var(--color-accent-green)' :
+                       gamesDiff < 0 ? 'var(--color-accent-red)' :
+                       'var(--color-text-secondary)',
+                textShadow: gamesDiff !== 0 ? '0 0 30px currentColor' : 'none'
+              }}
+              initial={{ scale: 0, rotate: gamesDiff > 0 ? -15 : 15 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", duration: 0.8 }}
+            >
+              {gamesDiff > 0 && `+${gamesDiff}`}
+              {gamesDiff < 0 && `${gamesDiff}`}
+              {gamesDiff === 0 && `±0`}
+            </motion.div>
             <motion.p
-              className="text-2xl mb-6"
+              className="text-xl mb-4"
               style={{ color: 'var(--color-text-secondary)' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
             >
-              {t('story.rankChange')}
+              {t('summary.gamesChange').toLowerCase()}
             </motion.p>
+
+            {/* Games comparison cards */}
             <motion.div
-              className="text-8xl mb-4"
-              initial={{ scale: 0, rotate: rankChange.direction === 'up' ? -180 : 180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", duration: 1 }}
-            >
-              {rankChange.emoji}
-            </motion.div>
-            <motion.p
-              className="text-3xl font-bold mb-2"
-              style={{
-                color: rankChange.direction === 'up' ? 'var(--color-accent-green)' :
-                       rankChange.direction === 'down' ? 'var(--color-accent-red)' :
-                       'var(--color-accent-blue)'
-              }}
+              className="flex justify-center gap-4 mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-            >
-              {rankChange.direction === 'up' && `${t('story.rankUp')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
-              {rankChange.direction === 'down' && `${t('story.rankDown')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
-              {rankChange.direction === 'same' && t('story.rankSame')}
-              {rankChange.direction === 'new' && t('story.rankNew')}
-            </motion.p>
-            <motion.p
-              className="text-sm mb-6"
-              style={{ color: 'var(--color-text-secondary)' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              {t('story.inRankingVs2024')}
-            </motion.p>
-
-            {/* Games comparison */}
-            <motion.div
-              className="flex justify-center gap-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
             >
               <div className="text-center px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-bg-card)' }}>
                 <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>2024</div>
@@ -566,22 +551,49 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
               </div>
             </motion.div>
 
-            {/* Difference */}
+            {/* Divider */}
             <motion.div
-              className="mt-4 text-xl font-semibold"
+              className="w-16 h-0.5 mx-auto mb-4"
+              style={{ backgroundColor: 'var(--color-text-tertiary)' }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.7 }}
+            />
+
+            {/* Rank change - at bottom */}
+            <motion.div
+              className="text-4xl mb-2"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.8, type: "spring" }}
+            >
+              {rankChange.emoji}
+            </motion.div>
+            <motion.p
+              className="text-lg font-semibold mb-1"
               style={{
-                color: gamesDiff > 0 ? 'var(--color-accent-green)' :
-                       gamesDiff < 0 ? 'var(--color-accent-red)' :
-                       'var(--color-text-secondary)'
+                color: rankChange.direction === 'up' ? 'var(--color-accent-green)' :
+                       rankChange.direction === 'down' ? 'var(--color-accent-red)' :
+                       'var(--color-accent-blue)'
               }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
+            >
+              {rankChange.direction === 'up' && `${t('story.rankUp')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
+              {rankChange.direction === 'down' && `${t('story.rankDown')} ${rankChange.value} ${rankChange.value === 1 ? t('story.position') : t('story.positions')}`}
+              {rankChange.direction === 'same' && t('story.rankSame')}
+              {rankChange.direction === 'new' && t('story.rankNew')}
+            </motion.p>
+            <motion.p
+              className="text-xs"
+              style={{ color: 'var(--color-text-secondary)' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
             >
-              {gamesDiff > 0 && `↑ +${gamesDiff} ${t('story.games')}`}
-              {gamesDiff < 0 && `↓ ${gamesDiff} ${t('story.games')}`}
-              {gamesDiff === 0 && `= ${t('story.games')}`}
-            </motion.div>
+              {t('story.inRankingVs2024')}
+            </motion.p>
           </div>
         );
       })()

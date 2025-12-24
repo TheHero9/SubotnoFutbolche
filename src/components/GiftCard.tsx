@@ -1,199 +1,193 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
 import type { GiftCardProps } from '../types';
 
 interface ThemeConfig {
-  ribbonVertical: string;
-  ribbonHorizontal: string;
-  shadowVertical: string;
-  shadowHorizontal: string;
+  ribbonColor: string;
   bowShadow: string;
   confetti: string[];
-  pattern: string;
+  gradient: string;
 }
 
 const themes: Record<string, ThemeConfig> = {
   yellow: {
-    ribbonVertical: 'linear-gradient(to right, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
-    ribbonHorizontal: 'linear-gradient(to bottom, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.8), rgba(255, 215, 0, 0.3))',
-    shadowVertical: '0 0 25px rgba(29, 185, 84, 0.6)',
-    shadowHorizontal: '0 0 25px rgba(255, 215, 0, 0.6)',
+    ribbonColor: 'rgba(255, 215, 0, 0.8)',
     bowShadow: '0 4px 12px rgba(255, 215, 0, 0.6)',
     confetti: ['#ffd700', '#1db954', '#ffffff'],
-    pattern: 'repeating-linear-gradient(45deg, var(--color-accent-gold) 0px, var(--color-accent-gold) 10px, transparent 10px, transparent 20px)'
+    gradient: 'linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)'
   },
   blue: {
-    ribbonVertical: 'linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.3))',
-    ribbonHorizontal: 'linear-gradient(to bottom, rgba(52, 152, 219, 0.3), rgba(52, 152, 219, 0.9), rgba(52, 152, 219, 0.3))',
-    shadowVertical: '0 0 25px rgba(255, 255, 255, 0.6)',
-    shadowHorizontal: '0 0 25px rgba(52, 152, 219, 0.6)',
+    ribbonColor: 'rgba(52, 152, 219, 0.8)',
     bowShadow: '0 4px 12px rgba(52, 152, 219, 0.8)',
     confetti: ['#3498db', '#ffffff', '#5dade2'],
-    pattern: 'repeating-linear-gradient(45deg, var(--color-accent-blue) 0px, var(--color-accent-blue) 10px, transparent 10px, transparent 20px)'
+    gradient: 'linear-gradient(135deg, #1a2a3a 0%, #0d1a2a 100%)'
   },
   red: {
-    ribbonVertical: 'linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.3))',
-    ribbonHorizontal: 'linear-gradient(to bottom, rgba(231, 76, 60, 0.3), rgba(231, 76, 60, 0.9), rgba(231, 76, 60, 0.3))',
-    shadowVertical: '0 0 25px rgba(255, 255, 255, 0.6)',
-    shadowHorizontal: '0 0 25px rgba(231, 76, 60, 0.6)',
+    ribbonColor: 'rgba(231, 76, 60, 0.8)',
     bowShadow: '0 4px 12px rgba(231, 76, 60, 0.8)',
     confetti: ['#e74c3c', '#ffffff', '#ec7063'],
-    pattern: 'repeating-linear-gradient(45deg, var(--color-accent-red) 0px, var(--color-accent-red) 10px, transparent 10px, transparent 20px)'
+    gradient: 'linear-gradient(135deg, #2a1a1a 0%, #1a0d0d 100%)'
   },
   green: {
-    ribbonVertical: 'linear-gradient(to right, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
-    ribbonHorizontal: 'linear-gradient(to bottom, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.8), rgba(29, 185, 84, 0.3))',
-    shadowVertical: '0 0 25px rgba(29, 185, 84, 0.6)',
-    shadowHorizontal: '0 0 25px rgba(29, 185, 84, 0.6)',
+    ribbonColor: 'rgba(29, 185, 84, 0.8)',
     bowShadow: '0 4px 12px rgba(29, 185, 84, 0.6)',
     confetti: ['#1db954', '#ffffff', '#2ecc71'],
-    pattern: 'repeating-linear-gradient(45deg, var(--color-accent-green) 0px, var(--color-accent-green) 10px, transparent 10px, transparent 20px)'
+    gradient: 'linear-gradient(135deg, #1a2a1a 0%, #0d1a0d 100%)'
   },
   purple: {
-    ribbonVertical: 'linear-gradient(to right, rgba(155, 89, 182, 0.3), rgba(155, 89, 182, 0.8), rgba(155, 89, 182, 0.3))',
-    ribbonHorizontal: 'linear-gradient(to bottom, rgba(155, 89, 182, 0.3), rgba(155, 89, 182, 0.8), rgba(155, 89, 182, 0.3))',
-    shadowVertical: '0 0 25px rgba(155, 89, 182, 0.6)',
-    shadowHorizontal: '0 0 25px rgba(155, 89, 182, 0.6)',
+    ribbonColor: 'rgba(155, 89, 182, 0.8)',
     bowShadow: '0 4px 12px rgba(155, 89, 182, 0.6)',
     confetti: ['#9b59b6', '#ffffff', '#c39bd3'],
-    pattern: 'repeating-linear-gradient(45deg, #9b59b6 0px, #9b59b6 10px, transparent 10px, transparent 20px)'
+    gradient: 'linear-gradient(135deg, #2a1a2a 0%, #1a0d1a 100%)'
   }
 };
 
 const GiftCard: React.FC<GiftCardProps> = ({ children, delay = 0, theme = 'yellow' }) => {
-  const [isUnwrapped, setIsUnwrapped] = useState<boolean>(false);
+  const { t } = useTranslation();
+  const [isFlipped, setIsFlipped] = useState<boolean>(false);
+  const [hasFlippedOnce, setHasFlippedOnce] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState<boolean>(false);
 
   const currentTheme = themes[theme] || themes.yellow;
 
-  const handleUnwrap = (): void => {
-    // Trigger confetti on unwrap
-    confetti({
-      particleCount: 120,
-      spread: 90,
-      origin: { y: 0.6 },
-      colors: currentTheme.confetti,
-      ticks: 150
-    });
-
-    setIsUnwrapped(true);
+  const handleFlip = (): void => {
+    if (!hasFlippedOnce) {
+      // Trigger confetti on first flip only
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { y: 0.6 },
+        colors: currentTheme.confetti,
+        ticks: 100
+      });
+      setHasFlippedOnce(true);
+    }
+    setIsFlipped(!isFlipped);
   };
 
   return (
-    <div className="relative">
-      <AnimatePresence mode="wait">
-        {!isUnwrapped && (
-          <motion.div
-            className="cursor-pointer relative"
-            onClick={handleUnwrap}
-            onHoverStart={() => setIsHovering(true)}
-            onHoverEnd={() => setIsHovering(false)}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{
-              opacity: 1,
-              scale: isHovering ? 1.03 : 1,
-              y: isHovering ? -5 : 0
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.85,
-              y: -20,
-              transition: {
-                duration: 0.4,
-                ease: [0.4, 0, 0.2, 1]
-              }
-            }}
-            transition={{
-              delay,
-              duration: 0.4,
-              ease: [0.4, 0, 0.2, 1]
-            }}
-            whileTap={{ scale: 0.97 }}
-            style={{ willChange: 'transform, opacity' }}
-          >
+    <div
+      className="relative cursor-pointer"
+      style={{ perspective: '1000px' }}
+      onClick={handleFlip}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      {/* Card Container */}
+      <motion.div
+        className="relative w-full"
+        initial={{ opacity: 0, rotateY: 0 }}
+        animate={{
+          opacity: 1,
+          rotateY: isFlipped ? 180 : 0
+        }}
+        transition={{
+          opacity: { delay, duration: 0.4 },
+          rotateY: { duration: 0.5, ease: 'easeInOut' }
+        }}
+        style={{
+          transformStyle: 'preserve-3d'
+        }}
+      >
+        {/* Front Side - Gift Wrapping */}
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{
+            background: currentTheme.gradient,
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            transform: isHovering && !isFlipped ? 'scale(1.02) translateY(-3px)' : 'scale(1)',
+            transition: 'transform 0.2s ease'
+          }}
+        >
+          {/* Gift Box Content */}
+          <div className="relative p-8">
+            {/* Vertical Ribbon */}
+            <div
+              className="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-12 pointer-events-none"
+              style={{
+                background: `linear-gradient(to right, transparent, ${currentTheme.ribbonColor}, transparent)`,
+              }}
+            />
 
-            {/* Gift Box - matches content size */}
-            <div className="relative rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #282828 0%, #1a1a1a 100%)' }}>
-              {/* Wrapping Paper Pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div
-                  className="w-full h-full"
-                  style={{
-                    backgroundImage: currentTheme.pattern,
-                    backgroundSize: '30px 30px'
-                  }}
-                />
-              </div>
+            {/* Horizontal Ribbon */}
+            <div
+              className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 h-12 pointer-events-none"
+              style={{
+                background: `linear-gradient(to bottom, transparent, ${currentTheme.ribbonColor}, transparent)`,
+              }}
+            />
 
-              {/* Vertical Ribbon */}
-              <div
-                className="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-16 z-10"
+            {/* Bow in center */}
+            <div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none"
+            >
+              <span
+                className="text-6xl block"
                 style={{
-                  background: currentTheme.ribbonVertical,
-                  boxShadow: currentTheme.shadowVertical
-                }}
-              />
-
-              {/* Horizontal Ribbon */}
-              <div
-                className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 h-16 z-10"
-                style={{
-                  background: currentTheme.ribbonHorizontal,
-                  boxShadow: currentTheme.shadowHorizontal
-                }}
-              />
-
-              {/* Bow */}
-              <motion.div
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-7xl z-20"
-                animate={{
-                  rotate: isHovering ? -8 : 0,
-                  scale: isHovering ? 1.1 : 1
-                }}
-                transition={{
-                  duration: 0.3,
-                  ease: "easeOut"
-                }}
-                style={{
-                  filter: `drop-shadow(${currentTheme.bowShadow})`
+                  filter: `drop-shadow(${currentTheme.bowShadow})`,
+                  transform: isHovering ? 'scale(1.1) rotate(-5deg)' : 'scale(1) rotate(0deg)',
+                  transition: 'transform 0.3s ease',
+                  display: 'block'
                 }}
               >
-                🎀
-              </motion.div>
-
-              {/* Invisible content for sizing */}
-              <div className="invisible" aria-hidden="true">
-                {children}
-              </div>
+                🎁
+              </span>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* Revealed Content */}
-      <AnimatePresence>
-        {isUnwrapped && (
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.9,
-              y: 20
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              y: 0
-            }}
-            transition={{
-              duration: 0.5,
-              ease: [0.4, 0, 0.2, 1]
-            }}
-          >
-            {children}
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {/* Invisible content for sizing */}
+            <div className="invisible" aria-hidden="true">
+              {children}
+            </div>
+
+            {/* Tap hint */}
+            <div
+              className="absolute bottom-3 left-0 right-0 text-center text-xs pointer-events-none"
+              style={{
+                color: 'var(--color-text-secondary)',
+                opacity: isHovering ? 1 : 0.5,
+                transition: 'opacity 0.2s ease'
+              }}
+            >
+              {t('gift.tapToReveal')}
+            </div>
+          </div>
+        </div>
+
+        {/* Back Side - Content (hidden until flipped) */}
+        <div
+          className="absolute inset-0 rounded-2xl p-8 border overflow-hidden"
+          style={{
+            backgroundColor: 'rgba(26, 26, 26, 0.95)',
+            borderColor: 'var(--color-accent-green)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+            // Hide completely when not flipped to prevent any flash
+            visibility: hasFlippedOnce ? 'visible' : 'hidden'
+          }}
+        >
+          {/* Only render content after first flip to prevent flash */}
+          {hasFlippedOnce && (
+            <>
+              {children}
+
+              {/* Tap to flip back hint */}
+              <div
+                className="absolute bottom-3 left-0 right-0 text-center text-xs pointer-events-none"
+                style={{
+                  color: 'var(--color-text-secondary)',
+                  opacity: 0.5
+                }}
+              >
+                {t('gift.tapToFlipBack')}
+              </div>
+            </>
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 };

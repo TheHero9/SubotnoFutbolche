@@ -191,6 +191,10 @@
     "squad": "Squad",
     "clickToSeeRepeats": "Click on a formation to see repeats"
   },
+  "gift": {
+    "tapToReveal": "Tap to reveal",
+    "tapToFlipBack": "Tap to flip back"
+  },
   "quizPrompt": {
     "greeting": "Hey, {{name}}!",
     "description": "Before you see your stats, want to test how well you know the year?",

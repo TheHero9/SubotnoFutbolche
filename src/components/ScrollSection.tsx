@@ -107,27 +107,17 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
 
   const playerDatesSet = useMemo(() => new Set(player.dates2025 || []), [player.dates2025]);
 
-  // Calculate streak for all players and rank them (ALL players)
-  const streakRanking = useMemo(() => {
+  // Calculate streak ranking once and derive player rank from it
+  const { streakRanking, playerStreakRank } = useMemo(() => {
     const playersWithStreak = allPlayers.map(p => ({
       ...p,
       calculatedStreak: calculatePeakPerformance(p.dates2025 || [], rawCommunityStats.games2025).streakLength
     }));
-    return playersWithStreak
+    const sorted = playersWithStreak
       .filter(p => p.calculatedStreak > 0)
       .sort((a, b) => b.calculatedStreak - a.calculatedStreak);
-  }, [allPlayers]);
-
-  // Find current player's rank in streak leaderboard
-  const playerStreakRank = useMemo(() => {
-    const playersWithStreak = allPlayers.map(p => ({
-      name: p.name,
-      streak: calculatePeakPerformance(p.dates2025 || [], rawCommunityStats.games2025).streakLength
-    }));
-    const sorted = playersWithStreak
-      .filter(p => p.streak > 0)
-      .sort((a, b) => b.streak - a.streak);
-    return sorted.findIndex(p => p.name === player.name) + 1;
+    const rank = sorted.findIndex(p => p.name === player.name) + 1;
+    return { streakRanking: sorted, playerStreakRank: rank };
   }, [allPlayers, player.name]);
 
   // Games ranking (ALL players by total games 2025)
@@ -430,12 +420,12 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                     style={{ backgroundColor: 'var(--color-bg-card)' }}
                   >
                     <div className="flex flex-wrap gap-1.5 justify-center">
-                      {allCommunityGameDates.map((date, index) => {
+                      {allCommunityGameDates.map((date) => {
                         const played = playerDatesSet.has(date);
                         const season = getSeasonFromDate(date);
                         const colors = seasonColors[season];
                         return (
-                          <motion.span
+                          <span
                             key={date}
                             className="px-2 py-0.5 rounded-full text-xs font-medium"
                             style={{
@@ -443,12 +433,9 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                               color: played ? colors.text : '#9ca3af',
                               opacity: played ? 1 : 0.6
                             }}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: played ? 1 : 0.6 }}
-                            transition={{ delay: Math.min(index * 0.008, 0.3) }}
                           >
                             {formatDateEU(date)}
-                          </motion.span>
+                          </span>
                         );
                       })}
                     </div>
@@ -505,7 +492,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                 </h3>
                 <div className="max-h-80 overflow-y-auto space-y-2 mb-4 pr-2">
                   {gamesRanking.map((p, index) => (
-                    <motion.div
+                    <div
                       key={p.name}
                       className="flex items-center justify-between px-4 py-2 rounded-lg"
                       style={{
@@ -516,16 +503,13 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                           ? 'var(--color-bg-primary)'
                           : 'var(--color-text-primary)'
                       }}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: Math.min(index * 0.02, 0.5) }}
                     >
                       <span className="flex items-center gap-2">
                         <span className="font-bold">#{index + 1}</span>
                         <span>{p.name}</span>
                       </span>
                       <span className="font-bold">{p.total2025}</span>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
                 <motion.button
@@ -661,7 +645,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                   </h3>
                   <div className="max-h-80 overflow-y-auto space-y-2 mb-4 pr-2">
                     {streakRanking.map((p, index) => (
-                      <motion.div
+                      <div
                         key={p.name}
                         className="flex justify-between items-center px-4 py-2 rounded-lg"
                         style={{
@@ -672,9 +656,6 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                             ? 'var(--color-bg-primary)'
                             : 'var(--color-text-primary)'
                         }}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: Math.min(index * 0.02, 0.5) }}
                       >
                         <span className="font-semibold">
                           #{index + 1} {p.name}
@@ -682,7 +663,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ player, totalPlayers, all
                         <span className="font-bold">
                           🔥 {p.calculatedStreak}
                         </span>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
                   <motion.button

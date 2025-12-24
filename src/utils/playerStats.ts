@@ -108,6 +108,15 @@ export interface BestSeasonData {
   emoji: string;
 }
 
+export interface TrioFinderResult {
+  players: string[];
+  gamesTogether: number;
+  dates: string[];
+  playerGames: number[];    // Each player's total games [p1, p2, p3]
+  maxPossibleMeetings: number;  // Min of all 3 players' games (theoretical max overlap)
+  meetingRate: number;      // gamesTogether / maxPossibleMeetings as percentage
+}
+
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
@@ -890,5 +899,79 @@ export const calculateBestSeason = (
     season: bestSeason,
     games: maxGames,
     emoji: emojiMap[bestSeason]
+  };
+};
+
+// ============================================
+// TRIO FINDER
+// ============================================
+
+/**
+ * Calculate when 3 selected players have played together
+ *
+ * Returns:
+ * - Number of games all 3 played together
+ * - Specific dates
+ * - Coverage: % of total games where at least one of them played
+ */
+export const calculateTrioStats = (
+  player1Name: string,
+  player2Name: string,
+  player3Name: string,
+  allPlayers: ProcessedPlayer[],
+  _communityGames: GameRecord[]
+): TrioFinderResult => {
+  const p1 = allPlayers.find(p => p.name === player1Name);
+  const p2 = allPlayers.find(p => p.name === player2Name);
+  const p3 = allPlayers.find(p => p.name === player3Name);
+
+  if (!p1 || !p2 || !p3) {
+    return {
+      players: [player1Name, player2Name, player3Name],
+      gamesTogether: 0,
+      dates: [],
+      playerGames: [0, 0, 0],
+      maxPossibleMeetings: 0,
+      meetingRate: 0
+    };
+  }
+
+  const dates1 = new Set(p1.dates2025 || []);
+  const dates2 = new Set(p2.dates2025 || []);
+  const dates3 = new Set(p3.dates2025 || []);
+
+  const p1Games = dates1.size;
+  const p2Games = dates2.size;
+  const p3Games = dates3.size;
+
+  // Find dates where all 3 played
+  const togetherDates: string[] = [];
+  dates1.forEach(date => {
+    if (dates2.has(date) && dates3.has(date)) {
+      togetherDates.push(date);
+    }
+  });
+
+  // Sort dates chronologically
+  togetherDates.sort((a, b) => {
+    const [dayA, monthA] = a.split('/').map(Number);
+    const [dayB, monthB] = b.split('/').map(Number);
+    if (monthA !== monthB) return monthA - monthB;
+    return dayA - dayB;
+  });
+
+  // Max possible meetings is constrained by the player with fewest games
+  const maxPossibleMeetings = Math.min(p1Games, p2Games, p3Games);
+  const meetingRate = maxPossibleMeetings > 0
+    ? Math.round((togetherDates.length / maxPossibleMeetings) * 100)
+    : 0;
+
+  return {
+    players: [player1Name, player2Name, player3Name],
+    gamesTogether: togetherDates.length,
+    dates: togetherDates,
+    playerGames: [p1Games, p2Games, p3Games],
+    maxPossibleMeetings,
+    meetingRate
   };
 };

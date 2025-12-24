@@ -189,7 +189,16 @@
     "repeatSquadsInfo": "Finding the largest squad that gathered at least 2 times with the same people",
     "differentSquads": "squads",
     "squad": "Squad",
-    "clickToSeeRepeats": "Click on a formation to see repeats"
+    "clickToSeeRepeats": "Click on a formation to see repeats",
+    "trioFinder": "Trio Finder",
+    "trioFinderSubtitle": "Select 3 players to see when they played together",
+    "trioFinderInfo": "Pick any 3 players and discover how many games they've shared",
+    "trioSearchPlaceholder": "Search player...",
+    "trioSelectHint": "Select {{count}} more player(s)",
+    "trioGamesTogether": "games together",
+    "trioIndividualGames": "individual games in 2025",
+    "trioMeetingRate": "{{count}} out of {{max}} possible meetings ({{rate}}%)",
+    "trioTryAgain": "Try another trio"
   },
   "gift": {
     "tapToReveal": "Tap to reveal",

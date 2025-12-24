@@ -189,7 +189,16 @@
     "repeatSquadsInfo": "Търсим най-големия състав, който се е събрал поне 2 пъти с едни и същи хора",
     "differentSquads": "състава",
     "squad": "Състав",
-    "clickToSeeRepeats": "Кликни на формация, за да видиш повторенията"
+    "clickToSeeRepeats": "Кликни на формация, за да видиш повторенията",
+    "trioFinder": "Търсач на трио",
+    "trioFinderSubtitle": "Избери 3 играчи, за да видиш кога са играли заедно",
+    "trioFinderInfo": "Избери 3 играчи и открий колко мача са споделили",
+    "trioSearchPlaceholder": "Търси играч...",
+    "trioSelectHint": "Избери още {{count}} играч(а)",
+    "trioGamesTogether": "мача заедно",
+    "trioIndividualGames": "индивидуални мачове през 2025",
+    "trioMeetingRate": "{{count}} от {{max}} възможни срещи ({{rate}}%)",
+    "trioTryAgain": "Пробвай друго трио"
   },
   "gift": {
     "tapToReveal": "Натисни за да откриеш",

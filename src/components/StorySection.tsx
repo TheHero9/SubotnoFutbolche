@@ -19,6 +19,7 @@ import {
   calculateRepeatSquads,
   calculateActiveMonths,
   calculateBestSeason,
+  calculateTrioStats,
   getPlayedGameDates
 } from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
@@ -46,6 +47,8 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   const [showCommunityStreakCalendar, setShowCommunityStreakCalendar] = useState<boolean>(false);
   const [selectedSquadSize, setSelectedSquadSize] = useState<number | null>(null);
   const [selectedSquadIndex, setSelectedSquadIndex] = useState<number | null>(null);
+  const [trioSelection, setTrioSelection] = useState<string[]>([]);
+  const [trioSearchQuery, setTrioSearchQuery] = useState<string>('');
 
   // Sort players by rank for the ranking list
   const rankedPlayers = useMemo(() => {
@@ -103,6 +106,32 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
     () => calculateRepeatSquads(allPlayers, rawStats.games2025, 12, 14),
     [allPlayers]
   );
+
+  // Trio finder calculation (only when 3 players are selected)
+  const trioStats = useMemo(() => {
+    if (trioSelection.length !== 3) return null;
+    return calculateTrioStats(
+      trioSelection[0],
+      trioSelection[1],
+      trioSelection[2],
+      allPlayers,
+      rawStats.games2025
+    );
+  }, [trioSelection, allPlayers]);
+
+  // Filter players for trio selection search
+  const filteredPlayersForTrio = useMemo(() => {
+    const activePlayersList = allPlayers
+      .filter(p => (p.dates2025?.length || 0) > 0)
+      .sort((a, b) => a.name.localeCompare(b.name, 'bg'));
+
+    if (!trioSearchQuery.trim()) return activePlayersList;
+
+    const query = trioSearchQuery.toLowerCase();
+    return activePlayersList.filter(p =>
+      p.name.toLowerCase().includes(query)
+    );
+  }, [allPlayers, trioSearchQuery]);
 
   // Create set of community streak dates for quick lookup
   const communityStreakDatesSet = useMemo(() => {
@@ -2272,6 +2301,340 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
           )}
         </div>
       )
+    },
+    // Story 14: Trio Finder - Interactive player selection
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          {trioSelection.length < 3 ? (
+            // SELECTION MODE: Pick 3 players
+            <>
+              <motion.div
+                className="text-6xl mb-4"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", duration: 0.8 }}
+              >
+                🔮
+              </motion.div>
+              <motion.div
+                className="flex items-center justify-center gap-2 mb-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <h2
+                  className="text-2xl font-bold"
+                  style={{ color: 'var(--color-accent-blue)' }}
+                >
+                  {t('stats.trioFinder')}
+                </h2>
+                <InfoTooltip text={t('stats.trioFinderInfo')} size="md" />
+              </motion.div>
+              <motion.p
+                className="text-sm mb-4"
+                style={{ color: 'var(--color-text-secondary)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {t('stats.trioFinderSubtitle')}
+              </motion.p>
+
+              {/* Selected players display */}
+              <motion.div
+                className="flex justify-center gap-2 mb-4 min-h-[40px]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                {[0, 1, 2].map((slot) => (
+                  <motion.div
+                    key={slot}
+                    className="px-3 py-2 rounded-xl min-w-[80px] text-center"
+                    style={{
+                      backgroundColor: trioSelection[slot]
+                        ? 'var(--color-accent-blue)'
+                        : 'var(--color-bg-card)',
+                      border: '2px dashed',
+                      borderColor: trioSelection[slot]
+                        ? 'transparent'
+                        : 'var(--color-text-secondary)'
+                    }}
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    whileHover={trioSelection[slot] ? { scale: 1.05 } : {}}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (trioSelection[slot]) {
+                        // Remove this player
+                        setTrioSelection(prev => prev.filter((_, i) => i !== slot));
+                      }
+                    }}
+                  >
+                    {trioSelection[slot] ? (
+                      <span className="text-sm font-semibold text-white flex items-center gap-1">
+                        {trioSelection[slot]}
+                        <span className="text-xs opacity-70">×</span>
+                      </span>
+                    ) : (
+                      <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                        {slot + 1}
+                      </span>
+                    )}
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* Search input */}
+              <motion.div
+                className="mb-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+              >
+                <input
+                  type="text"
+                  value={trioSearchQuery}
+                  onChange={(e) => setTrioSearchQuery(e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                  placeholder={t('stats.trioSearchPlaceholder')}
+                  className="w-full px-4 py-2 rounded-xl text-sm"
+                  style={{
+                    backgroundColor: 'var(--color-bg-card)',
+                    color: 'var(--color-text-primary)',
+                    border: '1px solid var(--color-text-secondary)',
+                    outline: 'none'
+                  }}
+                />
+              </motion.div>
+
+              {/* Player grid */}
+              <motion.div
+                className="max-h-[30vh] overflow-y-auto rounded-xl p-2"
+                style={{ backgroundColor: 'var(--color-bg-card)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {filteredPlayersForTrio.map((p, index) => {
+                    const isSelected = trioSelection.includes(p.name);
+                    const isDisabled = trioSelection.length >= 3 && !isSelected;
+
+                    return (
+                      <motion.button
+                        key={p.name}
+                        className="px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+                        style={{
+                          backgroundColor: isSelected
+                            ? 'var(--color-accent-blue)'
+                            : isDisabled
+                              ? 'rgba(75, 85, 99, 0.3)'
+                              : 'rgba(75, 85, 99, 0.5)',
+                          color: isSelected ? '#fff' : isDisabled ? 'var(--color-text-secondary)' : 'var(--color-text-primary)',
+                          opacity: isDisabled ? 0.5 : 1,
+                          cursor: isDisabled ? 'not-allowed' : 'pointer'
+                        }}
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: isDisabled ? 0.5 : 1, scale: 1 }}
+                        transition={{ delay: 0.9 + index * 0.01 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isDisabled) return;
+                          if (isSelected) {
+                            setTrioSelection(prev => prev.filter(n => n !== p.name));
+                          } else {
+                            setTrioSelection(prev => [...prev, p.name]);
+                          }
+                        }}
+                        whileHover={!isDisabled ? { scale: 1.05 } : {}}
+                        whileTap={!isDisabled ? { scale: 0.95 } : {}}
+                      >
+                        {p.name}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+
+              <motion.p
+                className="text-xs mt-4"
+                style={{ color: 'var(--color-accent-blue)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+              >
+                {t('stats.trioSelectHint', { count: 3 - trioSelection.length })}
+              </motion.p>
+            </>
+          ) : (
+            // RESULT MODE: Show trio stats
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full"
+            >
+              <motion.div
+                className="text-6xl mb-3"
+                initial={{ scale: 0, rotate: 180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", duration: 0.8 }}
+              >
+                {trioStats && trioStats.gamesTogether > 0 ? '🎉' : '😢'}
+              </motion.div>
+
+              {/* The Trio */}
+              <motion.div
+                className="flex justify-center gap-2 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                {trioSelection.map((name, index) => (
+                  <motion.span
+                    key={name}
+                    className="px-3 py-1.5 rounded-full text-sm font-semibold"
+                    style={{
+                      backgroundColor: 'var(--color-accent-blue)',
+                      color: '#fff'
+                    }}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                  >
+                    {name}
+                  </motion.span>
+                ))}
+              </motion.div>
+
+              {/* Result */}
+              <motion.div
+                className="text-center mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <div
+                  className="text-5xl font-bold mb-1"
+                  style={{
+                    color: trioStats && trioStats.gamesTogether > 0
+                      ? 'var(--color-accent-green)'
+                      : 'var(--color-accent-red)'
+                  }}
+                >
+                  {trioStats?.gamesTogether || 0}
+                </div>
+                <div className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('stats.trioGamesTogether')}
+                </div>
+              </motion.div>
+
+              {/* Dates when they played together */}
+              {trioStats && trioStats.gamesTogether > 0 && (
+                <motion.div
+                  className="mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  <h3 className="text-sm font-semibold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
+                    📅 {t('stats.theDates')}
+                  </h3>
+                  <div
+                    className="max-h-[15vh] overflow-y-auto px-3 py-3 rounded-xl"
+                    style={{ backgroundColor: 'var(--color-bg-card)' }}
+                  >
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {trioStats.dates.map((date, index) => (
+                        <motion.span
+                          key={date}
+                          className="px-3 py-1.5 rounded-full text-sm font-medium"
+                          style={{
+                            backgroundColor: 'var(--color-accent-green)',
+                            color: '#000'
+                          }}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.9 + index * 0.05 }}
+                        >
+                          {formatDateEU(date)}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Player games breakdown */}
+              {trioStats && (
+                <motion.div
+                  className="px-4 py-3 rounded-xl mb-4"
+                  style={{ backgroundColor: 'var(--color-bg-card)' }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                >
+                  <div className="flex justify-center gap-4 mb-2">
+                    {trioSelection.map((name, index) => (
+                      <div key={name} className="text-center">
+                        <div className="text-lg font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+                          {trioStats.playerGames[index]}
+                        </div>
+                        <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                          {name.length > 6 ? name.slice(0, 6) + '.' : name}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-center text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                    {t('stats.trioIndividualGames')}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Meeting rate */}
+              {trioStats && trioStats.maxPossibleMeetings > 0 && (
+                <motion.div
+                  className="text-center mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.1 }}
+                >
+                  <span className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                    {t('stats.trioMeetingRate', {
+                      count: trioStats.gamesTogether,
+                      max: trioStats.maxPossibleMeetings,
+                      rate: trioStats.meetingRate
+                    })}
+                  </span>
+                </motion.div>
+              )}
+
+              {/* Try again button */}
+              <motion.button
+                className="px-6 py-3 rounded-full text-sm font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-accent-blue)',
+                  color: '#fff'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setTrioSelection([]);
+                  setTrioSearchQuery('');
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                🔄 {t('stats.trioTryAgain')}
+              </motion.button>
+            </motion.div>
+          )}
+        </div>
+      )
     }
   ];
 
@@ -2293,6 +2656,9 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
       // Reset selected squad when leaving that story
       setSelectedSquadSize(null);
       setSelectedSquadIndex(null);
+      // Reset trio selection when leaving that story
+      setTrioSelection([]);
+      setTrioSearchQuery('');
     }
   };
 

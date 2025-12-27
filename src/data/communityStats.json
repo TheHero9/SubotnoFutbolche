@@ -733,23 +733,16 @@
     {
       "month": "December",
       "date": "24/12",
-      "played": false,
-      "players": null,
-      "field": null
+      "played": true,
+      "players": 12,
+      "field": "Овча Купел"
     },
     {
       "month": "December",
       "date": "27/12",
-      "played": false,
-      "players": null,
-      "field": null
-    },
-    {
-      "month": "December",
-      "date": "31/12",
-      "played": false,
-      "players": null,
-      "field": null
+      "played": true,
+      "players": 14,
+      "field": "Овча Купел"
     }
   ]
 }

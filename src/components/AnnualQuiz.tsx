@@ -9,6 +9,7 @@ import {
   type QuizResult
 } from '../utils/quizCalculations';
 import QuizSlider from './QuizSlider';
+import QuizMultipleChoice from './QuizMultipleChoice';
 
 interface AnnualQuizProps {
   player: ProcessedPlayer;
@@ -36,6 +37,7 @@ const AnnualQuiz: React.FC<AnnualQuizProps> = ({
   // State
   const [currentSlide, setCurrentSlide] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState<Record<string, string>>({});
   const [showTeaser, setShowTeaser] = useState(false);
   const [results, setResults] = useState<QuizResult | null>(null);
 
@@ -60,10 +62,17 @@ const AnnualQuiz: React.FC<AnnualQuizProps> = ({
     }));
   };
 
+  const handleMultipleChoiceChange = (questionId: string, value: string) => {
+    setMultipleChoiceAnswers(prev => ({
+      ...prev,
+      [questionId]: value
+    }));
+  };
+
   const handleNext = () => {
     if (isLastSlide) {
       // Submit quiz - calculate results and show teaser
-      const quizResults = calculateQuizResults(slides, answers);
+      const quizResults = calculateQuizResults(slides, answers, multipleChoiceAnswers);
       setResults(quizResults);
       setShowTeaser(true);
     } else {
@@ -122,7 +131,9 @@ const AnnualQuiz: React.FC<AnnualQuizProps> = ({
               slideIndex={currentSlide}
               totalSlides={totalSlides}
               answers={answers}
+              multipleChoiceAnswers={multipleChoiceAnswers}
               onAnswerChange={handleAnswerChange}
+              onMultipleChoiceChange={handleMultipleChoiceChange}
               onNext={handleNext}
               onPrev={handlePrev}
               isLastSlide={isLastSlide}
@@ -143,7 +154,9 @@ interface QuizSlideComponentProps {
   slideIndex: number;
   totalSlides: number;
   answers: Record<string, number>;
+  multipleChoiceAnswers: Record<string, string>;
   onAnswerChange: (questionId: string, value: number) => void;
+  onMultipleChoiceChange: (questionId: string, value: string) => void;
   onNext: () => void;
   onPrev: () => void;
   isLastSlide: boolean;
@@ -154,12 +167,17 @@ const QuizSlideComponent: React.FC<QuizSlideComponentProps> = ({
   slideIndex,
   totalSlides,
   answers,
+  multipleChoiceAnswers,
   onAnswerChange,
+  onMultipleChoiceChange,
   onNext,
   onPrev,
   isLastSlide
 }) => {
   const { t } = useTranslation();
+
+  const hasSliderQuestions = slide.questions.length > 0;
+  const hasMultipleChoice = slide.multipleChoiceQuestions && slide.multipleChoiceQuestions.length > 0;
 
   return (
     <motion.div
@@ -191,24 +209,41 @@ const QuizSlideComponent: React.FC<QuizSlideComponentProps> = ({
         {t(slide.titleKey)}
       </h2>
 
-      {/* Questions */}
-      <div className="space-y-4 mb-6">
-        {slide.questions.map(question => (
-          <QuizSlider
-            key={question.id}
-            value={answers[question.id] ?? Math.floor((question.min + question.max) / 2)}
-            onChange={(value) => onAnswerChange(question.id, value)}
-            min={question.min}
-            max={question.max}
-            label={t(question.questionKey)}
-            margin={question.margin}
-            anchor={question.anchor ? {
-              value: question.anchor.value,
-              label: t(question.anchor.labelKey)
-            } : undefined}
-          />
-        ))}
-      </div>
+      {/* Slider Questions */}
+      {hasSliderQuestions && (
+        <div className="space-y-4 mb-6">
+          {slide.questions.map(question => (
+            <QuizSlider
+              key={question.id}
+              value={answers[question.id] ?? Math.floor((question.min + question.max) / 2)}
+              onChange={(value) => onAnswerChange(question.id, value)}
+              min={question.min}
+              max={question.max}
+              label={t(question.questionKey)}
+              margin={question.margin}
+              anchor={question.anchor ? {
+                value: question.anchor.value,
+                label: t(question.anchor.labelKey)
+              } : undefined}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Multiple Choice Questions */}
+      {hasMultipleChoice && (
+        <div className="space-y-4 mb-6 max-h-[50vh] overflow-y-auto">
+          {slide.multipleChoiceQuestions!.map(question => (
+            <QuizMultipleChoice
+              key={question.id}
+              question={t(question.questionKey)}
+              options={question.options}
+              selectedAnswer={multipleChoiceAnswers[question.id] || null}
+              onSelect={(value) => onMultipleChoiceChange(question.id, value)}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Navigation */}
       <div className="flex gap-4">

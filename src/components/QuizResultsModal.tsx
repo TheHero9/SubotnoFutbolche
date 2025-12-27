@@ -29,25 +29,33 @@ const QuizResultsModal: React.FC<QuizResultsModalProps> = ({
     }
   }, [isOpen, results.totalCorrect]);
 
+  const totalQuestions = results.totalQuestions;
+  const perfectScore = results.totalCorrect === totalQuestions;
+  const greatScore = results.totalCorrect >= totalQuestions * 0.7;
+  const goodScore = results.totalCorrect >= totalQuestions * 0.4;
+
   const getScoreEmoji = () => {
-    if (results.totalCorrect === 7) return '🏆';
-    if (results.totalCorrect >= 5) return '🌟';
-    if (results.totalCorrect >= 3) return '💪';
+    if (perfectScore) return '🏆';
+    if (greatScore) return '🌟';
+    if (goodScore) return '💪';
     return '📚';
   };
 
   const getScoreMessage = () => {
-    if (results.totalCorrect === 7) return t('quiz.results.perfect');
-    if (results.totalCorrect >= 5) return t('quiz.results.great');
-    if (results.totalCorrect >= 3) return t('quiz.results.good');
+    if (perfectScore) return t('quiz.results.perfect');
+    if (greatScore) return t('quiz.results.great');
+    if (goodScore) return t('quiz.results.good');
     return t('quiz.results.tryAgain');
   };
 
   const getScoreColor = () => {
-    if (results.totalCorrect >= 5) return 'var(--color-accent-green)';
-    if (results.totalCorrect >= 3) return 'var(--color-accent-gold)';
+    if (greatScore) return 'var(--color-accent-green)';
+    if (goodScore) return 'var(--color-accent-gold)';
     return 'var(--color-accent-red)';
   };
+
+  // Combine all answers for display
+  const allAnswersCount = results.answers.length + (results.multipleChoiceAnswers?.length || 0);
 
   if (!isOpen) return null;
 
@@ -125,17 +133,18 @@ const QuizResultsModal: React.FC<QuizResultsModalProps> = ({
           </div>
 
           {/* Results breakdown */}
-          <div className="px-4 pb-4">
+          <div className="px-4 pb-4 max-h-[40vh] overflow-y-auto">
             <div
               className="rounded-xl overflow-hidden"
               style={{ backgroundColor: 'var(--color-bg-card)' }}
             >
+              {/* Slider answers */}
               {results.answers.map((answer, index) => (
                 <motion.div
                   key={answer.questionId}
                   className="flex items-center gap-3 p-3"
                   style={{
-                    borderBottom: index < results.answers.length - 1
+                    borderBottom: index < allAnswersCount - 1
                       ? '1px solid rgba(255,255,255,0.05)'
                       : 'none'
                   }}
@@ -223,6 +232,110 @@ const QuizResultsModal: React.FC<QuizResultsModalProps> = ({
                   </div>
                 </motion.div>
               ))}
+
+              {/* Multiple choice answers */}
+              {results.multipleChoiceAnswers?.map((answer, index) => {
+                const baseIndex = results.answers.length + index;
+                const isLast = baseIndex === allAnswersCount - 1;
+
+                return (
+                  <motion.div
+                    key={answer.questionId}
+                    className="flex items-center gap-3 p-3"
+                    style={{
+                      borderBottom: !isLast
+                        ? '1px solid rgba(255,255,255,0.05)'
+                        : 'none'
+                    }}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + baseIndex * 0.08 }}
+                  >
+                    {/* Result icon */}
+                    <motion.div
+                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{
+                        backgroundColor: answer.isCorrect
+                          ? 'rgba(29, 185, 84, 0.2)'
+                          : 'rgba(231, 76, 60, 0.2)'
+                      }}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.6 + baseIndex * 0.08, type: 'spring' }}
+                    >
+                      <span className="text-xl">
+                        {answer.isCorrect ? '✓' : '✗'}
+                      </span>
+                    </motion.div>
+
+                    {/* Question info */}
+                    <div className="flex-1 min-w-0">
+                      <p
+                        className="text-sm truncate"
+                        style={{ color: 'var(--color-text-primary)' }}
+                      >
+                        {t(`quiz.results.${answer.questionId}`)}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs mt-1">
+                        <span
+                          className="truncate"
+                          style={{
+                            color: answer.isCorrect
+                              ? 'var(--color-accent-green)'
+                              : 'var(--color-text-secondary)',
+                            maxWidth: '80px'
+                          }}
+                        >
+                          {answer.userAnswer || '—'}
+                        </span>
+                        {!answer.isCorrect && answer.userAnswer && (
+                          <>
+                            <span style={{ color: 'var(--color-text-secondary)' }}>→</span>
+                            <span
+                              className="truncate"
+                              style={{
+                                color: 'var(--color-accent-gold)',
+                                maxWidth: '80px'
+                              }}
+                            >
+                              {answer.correctAnswer}
+                            </span>
+                          </>
+                        )}
+                        {!answer.userAnswer && (
+                          <>
+                            <span style={{ color: 'var(--color-text-secondary)' }}>→</span>
+                            <span
+                              className="truncate"
+                              style={{
+                                color: 'var(--color-accent-gold)',
+                                maxWidth: '80px'
+                              }}
+                            >
+                              {answer.correctAnswer}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Points */}
+                    <div
+                      className="text-sm font-bold px-2 py-1 rounded"
+                      style={{
+                        backgroundColor: answer.isCorrect
+                          ? 'rgba(29, 185, 84, 0.2)'
+                          : 'transparent',
+                        color: answer.isCorrect
+                          ? 'var(--color-accent-green)'
+                          : 'var(--color-text-secondary)'
+                      }}
+                    >
+                      {answer.isCorrect ? '+1' : '0'}
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 

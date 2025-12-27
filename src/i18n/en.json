@@ -159,10 +159,18 @@
     "ofAllGames": "of all games",
     "dynamicDuos": "Dynamic Duos",
     "dynamicDuosSubtitle": "Players who always come together",
+    "dynamicDuosInfo": "The percentage shows how often they play together relative to their individual games. Higher % = more loyal partnership.",
     "mutualRate": "mutual rate",
     "duoInfo": "Both players attend each other's games frequently",
     "rareDuos": "Rare Duos",
     "rareDuosSubtitle": "Players who both play a lot but rarely together",
+    "playerMovement": "Team Changes",
+    "playerMovementSubtitle": "Who rose, who fell, and who's new (vs 2024)",
+    "risers": "Biggest Risers",
+    "fallers": "Biggest Fallers",
+    "newcomers": "New Players",
+    "gamesVs2024": "games vs 2024",
+    "noNewcomers": "No new players",
     "rareDuosInfo": "Both play frequently but somehow never on the same day",
     "combinedGames": "combined games",
     "togetherOnly": "together only",
@@ -208,9 +216,9 @@
     "greeting": "Hey, {{name}}!",
     "description": "Before you see your stats, want to test how well you know the year?",
     "info": {
-      "questions": "7 questions",
-      "time": "~2 min",
-      "points": "Max 7 points"
+      "questions": "11 questions",
+      "time": "~3 min",
+      "points": "Max 11 points"
     },
     "buttons": {
       "takeQuiz": "Take the Quiz",
@@ -221,7 +229,9 @@
     "slides": {
       "organization": "Community",
       "personalGames": "Your Games",
-      "achievements": "Your Achievements"
+      "achievements": "Your Achievements",
+      "playerTrivia": "Player Trivia",
+      "playerMovement": "Changes vs 2024"
     },
     "questions": {
       "totalGames2025": "How many games did the community play in 2025?",
@@ -237,7 +247,11 @@
       "yourStreak": "What is your longest personal streak?",
       "streak": "Your streak",
       "uniqueTeammates": "How many unique players have you played with?",
-      "teammates": "Unique teammates"
+      "teammates": "Unique teammates",
+      "playerMostGames": "Which player has the most games in 2025?",
+      "playerBestStreak": "Who has the longest personal streak?",
+      "playerBiggestRise": "Who had the biggest increase in games vs 2024?",
+      "playerBiggestDecline": "Who had the biggest decrease in games vs 2024?"
     },
     "anchor": {
       "2024": "2024"
@@ -263,7 +277,11 @@
       "perfect": "Perfect! You know everything!",
       "great": "Great! You know the game well!",
       "good": "Good! There's more to learn!",
-      "tryAgain": "Well, at least you tried! 😅"
+      "tryAgain": "Well, at least you tried! 😅",
+      "player_most_games": "Most games",
+      "player_best_streak": "Best streak",
+      "player_biggest_rise": "Biggest rise",
+      "player_biggest_decline": "Biggest decline"
     }
   }
 }

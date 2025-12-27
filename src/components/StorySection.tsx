@@ -20,6 +20,7 @@ import {
   calculateActiveMonths,
   calculateBestSeason,
   calculateTrioStats,
+  calculatePlayerMovement,
   getPlayedGameDates
 } from '../utils/playerStats';
 import communityStatsRaw from '../data/communityStats.json';
@@ -104,6 +105,14 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
   );
   const repeatSquads = useMemo(
     () => calculateRepeatSquads(allPlayers, rawStats.games2025, 12, 14),
+    [allPlayers]
+  );
+
+  // Player movement (risers, fallers, newcomers)
+  // Add player names to exclude from newcomers here (e.g., players who played in 2023)
+  const excludeFromNewcomers: string[] = ['Неджи'];
+  const playerMovement = useMemo(
+    () => calculatePlayerMovement(allPlayers, excludeFromNewcomers),
     [allPlayers]
   );
 
@@ -1468,7 +1477,128 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
         </div>
       )
     },
-    // Story 11: Community - Dynamic Duos
+    // Story 11: Community - Player Movement (Risers, Fallers, Newcomers)
+    {
+      content: (
+        <div className="w-full max-w-md mx-auto">
+          <motion.div
+            className="text-5xl mb-4"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", duration: 0.6 }}
+          >
+            📊
+          </motion.div>
+          <motion.h2
+            className="text-2xl font-bold mb-2"
+            style={{ color: 'var(--color-accent-green)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            {t('stats.playerMovement')}
+          </motion.h2>
+          <motion.p
+            className="text-sm mb-6"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            {t('stats.playerMovementSubtitle')}
+          </motion.p>
+
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {/* Risers */}
+            <motion.div
+              className="p-3 rounded-xl"
+              style={{ backgroundColor: 'var(--color-bg-card)' }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <div className="text-xl mb-2">📈</div>
+              <div className="text-xs font-semibold mb-2" style={{ color: 'var(--color-accent-green)' }}>
+                {t('stats.risers')}
+              </div>
+              <div className="space-y-1">
+                {playerMovement.risers.map((p, idx) => (
+                  <div key={p.name} className="flex justify-between items-center text-xs">
+                    <span style={{ color: 'var(--color-text-primary)' }}>
+                      {idx + 1}. {p.name}
+                    </span>
+                    <span style={{ color: 'var(--color-accent-green)' }}>
+                      +{p.change} {t('story.games')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Fallers */}
+            <motion.div
+              className="p-3 rounded-xl"
+              style={{ backgroundColor: 'var(--color-bg-card)' }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <div className="text-xl mb-2">📉</div>
+              <div className="text-xs font-semibold mb-2" style={{ color: 'var(--color-accent-red)' }}>
+                {t('stats.fallers')}
+              </div>
+              <div className="space-y-1">
+                {playerMovement.fallers.map((p, idx) => (
+                  <div key={p.name} className="flex justify-between items-center text-xs">
+                    <span style={{ color: 'var(--color-text-primary)' }}>
+                      {idx + 1}. {p.name}
+                    </span>
+                    <span style={{ color: 'var(--color-accent-red)' }}>
+                      {p.change} {t('story.games')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Newcomers */}
+          <motion.div
+            className="p-3 rounded-xl"
+            style={{ backgroundColor: 'var(--color-bg-card)' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            <div className="text-xl mb-2">🆕</div>
+            <div className="text-xs font-semibold mb-2" style={{ color: 'var(--color-accent-blue)' }}>
+              {t('stats.newcomers')}
+            </div>
+            {playerMovement.newcomers.length > 0 ? (
+              <div className="flex flex-wrap gap-1 justify-center">
+                {playerMovement.newcomers.map((name) => (
+                  <span
+                    key={name}
+                    className="px-2 py-1 rounded-full text-xs"
+                    style={{
+                      backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                      color: 'var(--color-accent-blue)'
+                    }}
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {t('stats.noNewcomers')}
+              </div>
+            )}
+          </motion.div>
+        </div>
+      )
+    },
+    // Story 12: Community - Dynamic Duos
     {
       content: (
         <div className="w-full max-w-md mx-auto">
@@ -1483,13 +1613,14 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
                 👯
               </motion.div>
               <motion.h2
-                className="text-2xl font-bold mb-2"
+                className="text-2xl font-bold mb-2 flex items-center justify-center gap-2"
                 style={{ color: 'var(--color-accent-green)' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
                 {t('stats.dynamicDuos')}
+                <InfoTooltip text={t('stats.dynamicDuosInfo')} />
               </motion.h2>
               <motion.p
                 className="text-sm mb-6"

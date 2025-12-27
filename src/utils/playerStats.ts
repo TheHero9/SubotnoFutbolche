@@ -975,3 +975,64 @@ export const calculateTrioStats = (
     meetingRate
   };
 };
+
+// ============================================
+// PLAYER MOVEMENT (Risers, Fallers, Newcomers)
+// ============================================
+
+export interface PlayerMovement {
+  name: string;
+  games2024: number;
+  games2025: number;
+  change: number;  // Positive = rise, negative = fall
+}
+
+export interface PlayerMovementData {
+  risers: PlayerMovement[];      // Top 3 biggest increases (must have played in 2024)
+  fallers: PlayerMovement[];     // Top 3 biggest decreases (must have played in 2024)
+  newcomers: string[];           // Players with 0 games in 2024 but games in 2025
+}
+
+/**
+ * Calculate player movement between 2024 and 2025
+ *
+ * - Risers: Players who increased their games the most (must have played in 2024)
+ * - Fallers: Players who decreased their games the most (must have played in 2024)
+ * - Newcomers: Players who didn't play in 2024 but play in 2025
+ *
+ * @param excludeNewcomers - Array of player names to exclude from newcomers (e.g., they played in 2023)
+ */
+export const calculatePlayerMovement = (
+  allPlayers: ProcessedPlayer[],
+  excludeNewcomers: string[] = []
+): PlayerMovementData => {
+  const excludeSet = new Set(excludeNewcomers);
+
+  // Players who played in 2024
+  const returning = allPlayers.filter(p => p.total2024 > 0 && p.total2025 > 0);
+
+  // Calculate changes
+  const withChanges: PlayerMovement[] = returning.map(p => ({
+    name: p.name,
+    games2024: p.total2024,
+    games2025: p.total2025,
+    change: p.total2025 - p.total2024
+  }));
+
+  // Sort by change (descending for risers)
+  const sortedByRise = [...withChanges].sort((a, b) => b.change - a.change);
+  const risers = sortedByRise.filter(p => p.change > 0).slice(0, 3);
+
+  // Sort by change (ascending for fallers)
+  const sortedByFall = [...withChanges].sort((a, b) => a.change - b.change);
+  const fallers = sortedByFall.filter(p => p.change < 0).slice(0, 3);
+
+  // Newcomers: played in 2025 but not in 2024
+  const newcomers = allPlayers
+    .filter(p => p.total2024 === 0 && p.total2025 > 0)
+    .filter(p => !excludeSet.has(p.name))
+    .map(p => p.name)
+    .sort();
+
+  return { risers, fallers, newcomers };
+};

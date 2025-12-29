@@ -212,6 +212,13 @@
     "tapToReveal": "Tap to reveal",
     "tapToFlipBack": "Tap to flip back"
   },
+  "creatorMessage": {
+    "title": "(Almost) Final Words",
+    "message": "This year we broke all kinds of records - even though we don't have data from 2023 and before, I can confirm it. From a streak of 48 consecutive!!! games (almost a full year without missing a match - 52 weeks) to a total of 51 games for the whole year (insane number, to beat it next year we'd have to play on holidays too) and even more impressive is that we only played once on a day other than Saturday (on a holiday). Broken records for: games in a calendar year by different people, consecutive game streaks, newcomers, average players per game ~13.6 (super important metric) and so much more! There were truly epic games this year with drama, excitement, laughter, fair play and not many injuries (the most important thing that's not in the stats)...",
+    "improvementPart": "...Proportionally with the number of games come the number of arguments during play. This is the only statistic we can improve in the upcoming games. More tolerance and understanding when mistakes happen, and swallowing a touch call or two that went wrong. It's not worth having arguments over such small and insignificant situations during a match.",
+    "signature": "— Dimi, data management",
+    "hint": "👇 Tap the page for the final summary"
+  },
   "quizPrompt": {
     "greeting": "Hey, {{name}}!",
     "description": "Before you see your stats, want to test how well you know the year?",

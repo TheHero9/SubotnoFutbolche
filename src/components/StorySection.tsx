@@ -2766,6 +2766,171 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
           )}
         </div>
       )
+    },
+    // Story 15: Creator's Message
+    {
+      content: (
+        <div className="flex flex-col items-center h-full px-4 pt-16 pb-8 overflow-y-auto">
+          {/* Title */}
+          <motion.div
+            className="flex items-center gap-2 mb-5"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="text-3xl">✨</span>
+            <h2 className="text-xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+              {t('creatorMessage.title')}
+            </h2>
+            <span className="text-3xl">✨</span>
+          </motion.div>
+
+          {/* Key Stats Cards */}
+          <motion.div
+            className="flex gap-3 mb-5 w-full max-w-sm"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div
+              className="flex-1 py-3 px-2 rounded-xl text-center"
+              style={{ backgroundColor: 'var(--color-bg-card)' }}
+            >
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>48</div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {i18n.language === 'bg' ? 'поредни мача' : 'game streak'}
+              </div>
+            </div>
+            <div
+              className="flex-1 py-3 px-2 rounded-xl text-center"
+              style={{ backgroundColor: 'var(--color-bg-card)' }}
+            >
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-green)' }}>51</div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {i18n.language === 'bg' ? 'мача общо' : 'total games'}
+              </div>
+            </div>
+            <div
+              className="flex-1 py-3 px-2 rounded-xl text-center"
+              style={{ backgroundColor: 'var(--color-bg-card)' }}
+            >
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-accent-blue)' }}>13.6</div>
+              <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                {i18n.language === 'bg' ? 'средно играчи' : 'avg players'}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Main Message - Styled */}
+          <motion.div
+            className="text-sm leading-relaxed mb-4 max-w-sm text-center"
+            style={{ color: 'var(--color-text-primary)' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            {i18n.language === 'bg' ? (
+              <>
+                Тази година минахме <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>всякакви рекорди</span>!
+                От серия <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>48 поредни мача</span> (почти цяла година без пропуснат мач)
+                до общо <span style={{ color: 'var(--color-accent-green)', fontWeight: 'bold' }}>51 мача</span> за цялата година.
+                Играхме само <span style={{ color: 'var(--color-accent-blue)', fontWeight: 'bold' }}>1 път</span> в ден различен от събота!
+              </>
+            ) : (
+              <>
+                This year we broke <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>all kinds of records</span>!
+                From a streak of <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>48 consecutive games</span> (almost a full year)
+                to <span style={{ color: 'var(--color-accent-green)', fontWeight: 'bold' }}>51 total games</span> for the whole year.
+                We only played on <span style={{ color: 'var(--color-accent-blue)', fontWeight: 'bold' }}>1 non-Saturday</span>!
+              </>
+            )}
+          </motion.div>
+
+          {/* Records broken */}
+          <motion.div
+            className="w-full max-w-sm mb-4 px-3 py-3 rounded-xl"
+            style={{ backgroundColor: 'var(--color-bg-card)' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            <div className="text-xs font-semibold mb-2" style={{ color: 'var(--color-accent-gold)' }}>
+              🏆 {i18n.language === 'bg' ? 'Подобрени рекорди' : 'Records broken'}
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {[
+                i18n.language === 'bg' ? 'Мачове за година' : 'Games/year',
+                i18n.language === 'bg' ? 'Поредни мачове' : 'Streak',
+                i18n.language === 'bg' ? 'Новодошли' : 'Newcomers',
+                i18n.language === 'bg' ? 'Средно играчи' : 'Avg players'
+              ].map((record, i) => (
+                <span
+                  key={i}
+                  className="px-2 py-1 rounded-full text-xs"
+                  style={{
+                    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+                    color: 'var(--color-accent-gold)'
+                  }}
+                >
+                  {record}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Epic games description */}
+          <motion.p
+            className="text-sm text-center mb-4 max-w-sm"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+          >
+            {i18n.language === 'bg'
+              ? 'Имаше брутални мачове с драма, тръпка, смях, честна игра и без много контузии (най-важното, което го няма на статистика)...'
+              : 'Epic games with drama, excitement, laughter, fair play and few injuries (most important thing not in the stats)...'
+            }
+          </motion.p>
+
+          {/* Improvement section - continuation */}
+          <motion.p
+            className="text-sm text-center mb-4 max-w-sm leading-relaxed"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1 }}
+          >
+            {i18n.language === 'bg'
+              ? '...Правопропорционално с броя мачове вървят и броя караници по време на игра. Това е единствената статистика, която може да подобрим в следващите мачове. Повече толериране и разбиране при грешка и преглъщане на тъч/два отсъдени грешно. Не си струва да има караници за толкова дребни и маловажни ситуации по време на мач.'
+              : '...Proportionally with the number of games come the number of arguments during play. This is the only statistic we can improve in the upcoming games. More tolerance and understanding when mistakes happen, and swallowing a touch call or two that went wrong. It\'s not worth having arguments over such small and insignificant situations during a match.'
+            }
+          </motion.p>
+
+          {/* Signature */}
+          <motion.p
+            className="text-sm italic mb-4"
+            style={{ color: 'var(--color-text-secondary)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+          >
+            {t('creatorMessage.signature')}
+          </motion.p>
+
+          {/* Hint about more stats */}
+          <motion.div
+            className="px-4 py-2 rounded-xl"
+            style={{ backgroundColor: 'var(--color-bg-card)' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.3 }}
+          >
+            <p className="text-sm" style={{ color: 'var(--color-accent-green)' }}>
+              {t('creatorMessage.hint')}
+            </p>
+          </motion.div>
+        </div>
+      )
     }
   ];
 
@@ -2798,10 +2963,12 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
       {/* Progress indicators - colored by section */}
       <div className="fixed top-14 left-0 right-0 z-40 flex gap-1 px-4">
         {stories.map((_, index) => {
-          // Color by section: 0-7 player stories (green), 8+ community (blue)
-          const sectionColor = index <= 7
-            ? 'var(--color-accent-green)'
-            : 'var(--color-accent-blue)';
+          // Color by section: 0-7 player stories (green), 8-14 community (blue), 15 creator message (gold)
+          const sectionColor = index === stories.length - 1
+            ? 'var(--color-accent-gold)'
+            : index <= 7
+              ? 'var(--color-accent-green)'
+              : 'var(--color-accent-blue)';
 
           return (
             <div

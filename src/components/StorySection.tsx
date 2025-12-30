@@ -2770,24 +2770,24 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
     // Story 15: Creator's Message
     {
       content: (
-        <div className="flex flex-col items-center justify-center h-full px-5 py-8 overflow-y-auto">
+        <div className="flex flex-col items-center h-full px-5 pt-20 pb-24 overflow-y-auto">
           {/* Title */}
           <motion.div
-            className="flex items-center gap-2 mb-5"
+            className="flex items-center gap-2 mb-4 mt-2"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="text-3xl">✨</span>
-            <h2 className="text-xl font-bold" style={{ color: 'var(--color-accent-gold)' }}>
+            <span className="text-2xl">✨</span>
+            <h2 className="text-lg font-bold" style={{ color: 'var(--color-accent-gold)' }}>
               {t('creatorMessage.title')}
             </h2>
-            <span className="text-3xl">✨</span>
+            <span className="text-2xl">✨</span>
           </motion.div>
 
           {/* Main Message - Styled */}
           <motion.div
-            className="text-sm leading-relaxed mb-4 max-w-sm text-center"
+            className="text-xs leading-relaxed mb-3 max-w-xs text-center"
             style={{ color: 'var(--color-text-primary)' }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -2796,76 +2796,76 @@ const StorySection: React.FC<StorySectionProps> = ({ player, totalPlayers, allPl
             {i18n.language === 'bg' ? (
               <>
                 Тази година минахме <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>всякакви рекорди</span>!
-                От серия <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>48 поредни мача</span> (почти цяла година без пропуснат мач)
-                до общо <span style={{ color: 'var(--color-accent-green)', fontWeight: 'bold' }}>51 мача</span> за цялата година.
-                Играхме само <span style={{ color: 'var(--color-accent-blue)', fontWeight: 'bold' }}>1 път</span> в ден различен от събота!
-                {' '}Подобрени рекорди за: <span style={{ color: 'var(--color-accent-gold)' }}>мачове за календарна година</span>,{' '}
+                {' '}Серия от <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>48 поредни мача</span> (почти цяла година),
+                {' '}общо <span style={{ color: 'var(--color-accent-green)', fontWeight: 'bold' }}>51 мача</span> за годината,
+                {' '}само <span style={{ color: 'var(--color-accent-blue)', fontWeight: 'bold' }}>1 път</span> в ден различен от събота!
+                {' '}Подобрени рекорди: <span style={{ color: 'var(--color-accent-gold)' }}>мачове за година</span>,{' '}
                 <span style={{ color: 'var(--color-accent-gold)' }}>поредни мачове</span>,{' '}
-                <span style={{ color: 'var(--color-accent-gold)' }}>новодошли хора</span>,{' '}
-                <span style={{ color: 'var(--color-accent-gold)' }}>средно играчи на мач ~13.6</span> и какво ли още не!
+                <span style={{ color: 'var(--color-accent-gold)' }}>новодошли</span>,{' '}
+                <span style={{ color: 'var(--color-accent-gold)' }}>средно ~13.6 играчи</span>!
               </>
             ) : (
               <>
-                This year we broke <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>all kinds of records</span>!
-                From a streak of <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>48 consecutive games</span> (almost a full year)
-                to <span style={{ color: 'var(--color-accent-green)', fontWeight: 'bold' }}>51 total games</span> for the whole year.
-                We only played on <span style={{ color: 'var(--color-accent-blue)', fontWeight: 'bold' }}>1 non-Saturday</span>!
-                {' '}Broken records for: <span style={{ color: 'var(--color-accent-gold)' }}>games per calendar year</span>,{' '}
-                <span style={{ color: 'var(--color-accent-gold)' }}>consecutive games</span>,{' '}
+                This year we broke <span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>all records</span>!
+                {' '}<span style={{ color: 'var(--color-accent-gold)', fontWeight: 'bold' }}>48 consecutive games</span> (almost a year),
+                {' '}<span style={{ color: 'var(--color-accent-green)', fontWeight: 'bold' }}>51 total games</span>,
+                {' '}only <span style={{ color: 'var(--color-accent-blue)', fontWeight: 'bold' }}>1 non-Saturday</span>!
+                {' '}Records: <span style={{ color: 'var(--color-accent-gold)' }}>games/year</span>,{' '}
+                <span style={{ color: 'var(--color-accent-gold)' }}>streak</span>,{' '}
                 <span style={{ color: 'var(--color-accent-gold)' }}>newcomers</span>,{' '}
-                <span style={{ color: 'var(--color-accent-gold)' }}>avg players per game ~13.6</span> and more!
+                <span style={{ color: 'var(--color-accent-gold)' }}>~13.6 avg players</span>!
               </>
             )}
           </motion.div>
 
           {/* Epic games description */}
           <motion.p
-            className="text-sm text-center mb-4 max-w-sm"
+            className="text-xs text-center mb-3 max-w-xs"
             style={{ color: 'var(--color-text-secondary)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
             {i18n.language === 'bg'
-              ? 'Имаше брутални мачове с драма, тръпка, смях, честна игра и без много контузии (най-важното, което го няма на статистика)...'
-              : 'Epic games with drama, excitement, laughter, fair play and few injuries (most important thing not in the stats)...'
+              ? 'Брутални мачове с драма, тръпка, смях, честна игра и без много контузии (най-важното)...'
+              : 'Epic games with drama, excitement, laughter, fair play and few injuries (most important)...'
             }
           </motion.p>
 
           {/* Improvement section - continuation */}
           <motion.p
-            className="text-sm text-center mb-5 max-w-sm leading-relaxed"
+            className="text-xs text-center mb-4 max-w-xs leading-relaxed"
             style={{ color: 'var(--color-text-secondary)' }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
             {i18n.language === 'bg'
-              ? '...Правопропорционално с броя мачове вървят и броя караници по време на игра. Това е единствената статистика, която може да подобрим в следващите мачове. Повече толериране и разбиране при грешка и преглъщане на тъч/два отсъдени грешно. Не си струва да има караници за толкова дребни и маловажни ситуации по време на мач.'
-              : '...Proportionally with the number of games come the number of arguments during play. This is the only statistic we can improve in the upcoming games. More tolerance and understanding when mistakes happen, and swallowing a touch call or two that went wrong. It\'s not worth having arguments over such small and insignificant situations during a match.'
+              ? '...Правопропорционално с броя мачове вървят и караниците. Това е единствената статистика за подобряване. Повече толериране при грешка и преглъщане на тъч/два отсъдени грешно. Не си струва!'
+              : '...With more games come more arguments. The only stat we can improve. More tolerance for mistakes, accept a wrong call or two. Not worth it!'
             }
           </motion.p>
 
           {/* Signature */}
           <motion.p
-            className="text-sm italic mb-4"
+            className="text-xs italic mb-3"
             style={{ color: 'var(--color-text-secondary)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 0.9 }}
           >
             {t('creatorMessage.signature')}
           </motion.p>
 
           {/* Hint about more stats */}
           <motion.div
-            className="px-4 py-2 rounded-xl"
+            className="px-3 py-2 rounded-xl"
             style={{ backgroundColor: 'var(--color-bg-card)' }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.3 }}
+            transition={{ delay: 1.0 }}
           >
-            <p className="text-sm" style={{ color: 'var(--color-accent-green)' }}>
+            <p className="text-xs" style={{ color: 'var(--color-accent-green)' }}>
               {t('creatorMessage.hint')}
             </p>
           </motion.div>

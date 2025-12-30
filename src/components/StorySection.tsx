@@ -3413,7 +3413,7 @@ const StorySection: React.FC<StorySectionProps> = ({
     // Story 15: Creator's Message
     {
       content: (
-        <div className="flex flex-col items-center h-full px-5 pt-20 pb-24 overflow-y-auto">
+        <div className="flex flex-col items-center justify-center h-full px-5 pt-20 pb-24">
           {/* Title */}
           <motion.div
             className="flex items-center gap-2 mb-4 mt-2"

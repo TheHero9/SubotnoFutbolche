@@ -30,3 +30,4 @@ npm-debug.log*
 
 # Markdown files (root only)
 /*.md
+!README.md
